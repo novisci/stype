@@ -1,0 +1,1 @@
+An R package for generating descriptive summary statistics.

@@ -9,7 +9,9 @@ Description: Computes descriptive statistics for most R atomic types plus an API
     data.frames. The package aims to be tidyverse-friendly but not tidyverse-dependent 
     (except purrr).
 Imports:
-   methods (>= 3.5)
+   methods (>= 3.5),
+   assertthat (>= 0.2.0),
+   purrr (>= 0.2.5)
 License: GPL-3 + file LICENSE
 URL: https://gitlab.novisci.com/statistics/DenverSugar
 BugReports: https://gitlab.novisci.com/statistics/DenverSugar/issues

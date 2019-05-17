@@ -1,66 +1,43 @@
 
-setGeneric("describe", function(x) standardGeneric("describe"))
-setGeneric(".describe", function(x) standardGeneric(".describe"))
-setGeneric(".summarise", function(x, ...) standardGeneric(".summarise"))
+setGeneric("descriptor", function(x) standardGeneric("descriptor"))
 
 setMethod(
-  f = "describe",
-  signature  = "variableUnion",
+  f          = "descriptor",
+  signature  = "variable",
   definition = function(x){
-    cat(
-      sprintf("This variable is an %s with %s observations.\n", class(x), length(x)),
-      sprintf("Summary value: %s", .summarise(x))
-    )
-    
+    append(
+      list(
+        # TODO insert useful summary stats that apply across all variables here
+        has_missing = anyNA
+      ),
+      # TODO create methods for each data type below
+      descriptor(x@.Data))
   }
 )
 
 setMethod(
-  f = ".describe",
-  signature = "outcome",
-  definition = function(x){
-    any(x)
-  }
-)
-
-setMethod(
-  f = ".describe",
-  signature = "covariate",
-  definition = function(x){
-    all(x)
-  }
-)
-
-setMethod(
-  f          = ".summarise",
-  signature  = "numeric",
-  definition = function(x, funs = list(mean = mean, sd = sd)) {
-    purrr::map(.x = funs, ~ .x(x))
-  }
-)
-
-setMethod(
-  f          = ".summarise",
+  f          = "descriptor",
   signature  = "logical",
-  definition = function(x, funs = list(mean = mean, sd = sd)) {
-    purrr::map(.x = funs, ~ .x(x))
+  definition = function(x){
+    list(
+      proportion = function(x) sum(x, na.rm = TRUE)
+    )
   }
 )
 
 
+setGeneric("describe", function(x, g, w, ...) standardGeneric("describe"))
 
+setMethod(
+  f          = "describe",
+  signature  = c("variable", "missing", "missing"),
+  definition = function(x, g, w, ...){
+    desc <- descriptor(x)
+    out  <-  purrr::map(
+      .x = desc,
+      .f = ~ .x(x))
+    setNames(out, nm = names(desc))
+    out
+  }
+)
 
-.summarise(rnorm(100))
-.summarise(rnorm(100), list(median = median, iqr = IQR))
-.summarise(c(TRUE, FALSE, TRUE, FALSE))
-
-
-
-test <- tibble(
-  x = outcome(c(TRUE, FALSE),   label = "myOutcome is great"),
-  y = covariate(c(TRUE, FALSE), label = "myCovariate is great")
-) 
-
-
-describe(test$x)
-describe(test$y)

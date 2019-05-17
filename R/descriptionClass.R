@@ -1,7 +1,6 @@
-
 #' A call to describe returns a description object
 #'
-setClass(
+description <- setClass(
   "description",
-  contains = "list"
+  contains = "namedList"
 )

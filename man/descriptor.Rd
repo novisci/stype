@@ -5,6 +5,8 @@
 \alias{descriptor}
 \alias{descriptor,variable-method}
 \alias{descriptor,logical-method}
+\alias{descriptor,factor-method}
+\alias{descriptor,numeric-method}
 \alias{descriptor,groupVar-method}
 \alias{descriptor,maybeWeight-method}
 \alias{descriptor,NULL-method}
@@ -15,6 +17,10 @@ descriptor(x)
 \S4method{descriptor}{variable}(x)
 
 \S4method{descriptor}{logical}(x)
+
+\S4method{descriptor}{factor}(x)
+
+\S4method{descriptor}{numeric}(x)
 
 \S4method{descriptor}{groupVar}(x)
 

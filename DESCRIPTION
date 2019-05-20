@@ -1,9 +1,10 @@
 Package: DenverSugar
 Type: Package
 Title: Compute descriptive statistics
-Version: 0.0.1
+Version: 0.0.2
 Date: 2019-05-16
-Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), email = "bsaul@novisci.com"))
+Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
+                            email = "bsaul@novisci.com"))
 Maintainer: Bradley Saul <bsaul@novisci.com>
 Description: Computes descriptive statistics for most R atomic types plus an API for
     data.frames. The package aims to be tidyverse-friendly but not tidyverse-dependent 

@@ -14,12 +14,10 @@
 #' @slot name machine readable name
 #' @slot short_label a short label
 #' @slot long_label a longer label
-#' @slot has_missing an indicator of whether a variable has missing values
-#' @slot internal_type the internal 
 #' @slot description a \linkS4class{description} object containing summary statistics
 #' @importFrom purrr walk
 #' @importFrom assertthat validate_that
-#' @importFrom methods slot new
+#' @importFrom methods slot new callNextMethod
 #' @export variable
 
 variable <- setClass(
@@ -29,23 +27,21 @@ variable <- setClass(
     "name"          = "character",
     "short_label"   = "character",
     "long_label"    = "character",
-    "has_missing"   = "logical",   # TODO: put this in description?
-    "internal_type" = "character", # TODO: do we need this?
     "description"   = "description"),
   contains = "vector"
 )
 
 # Initialize a variable object
+# @export 
 setMethod(
   f          = "initialize",
   signature  = "variable",
-  definition = function(.Object, ...){
+  definition = function(.Object, ..., descriptor = descriptor(.Object), g = NULL, w = NULL){
 
-    # Hijack the user's ability to (incorrectly) set has_missing
-    # e.g. variable(c(TRUE, NA), has_missing = FALSE)
+    .Object <- callNextMethod(.Object, ...)
+    # Hijack the user's ability to (incorrectly) set slots
     dots <- list(...)
-    dots[["has_missing"]]   <- anyNA(..1)
-    dots[["internal_type"]] <- typeof(..1)
+    dots[["description"]] <- describe(.Object, g, w, descriptor = descriptor, ...)
     
     do.call("callNextMethod", args = append(list(.Object), dots))
   })

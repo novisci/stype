@@ -3,13 +3,13 @@
 \docType{methods}
 \name{describe}
 \alias{describe}
-\alias{describe,variable,maybeGroup,maybeWeight-method}
+\alias{describe,variable,maybeGroup,maybeWeight,maybeDescriptor-method}
 \title{Describe a variable}
 \usage{
-describe(x, g = NULL, w = NULL, ...)
+describe(x, g = NULL, w = NULL, descriptor, ...)
 
-\S4method{describe}{variable,maybeGroup,maybeWeight}(x, g = NULL,
-  w = NULL, ...)
+\S4method{describe}{variable,maybeGroup,maybeWeight,maybeDescriptor}(x,
+  g = NULL, w = NULL, descriptor, ...)
 }
 \arguments{
 \item{x}{a vector a values}
@@ -17,6 +17,8 @@ describe(x, g = NULL, w = NULL, ...)
 \item{g}{a vector a groupings (optional)}
 
 \item{w}{a vector of weights (optional)}
+
+\item{descriptor}{an (optional) list of lambda functions}
 
 \item{...}{additional arguments}
 }

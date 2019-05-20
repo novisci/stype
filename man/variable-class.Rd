@@ -20,10 +20,6 @@ The vector object must be one of the following basic classes: \code{"numeric", "
 
 \item{\code{long_label}}{a longer label}
 
-\item{\code{has_missing}}{an indicator of whether a variable has missing values}
-
-\item{\code{internal_type}}{the internal}
-
 \item{\code{description}}{a \linkS4class{description} object containing summary statistics}
 }}
 

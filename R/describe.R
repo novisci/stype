@@ -6,16 +6,18 @@
 # Classes used internally to define methods for signatures with possibly missing
 # arguments.
 
-setClassUnion("groupVar",     c("character", "factor"))
-setClassUnion("maybeMissing", c("missing", "NULL"))
-setClassUnion("maybeGroup",   c("maybeMissing", "groupVar"))
-setClassUnion("maybeWeight",  c("maybeMissing", "numeric"))
+setClassUnion("groupVar",        c("character", "factor"))
+setClassUnion("maybeMissing",    c("missing", "NULL"))
+setClassUnion("maybeGroup",      c("maybeMissing", "groupVar"))
+setClassUnion("maybeWeight",     c("maybeMissing", "numeric"))
+setClassUnion("maybeDescriptor", c("missing", "list"))
 
 #' Descriptor
 #'
 #' A function that returns a list of functions to be applied to a variable
 #' 
 #' @param x a \linkS4class{variable} or vector
+#' @importFrom stats IQR median sd quantile
 #' @export
 
 setGeneric("descriptor", function(x) standardGeneric("descriptor"))
@@ -33,7 +35,9 @@ setMethod(
         n            = function(x, ...) length(x),
         has_missing  = function(x, ...) anyNA(x),
         n_nonmissing = function(x, ...) sum(!is.na(x)),
-        n_missing    = function(x, ...) sum(is.na(x))
+        n_missing    = function(x, ...) sum(is.na(x)),
+        R_class      = function(x, ...) class(x@.Data),
+        R_type       = function(x, ...) typeof(x@.Data)
       ),
       # TODO create methods for each data type below
       descriptor(x@.Data))
@@ -49,6 +53,36 @@ setMethod(
   definition = function(x){
     list(
       proportion = function(x, ...) mean(x, na.rm = TRUE)
+    )
+  }
+)
+
+#' @rdname descriptor
+#' @export
+
+setMethod(
+  f          = "descriptor",
+  signature  = "factor",
+  definition = function(x){
+    list(
+      table  = function(x, ...) table(x, useNA = "ifany"),
+      levels = function(x, ...) levels(x)
+    )
+  }
+)
+
+#' @rdname descriptor
+#' @export
+
+setMethod(
+  f          = "descriptor",
+  signature  = "numeric",
+  definition = function(x){
+    list(
+      mean   = function(x, ...) mean(x, na.rm = TRUE),
+      sd     = function(x, ...) sd(x, na.rm = TRUE),
+      median = function(x, ...) median(x, na.rm = TRUE),
+      iqr    = function(x, ...) IQR(x, na.rm = TRUE)
     )
   }
 )
@@ -112,11 +146,14 @@ setMethod(
   signature  = c("function", "variable", "groupVar", "numeric"),
   definition = function(f, x, g, w, ...){ f(x = x, g = g, w = w, ...) })
 
+
+
 #' Describe a variable
 #' 
 #' @param x a vector a values
 #' @param g a vector a groupings (optional)
 #' @param w a vector of weights (optional)
+#' @param descriptor an (optional) list of lambda functions
 #' @param ... additional arguments
 #' @importFrom purrr reduce map
 #' @importFrom stats setNames
@@ -124,7 +161,7 @@ setMethod(
 
 setGeneric(
   name = "describe", 
-  def  = function(x, g = NULL, w = NULL, ...) standardGeneric("describe")
+  def  = function(x, g = NULL, w = NULL, descriptor, ...) standardGeneric("describe")
 )
 
 #' @rdname describe
@@ -132,14 +169,18 @@ setGeneric(
 
 setMethod(
   f          = "describe",
-  signature  = c("variable", "maybeGroup", "maybeWeight"),
-  definition = function(x, g, w, ...){
+  signature  = c("variable", "maybeGroup", "maybeWeight", "maybeDescriptor"),
+  definition = function(x, g, w, descriptor, ...){
     
-    purrr::reduce(
-      .x = list(x, g, w),
-      .f = ~ append(.x, descriptor(.y)),
-      .init = NULL
-    ) -> desc
+    if(missing(descriptor)){
+      purrr::reduce(
+        .x = list(x, g, w),
+        .f = ~ append(.x, descriptor(.y)),
+        .init = NULL
+      ) -> desc
+    } else{
+      desc <- descriptor
+    }
     
     description(
       stats::setNames(

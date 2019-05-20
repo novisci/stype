@@ -10,7 +10,7 @@ setClassUnion("groupVar",        c("character", "factor"))
 setClassUnion("maybeMissing",    c("missing", "NULL"))
 setClassUnion("maybeGroup",      c("maybeMissing", "groupVar"))
 setClassUnion("maybeWeight",     c("maybeMissing", "numeric"))
-setClassUnion("maybeDescriptor", c("missing", "list"))
+setClassUnion("maybeDescriptor", c("missing", "NULL", "list"))
 
 #' Descriptor
 #'
@@ -172,7 +172,7 @@ setMethod(
   signature  = c("variable", "maybeGroup", "maybeWeight", "maybeDescriptor"),
   definition = function(x, g, w, descriptor, ...){
     
-    if(missing(descriptor)){
+    if(is(descriptor, "maybeMissing")){
       purrr::reduce(
         .x = list(x, g, w),
         .f = ~ append(.x, descriptor(.y)),

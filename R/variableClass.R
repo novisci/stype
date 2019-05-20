@@ -38,11 +38,18 @@ setMethod(
   signature  = "variable",
   definition = function(.Object, ..., descriptor = descriptor(.Object), g = NULL, w = NULL){
 
+    # TODO: there is potential for conflicting arguments if the describe function's
+    # ... takes arguments with the same name as any slots in a variable.
+    # One could remove any arguments with the same name as any slotNames("variable")
+    # (and give a warning)
     .Object <- callNextMethod(.Object, ...)
-    # Hijack the user's ability to (incorrectly) set slots
-    dots <- list(...)
-    dots[["description"]] <- describe(.Object, g, w, descriptor = descriptor, ...)
     
+    ## Hijack the user's ability to (incorrectly) set slots
+    #TODO: enforce that the first element of dots is the data which is already
+    # added to .Object by the previous call
+    dots <- list(...)[-1]
+    desc <- if(missing(descriptor)) NULL else descriptor
+    dots[["description"]]  <- describe(.Object, g, w, descriptor = desc,...)
     do.call("callNextMethod", args = append(list(.Object), dots))
   })
 

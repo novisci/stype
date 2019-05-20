@@ -4,8 +4,9 @@ library(DenverSugar)
 x <- variable(c(TRUE, FALSE, TRUE, TRUE, NA), 
               short_label = "A test variable",
               descriptor = list(xx = function(x, ...) length(x)))
-
-
+x@description
+x <- variable(c(TRUE, FALSE, TRUE, TRUE, NA), 
+              short_label = "A test variable")
 x@description
 descriptor(x)
 describe(x)

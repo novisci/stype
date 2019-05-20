@@ -6,9 +6,9 @@
 
 #' The variable R object
 #'
-#' Extends R's \link{\code{vector-class}} to provide objects with additional information. 
+#' Extends R's \code{\link{vector-class}} to provide objects with additional information. 
 #' The vector object must be one of the following basic classes: \code{"numeric", "double", 
-#' "integer", "logical", "character",}, or \link{\code{"factor"}}, or \link{\code{"Date"}}.
+#' "integer", "logical", "character",}, or \code{\link{factor}}, or \code{\link{Date}}.
 #'  A variable object can used as if it was a vector.
 #' 
 #' @slot name machine readable name
@@ -19,7 +19,7 @@
 #' @slot description a \linkS4class{description} object containing summary statistics
 #' @importFrom purrr walk
 #' @importFrom assertthat validate_that
-#' @importFrom methods slot
+#' @importFrom methods slot new
 #' @export variable
 
 variable <- setClass(

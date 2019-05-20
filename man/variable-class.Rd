@@ -6,9 +6,9 @@
 \alias{variable}
 \title{The variable R object}
 \description{
-Extends R's \link{\code{vector-class}} to provide objects with additional information. 
+Extends R's \code{\link{vector-class}} to provide objects with additional information. 
 The vector object must be one of the following basic classes: \code{"numeric", "double", 
-"integer", "logical", "character",}, or \link{\code{"factor"}}, or \link{\code{"Date"}}.
+"integer", "logical", "character",}, or \code{\link{factor}}, or \code{\link{Date}}.
  A variable object can used as if it was a vector.
 }
 \section{Slots}{

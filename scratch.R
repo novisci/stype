@@ -6,8 +6,12 @@ descriptor(x)
 describe(x)
 
 x <- variable(c(TRUE, FALSE, TRUE, TRUE, FALSE), short_label = "A test variable")
-describe(x, g = c("A", "A", "A", "B", "B"))
+describe(x, g = c("A", "A", "A", "B", "B"), w = c(2, 2, 2, 1, 1))
 
+
+
+
+x
 z1 <- data.frame(
   x = variable(rnorm(10), short_label = "A test variable")
 )
@@ -32,73 +36,3 @@ setMethod(
       }
   }
 )
-
-z1 %>%
-  {
-    df <- .
-    . %>% mutate(x = 1) -> out
-    metadata(out) <- metadata(df)
-    out
-  }
-
-  mutate(
-    # x    = cumsum(x),
-    test = cumsum(x)
-  ) -> hold
-
-hold$x
-hold$test
-z2 <- tibble::tibble(
-  x = variable(rnorm(5), short_label = "A test variable")
-)
-z2
-
-
-
-Hmisc::label(x@.Data) <- "test"
-, "label") <- test
-tibble::tibble(x) %>% glimpse_labels()
-z2
-z2[[1]]
-
-make_cohort_tibble <- function(l){
-  tibble::new_tibble(l, nrow = length(l[[1]]))
-}
-
-
-#' #'
-#' #'
-#' 
-#' outcome <- setClass(
-#'   "outcome",
-#'   slots   =  c("type" = "character"),
-#'   contains = "variable"
-#' )
-#' 
-#' #'
-#' #'
-#' 
-#' covariate <- setClass(
-#'   "covariate",
-#'   contains = "variable"    
-#' )
-#' 
-#' 
-#' setClassUnion("variableUnion", members = c("outcome", "covariate"))
-
-
-.summarise(rnorm(100))
-.summarise(rnorm(100), list(median = median, iqr = IQR))
-.summarise(c(TRUE, FALSE, TRUE, FALSE))
-
-
-
-test <- tibble(
-  x = outcome(c(TRUE, FALSE),   label = "myOutcome is great"),
-  y = covariate(c(TRUE, FALSE), label = "myCovariate is great")
-) 
-
-
-describe(test$x)
-describe(test$y)
-

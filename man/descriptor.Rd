@@ -6,6 +6,7 @@
 \alias{descriptor,variable-method}
 \alias{descriptor,logical-method}
 \alias{descriptor,groupVar-method}
+\alias{descriptor,maybeWeight-method}
 \alias{descriptor,NULL-method}
 \title{Descriptor}
 \usage{
@@ -17,11 +18,13 @@ descriptor(x)
 
 \S4method{descriptor}{groupVar}(x)
 
+\S4method{descriptor}{maybeWeight}(x)
+
 \S4method{descriptor}{`NULL`}(x)
 }
 \arguments{
 \item{x}{a \linkS4class{variable} or vector}
 }
 \description{
-A function that returns a list of functions to be applied to
+A function that returns a list of functions to be applied to a variable
 }

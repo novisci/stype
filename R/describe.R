@@ -3,7 +3,9 @@
 # - descriptor: a method that returns an unevaluated description for a variable
 # - describe: applies a descriptor to a variable
 
-#' 
+# Classes used internally to define methods for signatures with possibly missing
+# arguments.
+
 setClassUnion("groupVar",     c("character", "factor"))
 setClassUnion("maybeMissing", c("missing", "NULL"))
 setClassUnion("maybeGroup",   c("maybeMissing", "groupVar"))
@@ -11,7 +13,7 @@ setClassUnion("maybeWeight",  c("maybeMissing", "numeric"))
 
 #' Descriptor
 #'
-#' A function that returns a list of functions to be applied to 
+#' A function that returns a list of functions to be applied to a variable
 #' 
 #' @param x a \linkS4class{variable} or vector
 #' @export
@@ -69,36 +71,46 @@ setMethod(
 
 setMethod(
   f          = "descriptor",
+  signature  = "maybeWeight",
+  definition = function(x){ NULL }
+)
+
+#' @rdname descriptor
+#' @export
+
+setMethod(
+  f          = "descriptor",
   signature  = "NULL",
   definition = function(x){ NULL }
 )
 
-#' Describe a variable (internal function)
-#' 
+# Describe a variable (internal method)
+# 
+# The internal method for applying a descriptive function on x and, optionally, 
+# g and/or w. The methods define the signature patterns for applying the 
+# functions.
 
 setGeneric(".describe", function(f, x, g, w, ...) standardGeneric(".describe"))
-
-#' 
-#' 
 
 setMethod(
   f          = ".describe",
   signature  = c("function", "variable", "NULL", "NULL"),
-  definition = function(f, x, g, w, ...){
-    f(x, ...)
-  }
-)
-
-#' 
-#' 
+  definition = function(f, x, g, w, ...){ f(x, ...) } )
 
 setMethod(
   f          = ".describe",
   signature  = c("function", "variable", "groupVar", "NULL"),
-  definition = function(f, x, g, w, ...){
-    f(x = x, g = g, ...)
-  }
-)
+  definition = function(f, x, g, w, ...){ f(x = x, g = g, ...) } )
+
+setMethod(
+  f          = ".describe",
+  signature  = c("function", "variable", "NULL", "numeric"),
+  definition = function(f, x, g, w, ...){ f(x = x, w = w, ...) } )
+
+setMethod(
+  f          = ".describe",
+  signature  = c("function", "variable", "groupVar", "numeric"),
+  definition = function(f, x, g, w, ...){ f(x = x, g = g, w = w, ...) })
 
 #' Describe a variable
 #' 
@@ -106,6 +118,8 @@ setMethod(
 #' @param g a vector a groupings (optional)
 #' @param w a vector of weights (optional)
 #' @param ... additional arguments
+#' @importFrom purrr reduce map
+#' @importFrom stats setNames
 #' @export
 
 setGeneric(
@@ -127,11 +141,13 @@ setMethod(
       .init = NULL
     ) -> desc
     
-    setNames(
-      purrr::map(
-        .x = desc,
-        .f = function(f) .describe(f, x = x, g = g, w = w, ...)),
-      nm = names(desc)
+    description(
+      stats::setNames(
+        purrr::map(
+          .x = desc,
+          .f = function(f) .describe(f, x = x, g = g, w = w, ...)),
+        nm = names(desc)
+      )
     )
   }
 )

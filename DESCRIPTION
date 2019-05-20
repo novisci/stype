@@ -19,4 +19,8 @@ Encoding: UTF-8
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Repository: cran.novisci.com
-
+Collate: 
+    'descriptionClass.R'
+    'variableClass.R'
+    'describe.R'
+    'aREADME.R'

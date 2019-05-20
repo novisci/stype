@@ -1,11 +1,12 @@
 library(dplyr)
 
-
+library(DenverSugar)
 x <- variable(c(TRUE, FALSE, TRUE, TRUE, NA), short_label = "A test variable")
 descriptor(x)
-descriptor(x) %>% names()
-
 describe(x)
+
+x <- variable(c(TRUE, FALSE, TRUE, TRUE, FALSE), short_label = "A test variable")
+describe(x, g = c("A", "A", "A", "B", "B"))
 
 z1 <- data.frame(
   x = variable(rnorm(10), short_label = "A test variable")

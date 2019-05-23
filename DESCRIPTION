@@ -1,8 +1,8 @@
 Package: DenverSugar
 Type: Package
 Title: Compute descriptive statistics
-Version: 0.0.2
-Date: 2019-05-16
+Version: 0.0.3
+Date: 2019-05-23
 Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
                             email = "bsaul@novisci.com"))
 Maintainer: Bradley Saul <bsaul@novisci.com>
@@ -13,9 +13,11 @@ Imports:
    methods (>= 3.5),
    assertthat (>= 0.2.0),
    purrr (>= 0.2.5),
+   tibble (>= 2.1.1),
    SugarMaryDenver (>= 0.5)
 Suggests:
-   knitr
+   knitr,
+   testthat
 License: GPL-3 + file LICENSE
 URL: https://gitlab.novisci.com/statistics/DenverSugar
 BugReports: https://gitlab.novisci.com/statistics/DenverSugar/issues
@@ -25,6 +27,8 @@ VignetteBuilder: knitr
 Repository: cran.novisci.com
 Collate: 
     'descriptionClass.R'
+    'descriptor.R'
     'variableClass.R'
     'describe.R'
+    'atibble.R'
     'aREADME.R'

@@ -6,8 +6,10 @@
 #' DenverSugar: a grammar of cohort creation
 #'
 #' TODO: add a description
+#' @include atibble.R
 #' @include describe.R
 #' @include variableClass.R
+#' @include descriptor.R
 #' @include descriptionClass.R
 
 "_PACKAGE"

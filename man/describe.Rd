@@ -6,10 +6,10 @@
 \alias{describe,variable,maybeGroup,maybeWeight,maybeDescriptor-method}
 \title{Describe a variable}
 \usage{
-describe(x, g = NULL, w = NULL, descriptor, ...)
+describe(x, g = NULL, w = NULL, .descriptors, ...)
 
 \S4method{describe}{variable,maybeGroup,maybeWeight,maybeDescriptor}(x,
-  g = NULL, w = NULL, descriptor, ...)
+  g = NULL, w = NULL, .descriptors, ...)
 }
 \arguments{
 \item{x}{a vector a values}
@@ -18,7 +18,7 @@ describe(x, g = NULL, w = NULL, descriptor, ...)
 
 \item{w}{a vector of weights (optional)}
 
-\item{descriptor}{an (optional) list of lambda functions}
+\item{.descriptors}{an (optional) list of lambda functions}
 
 \item{...}{additional arguments}
 }

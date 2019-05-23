@@ -56,3 +56,15 @@ setValidity(
     )
   }
 )
+
+#' @rdname glance
+#' @importFrom purrr map_dfr
+#' @export
+
+setMethod(
+  f          = "glance",
+  signature  = "atibble",
+  definition = function(object){
+    purrr::map_dfr(object, ~ glance(.x))
+  }
+)

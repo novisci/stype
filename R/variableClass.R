@@ -2,13 +2,14 @@
 # Defines a class "variable", which basically adds metadata to vectors of 
 # certain types.
 # TODO: should this class definition live in a separate package?
+# TODO: add support for factors, dates, and times
 #------------------------------------------------------------------------------#
 
 #' The variable R object
 #'
 #' Extends R's \code{\link{vector-class}} to provide objects with additional information. 
-#' The vector object must be one of the following basic classes: \code{"numeric", "double", 
-#' "integer", "logical", "character",}, or \code{\link{factor}}, or \code{\link{Date}}.
+#' The vector object must be one of the following basic classes: \code{"numeric", 
+#' "integer", "logical", "character"}
 #'  A variable object can used as if it was a vector.
 #' 
 #' @slot name machine readable name
@@ -42,24 +43,27 @@ setMethod(
     # ... takes arguments with the same name as any slots in a variable.
     # One could remove any arguments with the same name as any slotNames("variable")
     # (and give a warning)
-    .Object <- callNextMethod(.Object, ...)
+    
+    .Object@.Data <- list(...)[[1L]]
     
     ## Hijack the user's ability to (incorrectly) set slots
     #TODO: enforce that the first element of dots is the data which is already
     # added to .Object by the previous call
     dots <- list(...)[-1]
     desc <- append(getDescriptors(.Object), .descriptors)
-    dots[["description"]]  <- describe(.Object, g, w, .descriptors = desc, ...)
-    do.call("callNextMethod", args = append(list(.Object), dots))
+    .Object@description  <- describe(.Object, g = g, w = w, .descriptors = desc)
+    callNextMethod()
+    # validObject(.Object) 
+    # return(.Object)
+    # do.call("callNextMethod", args = append(list(.Object), dots))
   })
 
 # Set the validity of of variable object
 setValidity(
   Class  = "variable",
   method = function(object){
-    
-    valid_classes <- c("numeric", "double", "integer", "logical",
-                       "factor", "character", "Date")
+    valid_classes <- c("numeric", "double", "integer", "logical")
+                       # "factor", "character", "Date")
     data_class    <- class(methods::getDataPart(object))
     
     assertthat::validate_that(
@@ -92,5 +96,28 @@ setMethod(
   signature  = "variable",
   definition = function(object){
     cat(object@short_label,"\n", object@.Data)
+  }
+)
+
+
+#' Glance at a variable
+#' 
+#' @param object an object
+#' @importFrom tibble as_tibble
+#' @export
+
+setGeneric(
+  name = "glance", 
+  def  = function(object) standardGeneric("glance")
+)
+
+#' @rdname glance
+#' @export
+
+setMethod(
+  f          = "glance",
+  signature  = "variable",
+  definition = function(object){
+    tibble::tibble(!!! object@description)
   }
 )

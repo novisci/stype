@@ -60,16 +60,31 @@ setMethod(
   }
 )
 
+# @rdname getDescriptors
+# @export
+# TODO: add support for factors and Dates
+# setMethod(
+#   f          = "getDescriptors",
+#   signature  = "factor",
+#   definition = function(x){
+#     list(
+#       table  = function(x, ...) table(x, useNA = "ifany"),
+#       levels = function(x, ...) levels(x)
+#     )
+#   }
+# )
+
 #' @rdname getDescriptors
 #' @export
 
 setMethod(
   f          = "getDescriptors",
-  signature  = "factor",
+  signature  = "character",
   definition = function(x){
     list(
-      table  = function(x, ...) table(x, useNA = "ifany"),
-      levels = function(x, ...) levels(x)
+      n_unique = function(x, ...) length(unique(x)),
+      max_char = function(x, ...) max(nchar(x)),
+      min_char = function(x, ...) min(nchar(x))
     )
   }
 )
@@ -90,27 +105,19 @@ setMethod(
   }
 )
 
-#' @rdname getDescriptors
-#' @export
+# @rdname getDescriptors
+# @export
+# setMethod(
+#   f          = "getDescriptors",
+#   signature  = "groupVar",
+#   definition = function(x){
+#     list(
+#       smd = function(x, g, w = NULL) SugarMaryDenver::smd(x, g, w, na.rm = TRUE)
+#     )
+#   }
+# )
 
-setMethod(
-  f          = "getDescriptors",
-  signature  = "groupVar",
-  definition = function(x){
-    list(
-      smd = function(x, g, w = NULL) SugarMaryDenver::smd(x, g, w, na.rm = TRUE)
-    )
-  }
-)
 
-#' @rdname getDescriptors
-#' @export
-
-setMethod(
-  f          = "getDescriptors",
-  signature  = "maybeWeight",
-  definition = function(x){ NULL }
-)
 
 #' @rdname getDescriptors
 #' @export

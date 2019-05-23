@@ -8,6 +8,10 @@ x@description
 
 x <- variable(c(TRUE, FALSE, TRUE, TRUE, NA), 
               short_label = "A test variable")
+
+x <- variable(LETTERS[1:2], 
+              short_label = "A test variable")
+x@description
 getDescriptors(x@.Data)
 x@description
 
@@ -24,10 +28,7 @@ describe(x2)
 
 
 
-ff <- function(x){
-  purrr::map_dfr(x, ~ tibble::as_tibble(.x@description))
-}
-ff(z1)
+
 
 z1$z@description
 broom::glance(z1)
@@ -51,15 +52,3 @@ setMethod(
   }
 )
 
-
-nobs <- list(
-  fun     = function(x, g, w, ...) length(x),
-  label   = "Number of observations",
-  printer = function(var, val) sprintf("%s has %s observations", var, val)
-)
-
-mean_sd <- list(
-  fun     = function(x, g, w, ...) list(mean = mean(x), sd = sd(x)),
-  label   = "Number of observations",
-  printer = function(var, val) sprintf("%s (%s)", val[["mean"]], val[["sd"]])
-)

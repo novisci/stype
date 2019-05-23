@@ -5,10 +5,8 @@
 \alias{getDescriptors}
 \alias{getDescriptors,variable-method}
 \alias{getDescriptors,logical-method}
-\alias{getDescriptors,factor-method}
+\alias{getDescriptors,character-method}
 \alias{getDescriptors,numeric-method}
-\alias{getDescriptors,groupVar-method}
-\alias{getDescriptors,maybeWeight-method}
 \alias{getDescriptors,NULL-method}
 \title{Descriptor}
 \usage{
@@ -18,13 +16,9 @@ getDescriptors(x)
 
 \S4method{getDescriptors}{logical}(x)
 
-\S4method{getDescriptors}{factor}(x)
+\S4method{getDescriptors}{character}(x)
 
 \S4method{getDescriptors}{numeric}(x)
-
-\S4method{getDescriptors}{groupVar}(x)
-
-\S4method{getDescriptors}{maybeWeight}(x)
 
 \S4method{getDescriptors}{`NULL`}(x)
 }

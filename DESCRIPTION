@@ -1,20 +1,21 @@
 Package: DenverSugar
 Type: Package
 Title: Compute descriptive statistics
-Version: 0.0.3
+Version: 0.0.4
 Date: 2019-05-23
 Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
                             email = "bsaul@novisci.com"))
 Maintainer: Bradley Saul <bsaul@novisci.com>
 Description: Computes descriptive statistics for most R atomic types plus an API for
     data.frames. The package aims to be tidyverse-friendly but not tidyverse-dependent 
-    (except purrr).
+    (except purrr and tibble).
 Imports:
    methods (>= 3.5),
    assertthat (>= 0.2.0),
    purrr (>= 0.2.5),
    tibble (>= 2.1.1),
-   SugarMaryDenver (>= 0.5)
+   SugarMaryDenver (>= 0.5),
+   broom (>= 0.4.4)
 Suggests:
    knitr,
    testthat

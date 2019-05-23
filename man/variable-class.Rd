@@ -7,8 +7,8 @@
 \title{The variable R object}
 \description{
 Extends R's \code{\link{vector-class}} to provide objects with additional information. 
-The vector object must be one of the following basic classes: \code{"numeric", "double", 
-"integer", "logical", "character",}, or \code{\link{factor}}, or \code{\link{Date}}.
+The vector object must be one of the following basic classes: \code{"numeric", 
+"integer", "logical", "character"}
  A variable object can used as if it was a vector.
 }
 \section{Slots}{

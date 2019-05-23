@@ -36,7 +36,7 @@ variable <- setClass(
 setMethod(
   f          = "initialize",
   signature  = "variable",
-  definition = function(.Object, ..., descriptor = descriptor(.Object), g = NULL, w = NULL){
+  definition = function(.Object, ..., .descriptors = NULL, g = NULL, w = NULL){
 
     # TODO: there is potential for conflicting arguments if the describe function's
     # ... takes arguments with the same name as any slots in a variable.
@@ -48,8 +48,8 @@ setMethod(
     #TODO: enforce that the first element of dots is the data which is already
     # added to .Object by the previous call
     dots <- list(...)[-1]
-    desc <- if(missing(descriptor)) NULL else descriptor
-    dots[["description"]]  <- describe(.Object, g, w, descriptor = desc,...)
+    desc <- append(getDescriptors(.Object), .descriptors)
+    dots[["description"]]  <- describe(.Object, g, w, .descriptors = desc, ...)
     do.call("callNextMethod", args = append(list(.Object), dots))
   })
 
@@ -74,7 +74,7 @@ setValidity(
       .f = function(x){
         assertthat::validate_that(
           length(methods::slot(object, x)) == 1,
-          msg = "short_label must be length 1"
+          msg = sprintf("\n%s must be length 1.", x)
         )
       }
     )

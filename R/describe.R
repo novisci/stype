@@ -1,6 +1,9 @@
 #------------------------------------------------------------------------------#
 # Defines the following
-# - descriptor: a method that returns an unevaluated description for a variable
+#
+# - useful class unions 
+# - getDescriptors: a method that gets descriptors
+# - .describe: the internal method for applying a descriptor
 # - describe: applies a descriptor to a variable
 
 # Classes used internally to define methods for signatures with possibly missing
@@ -20,13 +23,13 @@ setClassUnion("maybeDescriptor", c("missing", "NULL", "list"))
 #' @importFrom stats IQR median sd quantile
 #' @export
 
-setGeneric("descriptor", function(x) standardGeneric("descriptor"))
+setGeneric("getDescriptors", function(x) standardGeneric("getDescriptors"))
 
-#' @rdname descriptor
+#' @rdname getDescriptors
 #' @export
 
 setMethod(
-  f          = "descriptor",
+  f          = "getDescriptors",
   signature  = "variable",
   definition = function(x){
     append(
@@ -40,15 +43,15 @@ setMethod(
         R_type       = function(x, ...) typeof(x@.Data)
       ),
       # TODO create methods for each data type below
-      descriptor(x@.Data))
+      getDescriptors(x@.Data))
   }
 )
 
-#' @rdname descriptor
+#' @rdname getDescriptors
 #' @export
 
 setMethod(
-  f          = "descriptor",
+  f          = "getDescriptors",
   signature  = "logical",
   definition = function(x){
     list(
@@ -57,11 +60,11 @@ setMethod(
   }
 )
 
-#' @rdname descriptor
+#' @rdname getDescriptors
 #' @export
 
 setMethod(
-  f          = "descriptor",
+  f          = "getDescriptors",
   signature  = "factor",
   definition = function(x){
     list(
@@ -71,11 +74,11 @@ setMethod(
   }
 )
 
-#' @rdname descriptor
+#' @rdname getDescriptors
 #' @export
 
 setMethod(
-  f          = "descriptor",
+  f          = "getDescriptors",
   signature  = "numeric",
   definition = function(x){
     list(
@@ -87,11 +90,11 @@ setMethod(
   }
 )
 
-#' @rdname descriptor
+#' @rdname getDescriptors
 #' @export
 
 setMethod(
-  f          = "descriptor",
+  f          = "getDescriptors",
   signature  = "groupVar",
   definition = function(x){
     list(
@@ -100,20 +103,20 @@ setMethod(
   }
 )
 
-#' @rdname descriptor
+#' @rdname getDescriptors
 #' @export
 
 setMethod(
-  f          = "descriptor",
+  f          = "getDescriptors",
   signature  = "maybeWeight",
   definition = function(x){ NULL }
 )
 
-#' @rdname descriptor
+#' @rdname getDescriptors
 #' @export
 
 setMethod(
-  f          = "descriptor",
+  f          = "getDescriptors",
   signature  = "NULL",
   definition = function(x){ NULL }
 )
@@ -126,42 +129,51 @@ setMethod(
 
 setGeneric(".describe", function(f, x, g, w, ...) standardGeneric(".describe"))
 
-setMethod(
-  f          = ".describe",
-  signature  = c("function", "variable", "NULL", "NULL"),
-  definition = function(f, x, g, w, ...){ f(x, ...) } )
+.describeMethods <- list(
+  list(
+    sig = c("function", "variable", "maybeMissing", "maybeMissing"),
+    bod = quote(f(x, ...))
+  ),
+  list(
+    sig = c("function", "variable", "groupVar", "maybeMissing"),
+    bod = quote(f(x = x, g = g, ...))
+  ),
+  list(
+    sig = c("function", "variable", "maybeMissing", "numeric"),
+    bod = quote(f(x = x, w = w, ...))
+  ),
+  list(
+    sig = c("function", "variable", "groupVar", "numeric"),
+    bod = quote(f(x = x, g = g, w = w, ...) )
+  )
+)
 
-setMethod(
-  f          = ".describe",
-  signature  = c("function", "variable", "groupVar", "NULL"),
-  definition = function(f, x, g, w, ...){ f(x = x, g = g, ...) } )
-
-setMethod(
-  f          = ".describe",
-  signature  = c("function", "variable", "NULL", "numeric"),
-  definition = function(f, x, g, w, ...){ f(x = x, w = w, ...) } )
-
-setMethod(
-  f          = ".describe",
-  signature  = c("function", "variable", "groupVar", "numeric"),
-  definition = function(f, x, g, w, ...){ f(x = x, g = g, w = w, ...) })
-
-
+purrr::walk(
+  .x = .describeMethods,
+  .f = function(l){
+    
+    def <- getGeneric(".describe")
+    body(def) <- l$bod
+    
+    setMethod(f = ".describe", signature  = l$sig, definition = def)
+  }
+)
 
 #' Describe a variable
 #' 
 #' @param x a vector a values
 #' @param g a vector a groupings (optional)
 #' @param w a vector of weights (optional)
-#' @param descriptor an (optional) list of lambda functions
+#' @param .descriptors an (optional) list of lambda functions
 #' @param ... additional arguments
 #' @importFrom purrr reduce map
 #' @importFrom stats setNames
+#' @importFrom methods is
 #' @export
 
 setGeneric(
   name = "describe", 
-  def  = function(x, g = NULL, w = NULL, descriptor, ...) standardGeneric("describe")
+  def  = function(x, g = NULL, w = NULL, .descriptors, ...) standardGeneric("describe")
 )
 
 #' @rdname describe
@@ -170,25 +182,25 @@ setGeneric(
 setMethod(
   f          = "describe",
   signature  = c("variable", "maybeGroup", "maybeWeight", "maybeDescriptor"),
-  definition = function(x, g, w, descriptor, ...){
+  definition = function(x, g, w, .descriptors, ...){
     
-    if(is(descriptor, "maybeMissing")){
+    # TODO: add described() method which detects whether a variable has been 
+    # previously describe()d using the same arguments. If it has, then simply
+    # return the description slot rather than carrying out computations.
+    
+    desc <- if (missing(.descriptors) || methods::is(.descriptors, "maybeMissing")){
       purrr::reduce(
         .x = list(x, g, w),
-        .f = ~ append(.x, descriptor(.y)),
-        .init = NULL
-      ) -> desc
-    } else{
-      desc <- descriptor
+        .f = ~ append(.x, getDescriptors(.y)),
+        .init = NULL) 
+    } else {
+      .descriptors
     }
     
     description(
-      stats::setNames(
-        purrr::map(
-          .x = desc,
-          .f = function(f) .describe(f, x = x, g = g, w = w, ...)),
-        nm = names(desc)
-      )
+      purrr::map(
+        .x = desc,
+        .f = function(f) .describe(f, x = x, g = g, w = w, ...))
     )
   }
 )

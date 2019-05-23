@@ -1,0 +1,27 @@
+---
+title: "DenverSugar Design}"
+author: "B. Saul"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{DenverSugar Design}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Design Goals
+
+* provide an extensible set of classes that in themselves extend some R object classes to be useful in NoviSci's application suite by:
+   * attaching "metadata" to objects
+   * 
+   
+## Why not use attributes for metadata?
+
+Maybe we will.

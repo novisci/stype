@@ -1,0 +1,63 @@
+#' {{CLASS}}
+#' 
+#' {{CLASS_DESC}}
+#' 
+#' @name {{CLASS}}
+#' @importFrom methods setOldClass
+#' @export
+
+{{{CLASS_CONS}}}
+
+methods::setOldClass(c("vctrs_{{CLASS}}", "vctrs_vctr"))
+
+#' @describeIn {{CLASS}} constructor function for {{CLASS}} objects
+#' @export
+
+{{CLASS}} <- function(x = {{PTYPE}}()){
+  x <- vctrs::vec_cast(x, {{PTYPE}}())
+  new_{{CLASS}}(x)
+}
+
+#' @describeIn {{CLASS}} predicate function for {{CLASS}} objects
+#' @export
+is_{{CLASS}} <- function(x){
+  inherits(x, "vctrs_{{CLASS}}")
+}
+
+# Formatting of {{CLASS}} vectors
+
+format.vctrs_{{CLASS}} <- function(x, ...) {
+  apply_formatters(x, {{FORMATTERS}} ...)
+}
+
+# Casting and coercing ####
+
+# Boilerplate from:
+# https://vctrs.r-lib.org/articles/s3-vector.html#double-dispatch
+vec_type2.{{CLASS}} <- function(x, y, ...) UseMethod("vec_type2.{{CLASS}}", y)
+vec_type2.{{CLASS}}.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+  stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
+}
+vec_type2.{{CLASS}}.vctrs_unspecified <- function(x, y, ...) x
+
+vec_cast.{{CLASS}} <- function(x, to) UseMethod("vec_cast.{{CLASS}}")
+vec_cast.{{CLASS}}.default <- function(x, to) vec_default_cast(x, to)
+
+vec_type2.vctrs_{{CLASS}}.vctrs_{{CLASS}} <- function(x, y, ...) new_{{CLASS}}()
+
+## coercing from
+# Note: "Because double dispatch is a bit of a hack, we need to provide two methods.
+# It’s your responsibility to ensure that each pair return the same result: 
+# if they don’t you will get weird and unpredictable behaviour."
+
+{{{COMMON_TYPES}}}
+
+# coercing a {{CLASS}} to a {{CLASS}}
+vec_cast.vctrs_{{CLASS}}.vctrs_{{CLASS}} <- function(x, to) x
+
+{{{CASTING}}}
+
+as_{{CLASS}} <- function(x) {
+  vec_cast(x, new_{{CLASS}}())
+}
+

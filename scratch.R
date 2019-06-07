@@ -1,5 +1,33 @@
-library(dplyr)
+library(DenverSugar)
+xx <- count(1L:10000L)
+xx
+attr(xx, "desc")
+describe(xx)
 
+describe(xx[1:100])
+
+zz <- tibble::tibble(x = xx)
+attr(zz$x, "desc")
+library(magrittr)
+zz %>% 
+  dplyr::mutate(
+    g = rep(c(TRUE, FALSE), each = 5000)
+  ) %>%
+  dplyr::group_split(g) %>%
+  purrr::map_dfr(~ describe(.x$x))
+
+summarise(
+  mean = mean(x)
+)
+
+attr(zzz$x, "desc")
+zz <- atibble(
+  name = "A test analytic file",,
+  label = "",
+  x = xx
+)
+
+describe(zz[1:1100, ])
 library(DenverSugar)
 x <- variable(c(TRUE, FALSE, TRUE, TRUE, NA), 
               short_label = "A test variable",

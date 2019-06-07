@@ -11,6 +11,7 @@ Description: Computes descriptive statistics for most R atomic types plus an API
     (except purrr and tibble).
 Imports:
    methods (>= 3.5),
+   vctrs (> 0.1.0),
    assertthat (>= 0.2.0),
    purrr (>= 0.2.5),
    tibble (>= 2.1.1),
@@ -27,10 +28,10 @@ RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Repository: cran.novisci.com
 Collate: 
+    'v_count.R'
     'descriptionClass.R'
     'descriptor.R'
     'variableClass.R'
     'describe.R'
     'atibble.R'
     'aREADME.R'
-    'v_count.R'

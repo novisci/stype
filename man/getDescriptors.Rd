@@ -3,7 +3,6 @@
 \docType{methods}
 \name{getDescriptors}
 \alias{getDescriptors}
-\alias{getDescriptors,variable-method}
 \alias{getDescriptors,logical-method}
 \alias{getDescriptors,character-method}
 \alias{getDescriptors,numeric-method}
@@ -11,8 +10,6 @@
 \title{Descriptor}
 \usage{
 getDescriptors(x)
-
-\S4method{getDescriptors}{variable}(x)
 
 \S4method{getDescriptors}{logical}(x)
 

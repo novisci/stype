@@ -19,10 +19,10 @@ test_that(
 
 
 test_that(
-  "v_count meth behaves itself",
+  "v_count math behaves itself",
   {
     x1 <- count(c(0L, 1L, 2L))
     expect_equivalent(range(x1), c(0,2))
-
+    expect_equivalent(median(x1), 1)
   }
 )

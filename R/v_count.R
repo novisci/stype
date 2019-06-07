@@ -17,19 +17,23 @@ new_count <- function(x = integer(), desc = description()){
   vctrs::new_vctr(x, desc = desc, class = "v_count")
 }
 
-#' @describeIn v_count constructor function for count objects
+#' @importFrom methods setOldClass
+methods::setOldClass(c("v_count", "vctrs_vctr"))
+
+#' Count constructor
+#' 
+#' constructor function for count objects
+#' @rdname v_count 
 #' @export
 
-count <- function(x = integer(), ...){
+v_count <- function(x = integer(), ...){
   x <- vctrs::vec_cast(x, integer())
-  # .desc <- describe(vctrs::vec_data(x))
-  #TODO
-  .desc <- description()
-  
+  .desc <- describe(vctrs::vec_data(x))
   new_count(x, desc = .desc)
 }
 
-#' @describeIn v_count predicate function for count objects
+#' Predicate function for count objects
+#' @rdname v_count 
 #' @export
 
 is_count <- function(x){
@@ -88,24 +92,28 @@ vec_cast.v_count.default  <- function(x, to) vctrs::vec_default_cast(x, to)
 
 #' @method vec_cast.v_count integer
 #' @export
-vec_cast.v_count.integer <- function(x, y, ...) count(x)
+vec_cast.v_count.integer <- function(x, y, ...) v_count(x)
 vec_cast.integer.v_count <- function(x, y, ...) vctrs::vec_data(x)
 
 #' @method vec_cast.v_count numeric
 #' @export
-vec_cast.v_count.numeric <- function(x, y, ...) count(x)
+vec_cast.v_count.numeric <- function(x, y, ...) v_count(x)
 vec_cast.numeric.v_count <- function(x, y, ...) vctrs::vec_data(x)
 
-#' @describeIn v_count casting function for count objects
+#' Casting function for count objects
+#' @rdname v_count 
 #' @export
 as_count <- function(x) {
   vctrs::vec_cast(x, new_count())
 }
 
 # Restoration ####
+#' @importFrom vctrs vec_restore
+#' @method vec_restore v_count
+#' @export
 vec_restore.v_count <- function(x, to, ..., i = NULL) {
-  # .desc <- describe(vctrs::vec_data(x))
-  .desc <- description()
+  # browser()
+  .desc <- describe(vctrs::vec_data(x))
   new_count(x, desc = .desc)
 }
 
@@ -173,14 +181,50 @@ vec_arith.integer.v_count <- function(op, x, y) {
 vec_math.v_count <- function(fun, x, ...) {
   # TODO implement methods...
   switch(fun,
-         sum  = attr(x, "sum"),
-         mean = attr(x, "sum") / length(x),
+         sum  = attr(x, "desc")$sum,
+         mean = attr(x, "desc")$mean,
          vctrs::vec_math_base(fun, x, ...)
   )
 }
 
+#' @importFrom stats median
+#' @method median v_count
+#' @export
+median.v_count <- function(x, na.rm = FALSE, ...) {
+  median(vctrs::vec_data(x), na.rm, ...)
+}
+
+#' @importFrom stats quantile
+#' @method quantile v_count
+#' @export
+quantile.v_count <- function(x, ...) {
+  quantile(vctrs::vec_data(x),  ...)
+}
+
 # Formatting ####
+
+# format.v_count<- function(x, ...) {
+#   out <- formatC(signif(vec_data(x) * 100, 3))
+#   out[is.na(x)] <- NA
+#   out[!is.na(x)] <- paste0(out[!is.na(x)], "%")
+#   out
+# }
+
 # Print foot
 # obj_print_footer.v_count <- function(x, ...) {
 #   cat("# ", print(attr(x, "desc")[[1]]), "\n", sep = "")
 # }
+
+#' @importFrom vctrs vec_ptype_full
+#' @method vec_ptype_full v_count
+#' @export
+vec_ptype_full.v_count <- function(x) {
+  "count"
+}
+
+#' @importFrom vctrs vec_ptype_abbr
+#' @method vec_ptype_abbr v_count
+#' @export
+vec_ptype_abbr.v_count <- function(x) {
+  "cnt"
+}

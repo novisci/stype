@@ -6,6 +6,7 @@
 # - .describe: the internal method for applying a descriptor
 # - describe: applies a descriptor to a variable
 
+
 # Classes used internally to define methods for signatures with possibly missing
 # arguments.
 
@@ -14,6 +15,9 @@ setClassUnion("maybeMissing",    c("missing", "NULL"))
 setClassUnion("maybeGroup",      c("maybeMissing", "groupVar"))
 setClassUnion("maybeWeight",     c("maybeMissing", "numeric"))
 setClassUnion("maybeDescriptor", c("missing", "NULL", "list"))
+# TODO add more describable
+setClassUnion("describable",    c("integer"))
+setClassUnion("described",      c("v_count"))
 
 #' Descriptor
 #'
@@ -25,26 +29,12 @@ setClassUnion("maybeDescriptor", c("missing", "NULL", "list"))
 
 setGeneric("getDescriptors", function(x) standardGeneric("getDescriptors"))
 
-#' @rdname getDescriptors
-#' @export
-
-setMethod(
-  f          = "getDescriptors",
-  signature  = "variable",
-  definition = function(x){
-    append(
-      list(
-        # TODO insert useful summary stats that apply across all variables here
-        n            = function(x, ...) length(x),
-        has_missing  = function(x, ...) anyNA(x),
-        n_nonmissing = function(x, ...) sum(!is.na(x)),
-        n_missing    = function(x, ...) sum(is.na(x)),
-        R_class      = function(x, ...) class(x@.Data),
-        R_type       = function(x, ...) typeof(x@.Data)
-      ),
-      # TODO create methods for each data type below
-      getDescriptors(x@.Data))
-  }
+standardDescriptors <-  list(
+  # TODO insert useful summary stats that apply across all variables here
+  n            = function(x, ...) length(x),
+  has_missing  = function(x, ...) anyNA(x),
+  n_nonmissing = function(x, ...) sum(!is.na(x)),
+  n_missing    = function(x, ...) sum(is.na(x))
 )
 
 #' @rdname getDescriptors
@@ -54,9 +44,11 @@ setMethod(
   f          = "getDescriptors",
   signature  = "logical",
   definition = function(x){
-    list(
-      proportion = function(x, ...) mean(x, na.rm = TRUE)
-    )
+    append(
+      standardDescriptors,
+      list(
+       proportion = function(x, ...) mean(x, na.rm = TRUE)
+      ))
   }
 )
 
@@ -81,10 +73,13 @@ setMethod(
   f          = "getDescriptors",
   signature  = "character",
   definition = function(x){
-    list(
-      n_unique = function(x, ...) length(unique(x)),
-      max_char = function(x, ...) max(nchar(x)),
-      min_char = function(x, ...) min(nchar(x))
+    append(
+      standardDescriptors,
+        list(
+          n_unique = function(x, ...) length(unique(x)),
+          max_char = function(x, ...) max(nchar(x)),
+          min_char = function(x, ...) min(nchar(x))
+        )
     )
   }
 )
@@ -96,11 +91,16 @@ setMethod(
   f          = "getDescriptors",
   signature  = "numeric",
   definition = function(x){
-    list(
-      mean   = function(x, ...) mean(x, na.rm = TRUE),
-      sd     = function(x, ...) sd(x, na.rm = TRUE),
-      median = function(x, ...) median(x, na.rm = TRUE),
-      iqr    = function(x, ...) IQR(x, na.rm = TRUE)
+    append(
+      standardDescriptors,
+        list(
+          sum    = function(x, ...) sum(x, na.rm = TRUE),
+          mean   = function(x, ...) mean(x, na.rm = TRUE),
+          sd     = function(x, ...) sd(x, na.rm = TRUE),
+          median = function(x, ...) median(x, na.rm = TRUE),
+          iqr    = function(x, ...) IQR(x, na.rm = TRUE)
+          # hist   = function(x, ...) list(ggplot2::qplot(x, geom = "histogram", ...))
+        )
     )
   }
 )
@@ -138,19 +138,19 @@ setGeneric(".describe", function(f, x, g, w, ...) standardGeneric(".describe"))
 
 .describeMethods <- list(
   list(
-    sig = c("function", "variable", "maybeMissing", "maybeMissing"),
+    sig = c("function", "describable", "maybeMissing", "maybeMissing"),
     bod = quote(f(x, ...))
   ),
   list(
-    sig = c("function", "variable", "groupVar", "maybeMissing"),
+    sig = c("function", "describable", "groupVar", "maybeMissing"),
     bod = quote(f(x = x, g = g, ...))
   ),
   list(
-    sig = c("function", "variable", "maybeMissing", "numeric"),
+    sig = c("function", "describable", "maybeMissing", "numeric"),
     bod = quote(f(x = x, w = w, ...))
   ),
   list(
-    sig = c("function", "variable", "groupVar", "numeric"),
+    sig = c("function", "describable", "groupVar", "numeric"),
     bod = quote(f(x = x, g = g, w = w, ...) )
   )
 )
@@ -188,7 +188,7 @@ setGeneric(
 
 setMethod(
   f          = "describe",
-  signature  = c("variable", "maybeGroup", "maybeWeight", "maybeDescriptor"),
+  signature  = c("describable", "maybeGroup", "maybeWeight", "maybeDescriptor"),
   definition = function(x, g, w, .descriptors, ...){
     
     # TODO: add described() method which detects whether a variable has been 
@@ -209,6 +209,22 @@ setMethod(
         .x = desc,
         .f = function(f) .describe(f, x = x, g = g, w = w, ...))
     )
+  }
+)
+
+
+#' @rdname describe
+#' @export
+
+setMethod(
+  f          = "describe",
+  signature  = c("described", "maybeGroup", "maybeWeight", "maybeDescriptor"),
+  definition = function(x, g, w, .descriptors, ...){
+    
+    # TODO: add described() method which detects whether a variable has been 
+    # previously describe()d using the same arguments. If it has, then simply
+    # return the description slot rather than carrying out computations.
+    as.data.frame(attr(x, "desc"))
   }
 )
 

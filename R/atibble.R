@@ -36,7 +36,7 @@ setMethod(
   definition = function(.Object, name, label, ...){
     
     vars <- list(...)
-    vars <- purrr::set_names(vars, purrr::map(vars, ~ .x@name))
+    # vars <- purrr::set_names(vars, purrr::map(vars, ~ .x@name))
 
     # browser()
     dt <- tibble::tibble(
@@ -50,10 +50,12 @@ setMethod(
 setValidity(
   Class  = "atibble",
   method = function(object){
-    assertthat::validate_that(
-      all(purrr::map_lgl(object, ~ methods::is(.x, "variable"))),
-      msg = "All columns of a tibble must be S4 variable class objects."
-    )
+    # assertthat::validate_that(
+    #   all(purrr::map_lgl(object, ~ methods::is(.x, "variable"))),
+    #   msg = "All columns of a tibble must be S4 variable class objects."
+    # )
+    
+    TRUE
   }
 )
 
@@ -65,6 +67,6 @@ setMethod(
   f          = "glance",
   signature  = "atibble",
   definition = function(object){
-    purrr::map_dfr(object, ~ glance(.x))
+    purrr::map_dfr(object, ~ describe(.x))
   }
 )

@@ -18,13 +18,6 @@ as_count(x)
 }
 \description{
 Some desc
+
+constructor function for count objects
 }
-\section{Functions}{
-\itemize{
-\item \code{count}: constructor function for count objects
-
-\item \code{is_count}: predicate function for count objects
-
-\item \code{as_count}: casting function for count objects
-}}
-

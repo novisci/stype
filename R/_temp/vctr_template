@@ -4,18 +4,28 @@
 #' 
 #' @name {{CLASS}}
 #' @importFrom methods setOldClass
+#' @method vec_cast vctrs_{{CLASS}}
 #' @export
+#' @export vec_cast.vctrs_{{CLASS}}
+
+new_{{CLASS}} <- function(x = {{PTYPE}}(), desc = description()){
+   vctrs::vec_assert(x, ptype = {{PTYPE}}())
+   vctrs::vec_assert(desc, ptype = description())
+     
+   vctrs::new_vctr(x, desc = desc, class = 'vctrs_{{CLASS}}')
+}
 
 {{{CLASS_CONS}}}
-
 methods::setOldClass(c("vctrs_{{CLASS}}", "vctrs_vctr"))
 
 #' @describeIn {{CLASS}} constructor function for {{CLASS}} objects
 #' @export
 
-{{CLASS}} <- function(x = {{PTYPE}}()){
+{{CLASS}} <- function(x = {{PTYPE}}(), ...){
   x <- vctrs::vec_cast(x, {{PTYPE}}())
-  new_{{CLASS}}(x)
+  .desc = apply_descriptors(x, {{DESCRIPTORS}} ...)
+  
+  new_{{CLASS}}(x, desc = .desc)
 }
 
 #' @describeIn {{CLASS}} predicate function for {{CLASS}} objects
@@ -34,14 +44,14 @@ format.vctrs_{{CLASS}} <- function(x, ...) {
 
 # Boilerplate from:
 # https://vctrs.r-lib.org/articles/s3-vector.html#double-dispatch
-vec_type2.{{CLASS}} <- function(x, y, ...) UseMethod("vec_type2.{{CLASS}}", y)
-vec_type2.{{CLASS}}.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_type2.vctrs_{{CLASS}} <- function(x, y, ...) UseMethod("vec_type2.vctrs_{{CLASS}}", y)
+vec_type2.vctrs_{{CLASS}}.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
-vec_type2.{{CLASS}}.vctrs_unspecified <- function(x, y, ...) x
+vec_type2.vctrs_{{CLASS}}.vctrs_unspecified <- function(x, y, ...) x
 
-vec_cast.{{CLASS}} <- function(x, to) UseMethod("vec_cast.{{CLASS}}")
-vec_cast.{{CLASS}}.default <- function(x, to) vec_default_cast(x, to)
+vec_cast.vctrs_{{CLASS}} <- function(x, to) UseMethod("vec_cast.{{CLASS}}")
+vec_cast.vctrs_{{CLASS}}.default <- function(x, to) vec_default_cast(x, to)
 
 vec_type2.vctrs_{{CLASS}}.vctrs_{{CLASS}} <- function(x, y, ...) new_{{CLASS}}()
 
@@ -51,13 +61,20 @@ vec_type2.vctrs_{{CLASS}}.vctrs_{{CLASS}} <- function(x, y, ...) new_{{CLASS}}()
 # if they don’t you will get weird and unpredictable behaviour."
 
 {{{COMMON_TYPES}}}
-
 # coercing a {{CLASS}} to a {{CLASS}}
 vec_cast.vctrs_{{CLASS}}.vctrs_{{CLASS}} <- function(x, to) x
 
 {{{CASTING}}}
-
 as_{{CLASS}} <- function(x) {
   vec_cast(x, new_{{CLASS}}())
 }
 
+# Print foot
+obj_print_footer.vctrs_{{CLASS}} <- function(x, ...) {
+  cat("# ", print(attr(x, "desc")[[1]]), "\n", sep = "")
+}
+
+vec_restore.vctrs_{{CLASS}} <- function(x, to, ..., i = NULL) {
+  .desc = apply_descriptors(x, {{DESCRIPTORS}} ...)
+  new_{{CLASS}}(x, desc = .desc)
+}

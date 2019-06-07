@@ -4,15 +4,15 @@
 #' 
 #' @name example
 #' @importFrom methods setOldClass
+#' @method vec_cast vctrs_example
 #' @export
+#' @export vec_cast.vctrs_example
 
-
-new_example <- function(x = double(), sum = 0L, mean = 0L){
+new_example <- function(x = double(), desc = description()){
    vctrs::vec_assert(x, ptype = double())
-   vctrs::vec_assert(sum, ptype = double(), size = 0L)
-   vctrs::vec_assert(mean, ptype = NULL, size = NULL)
+   vctrs::vec_assert(desc, ptype = description())
      
-   vctrs::new_vctr(x, sum = sum, mean = mean, class = 'vctrs_example')
+   vctrs::new_vctr(x, desc = desc, class = 'vctrs_example')
 }
 
 
@@ -21,9 +21,11 @@ methods::setOldClass(c("vctrs_example", "vctrs_vctr"))
 #' @describeIn example constructor function for example objects
 #' @export
 
-example <- function(x = double()){
+example <- function(x = double(), ...){
   x <- vctrs::vec_cast(x, double())
-  new_example(x)
+  .desc = apply_descriptors(x, c('describe_mean_var','describe_quantiles'), ...)
+  
+  new_example(x, desc = .desc)
 }
 
 #' @describeIn example predicate function for example objects
@@ -35,21 +37,21 @@ is_example <- function(x){
 # Formatting of example vectors
 
 format.vctrs_example <- function(x, ...) {
-  apply_formatters(x, c('round','as.character'), ...)
+  apply_formatters(x, c('round'), ...)
 }
 
 # Casting and coercing ####
 
 # Boilerplate from:
 # https://vctrs.r-lib.org/articles/s3-vector.html#double-dispatch
-vec_type2.example <- function(x, y, ...) UseMethod("vec_type2.example", y)
-vec_type2.example.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_type2.vctrs_example <- function(x, y, ...) UseMethod("vec_type2.vctrs_example", y)
+vec_type2.vctrs_example.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
-vec_type2.example.vctrs_unspecified <- function(x, y, ...) x
+vec_type2.vctrs_example.vctrs_unspecified <- function(x, y, ...) x
 
-vec_cast.example <- function(x, to) UseMethod("vec_cast.example")
-vec_cast.example.default <- function(x, to) vec_default_cast(x, to)
+vec_cast.vctrs_example <- function(x, to) UseMethod("vec_cast.example")
+vec_cast.vctrs_example.default <- function(x, to) vec_default_cast(x, to)
 
 vec_type2.vctrs_example.vctrs_example <- function(x, y, ...) new_example()
 
@@ -63,7 +65,6 @@ vec_type2.double.vctrs_example <- function(x, y, ...) double()
 
 vec_type2.vctrs_example.numeric <- function(x, y, ...) numeric()
 vec_type2.numeric.vctrs_example <- function(x, y, ...) numeric()
-
 # coercing a example to a example
 vec_cast.vctrs_example.vctrs_example <- function(x, to) x
 
@@ -72,24 +73,33 @@ vec_cast.double.vctrs_example <- function(x, y, ...) vec_data()
 
 vec_cast.vctrs_example.numeric <- function(x, y, ...) example()
 vec_cast.numeric.vctrs_example <- function(x, y, ...) vec_data()
-
 as_example <- function(x) {
   vec_cast(x, new_example())
 }
-#' example2
+
+# Print foot
+obj_print_footer.vctrs_example <- function(x, ...) {
+  cat("# ", print(attr(x, "desc")[[1]]), "\n", sep = "")
+}
+
+vec_restore.vctrs_example <- function(x, to, ..., i = NULL) {
+  .desc = apply_descriptors(x, c('describe_mean_var','describe_quantiles'), ...)
+  new_example(x, desc = .desc)
+}#' example2
 #' 
 #'  Some desc 2
 #' 
 #' @name example2
 #' @importFrom methods setOldClass
+#' @method vec_cast vctrs_example2
 #' @export
+#' @export vec_cast.vctrs_example2
 
-
-new_example2 <- function(){
+new_example2 <- function(x = numeric(), desc = description()){
    vctrs::vec_assert(x, ptype = numeric())
-   
+   vctrs::vec_assert(desc, ptype = description())
      
-   vctrs::new_vctr(x,  class = 'vctrs_example2')
+   vctrs::new_vctr(x, desc = desc, class = 'vctrs_example2')
 }
 
 
@@ -98,9 +108,11 @@ methods::setOldClass(c("vctrs_example2", "vctrs_vctr"))
 #' @describeIn example2 constructor function for example2 objects
 #' @export
 
-example2 <- function(x = numeric()){
+example2 <- function(x = numeric(), ...){
   x <- vctrs::vec_cast(x, numeric())
-  new_example2(x)
+  .desc = apply_descriptors(x,  ...)
+  
+  new_example2(x, desc = .desc)
 }
 
 #' @describeIn example2 predicate function for example2 objects
@@ -112,21 +124,21 @@ is_example2 <- function(x){
 # Formatting of example2 vectors
 
 format.vctrs_example2 <- function(x, ...) {
-  apply_formatters(x, c('round','as.character'), ...)
+  apply_formatters(x, c('round'), ...)
 }
 
 # Casting and coercing ####
 
 # Boilerplate from:
 # https://vctrs.r-lib.org/articles/s3-vector.html#double-dispatch
-vec_type2.example2 <- function(x, y, ...) UseMethod("vec_type2.example2", y)
-vec_type2.example2.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_type2.vctrs_example2 <- function(x, y, ...) UseMethod("vec_type2.vctrs_example2", y)
+vec_type2.vctrs_example2.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
-vec_type2.example2.vctrs_unspecified <- function(x, y, ...) x
+vec_type2.vctrs_example2.vctrs_unspecified <- function(x, y, ...) x
 
-vec_cast.example2 <- function(x, to) UseMethod("vec_cast.example2")
-vec_cast.example2.default <- function(x, to) vec_default_cast(x, to)
+vec_cast.vctrs_example2 <- function(x, to) UseMethod("vec_cast.example2")
+vec_cast.vctrs_example2.default <- function(x, to) vec_default_cast(x, to)
 
 vec_type2.vctrs_example2.vctrs_example2 <- function(x, y, ...) new_example2()
 
@@ -136,12 +148,20 @@ vec_type2.vctrs_example2.vctrs_example2 <- function(x, y, ...) new_example2()
 # if they don’t you will get weird and unpredictable behaviour."
 
 
-
 # coercing a example2 to a example2
 vec_cast.vctrs_example2.vctrs_example2 <- function(x, to) x
 
 
-
 as_example2 <- function(x) {
   vec_cast(x, new_example2())
+}
+
+# Print foot
+obj_print_footer.vctrs_example2 <- function(x, ...) {
+  cat("# ", print(attr(x, "desc")[[1]]), "\n", sep = "")
+}
+
+vec_restore.vctrs_example2 <- function(x, to, ..., i = NULL) {
+  .desc = apply_descriptors(x,  ...)
+  new_example2(x, desc = .desc)
 }

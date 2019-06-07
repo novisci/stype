@@ -11,6 +11,8 @@
 #' @include variableClass.R
 #' @include descriptor.R
 #' @include descriptionClass.R
+# @include vctr_formatters.R
+# @include vctr_generator.R
 
 "_PACKAGE"
 

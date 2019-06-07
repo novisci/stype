@@ -1,5 +1,11 @@
 
 apply_formatters <- function(x, formatters = c(), ...){
+  x <- vctrs::vec_data(x)
+  if(is.null(formatters)){
+    # Return unformatted x
+    return(x)
+  }
+  
   purrr::reduce(
     .x = formatters,
     .f = function(x, f){
@@ -9,3 +15,4 @@ apply_formatters <- function(x, formatters = c(), ...){
     .init = x
   )
 }
+  

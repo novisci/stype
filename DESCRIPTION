@@ -1,7 +1,7 @@
 Package: DenverSugar
 Type: Package
 Title: Compute descriptive statistics
-Version: 0.0.5
+Version: 0.0.6
 Date: 2019-05-23
 Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
                             email = "bsaul@novisci.com"))
@@ -13,6 +13,7 @@ Imports:
    methods (>= 3.5),
    vctrs (> 0.1.0),
    assertthat (>= 0.2.0),
+   dplyr (>= 0.8.1),
    purrr (>= 0.2.5),
    tibble (>= 2.1.1),
    SugarMaryDenver (>= 0.5),
@@ -29,9 +30,10 @@ VignetteBuilder: knitr
 Repository: cran.novisci.com
 Collate: 
     'v_count.R'
+    'v_continuous.R'
+    'v_continuous_nonneg.R'
+    'v_event_time.R'
+    'v_binary.R'
     'descriptionClass.R'
-    'descriptor.R'
-    'variableClass.R'
     'describe.R'
-    'atibble.R'
     'aREADME.R'

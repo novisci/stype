@@ -1,82 +1,48 @@
 library(DenverSugar)
-xx <- count(1L:10000L)
-xx
-attr(xx, "desc")
-describe(xx)
+library(dplyr)
 
-describe(xx[1:100])
 
-zz <- tibble::tibble(x = xx)
-attr(zz$x, "desc")
-library(magrittr)
-zz %>% 
-  dplyr::mutate(
-    g = rep(c(TRUE, FALSE), each = 5000)
-  ) %>%
-  dplyr::group_split(g) %>%
-  purrr::map_dfr(~ describe(.x$x))
-
-summarise(
-  mean = mean(x)
+example <- tibble::tibble(
+  x1 = v_count(10L:1L),
+  x2 = v_binary(c(NA, rep(c(TRUE, FALSE), 4), NA)),
+  x3 = v_continuous(rnorm(10)),
+  x4 = v_continuous_nonneg(rlnorm(10)),
+  x5 = v_event_time(runif(10, min = 0, max = 10)),
+  g  = rep(LETTERS[1:2], each = 5)
 )
 
-attr(zzz$x, "desc")
-zz <- atibble(
-  name = "A test analytic file",,
-  label = "",
-  x = xx
-)
+variable( v_count(10L:1L), name = "xx", short_label = "xx", long_label = "xxx")
 
-describe(zz[1:1100, ])
-library(DenverSugar)
-x <- variable(c(TRUE, FALSE, TRUE, TRUE, NA), 
-              short_label = "A test variable",
-              .descriptors = list(xx = function(x, ...) length(x)))
-x@description
+example
+glance(example)
+example %>%
+  select_if(is_continuous)
 
-x <- variable(c(TRUE, FALSE, TRUE, TRUE, NA), 
-              short_label = "A test variable")
+example %>%
+  select_if(is_binary)
 
-x <- variable(LETTERS[1:2], 
-              short_label = "A test variable")
-x@description
-getDescriptors(x@.Data)
-x@description
+example %>%
+  select_if(is_count)
 
-x <- variable(c(TRUE, FALSE, TRUE, TRUE, FALSE), 
-              short_label = "A test variable")
+ex_sub <- example %>%
+  filter(rep(c(TRUE, FALSE), 5))
 
-describe(x, g = c("A", "A", "A", "B", "B"), w = c(2, 2, 2, 1, 1))
+attr(ex_sub@data$x3, "desc")
+
+example %>%
+  DenverSugar::group_split(g) %>%
+  purrr::map(
+    .x = .,
+    .f = ~ glance(.x)
+  )
 
 
-x2 <- variable(rnorm(100))
-describe(x2)
+%>%
+  .@data %>%
+  purrr::map(
+    .x = .$data,
+    .f = ~ glance(.x)
+  )
 
 
-
-
-
-
-
-z1$z@description
-broom::glance(z1)
-data.frame2 <- setClass(
-  "data.frame2",
-  contains = "data.frame"
-)
-
-
-
-setMethod(
-  f = "filter",
-  signature = "data.frame2",
-  function(.data, ..., .preserve = FALSE){
-    .data %>%
-      {
-        df <- .
-        . %>% dplyr::filter(..., .preserve) -> out
-        out
-      }
-  }
-)
-
+ex_sub %>% glance()

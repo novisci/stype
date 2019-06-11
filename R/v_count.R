@@ -139,8 +139,8 @@ vec_arith.v_count.default <- function(op, x, y) {
 vec_arith.v_count.v_count <- function(op, x, y) {
   switch(
     op,
-    "+" = new_count(vctrs::vec_arith_base(op, x, y)),
-    "-" = new_count(vctrs::vec_arith_base(op, x, y)),
+    "+" = v_count(vctrs::vec_arith_base(op, x, y)),
+    "-" = v_count(vctrs::vec_arith_base(op, x, y)),
     stop_incompatible_op(op, x, y)
   )
 }
@@ -150,8 +150,8 @@ vec_arith.v_count.v_count <- function(op, x, y) {
 vec_arith.v_count.integer <- function(op, x, y) {
   switch(
     op,
-    "+" = new_count(vctrs::vec_arith_base(op, x, y)),
-    "-" = new_count(vctrs::vec_arith_base(op, x, y)),
+    "+" = v_count(vctrs::vec_arith_base(op, x, y)),
+    "-" = v_count(vctrs::vec_arith_base(op, x, y)),
     stop_incompatible_op(op, x, y)
   )
 }
@@ -168,8 +168,8 @@ vec_arith.integer <- function(op, x, y) {
 vec_arith.integer.v_count <- function(op, x, y) {
   switch(
     op,
-    "+" = new_count(vctrs::vec_arith_base(op, x, y)),
-    "-" = new_count(vctrs::vec_arith_base(op, x, y)),
+    "+" = v_count(vctrs::vec_arith_base(op, x, y)),
+    "-" = v_count(vctrs::vec_arith_base(op, x, y)),
     stop_incompatible_op(op, x, y)
   )
 }
@@ -201,6 +201,12 @@ quantile.v_count <- function(x, ...) {
   quantile(vctrs::vec_data(x),  ...)
 }
 
+#' @method range v_count
+#' @export
+range.v_count <- function(..., na.rm = FALSE) {
+  range(vctrs::vec_data(..1),  na.rm = FALSE)
+}
+
 # Formatting ####
 
 # format.v_count<- function(x, ...) {
@@ -211,9 +217,12 @@ quantile.v_count <- function(x, ...) {
 # }
 
 # Print foot
-# obj_print_footer.v_count <- function(x, ...) {
-#   cat("# ", print(attr(x, "desc")[[1]]), "\n", sep = "")
-# }
+#' @importFrom vctrs obj_print_footer
+#' @method obj_print_footer v_count
+#' @export
+obj_print_footer.v_count <- function(x, ...) {
+  cat("# Total: ", attr(x, "desc")[["sum"]], "\n", sep = "")
+}
 
 #' @importFrom vctrs vec_ptype_full
 #' @method vec_ptype_full v_count
@@ -226,5 +235,11 @@ vec_ptype_full.v_count <- function(x) {
 #' @method vec_ptype_abbr v_count
 #' @export
 vec_ptype_abbr.v_count <- function(x) {
+  "cnt"
+}
+
+#' @importFrom pillar type_sum
+#' @export
+type_sum.v_count <- function(x) {
   "cnt"
 }

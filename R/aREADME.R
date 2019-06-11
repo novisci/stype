@@ -7,10 +7,14 @@
 #'
 #' TODO: add a description
 #' @include atibble.R
-#' @include describe.R
 #' @include variableClass.R
+#' @include describe.R
 #' @include descriptor.R
 #' @include descriptionClass.R
+#' @include v_binary.R
+#' @include v_event_time.R
+#' @include v_continuous_nonneg.R
+#' @include v_continuous.R
 #' @include v_count.R
 
 "_PACKAGE"

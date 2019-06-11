@@ -3,14 +3,13 @@
 \name{v_count}
 \alias{v_count}
 \alias{new_count}
-\alias{count}
 \alias{is_count}
 \alias{as_count}
 \title{Count vectors}
 \usage{
 new_count(x = integer(), desc = description())
 
-count(x = integer(), ...)
+v_count(x = integer(), ...)
 
 is_count(x)
 

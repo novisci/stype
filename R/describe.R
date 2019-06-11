@@ -16,8 +16,9 @@ setClassUnion("maybeGroup",      c("maybeMissing", "groupVar"))
 setClassUnion("maybeWeight",     c("maybeMissing", "numeric"))
 setClassUnion("maybeDescriptor", c("missing", "NULL", "list"))
 # TODO add more describable
-setClassUnion("describable",    c("integer"))
-setClassUnion("described",      c("v_count"))
+setClassUnion("describable",    c("integer", "logical", "numeric"))
+setClassUnion("described",      c("v_count", "v_binary", "v_continuous", 
+                                  "v_continuous_nonneg", "v_event_time"))
 
 #' Descriptor
 #'

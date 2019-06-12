@@ -6,7 +6,7 @@
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
 
-new_count <- function(x = integer(), desc = description()){
+new_count <- function(x = integer(), .desc = description(), .context = context()){
   vctrs::vec_assert(x, ptype = integer())
   assertthat::assert_that(
     all(x[!is.na(x)] >= 0),
@@ -14,7 +14,7 @@ new_count <- function(x = integer(), desc = description()){
   )
   # vctrs::vec_assert(desc, ptype = description())
   
-  vctrs::new_vctr(x, desc = desc, class = "v_count")
+  vctrs::new_vctr(x, desc = .desc, context = .context, class = "v_count")
 }
 
 #' @importFrom methods setOldClass
@@ -26,10 +26,13 @@ methods::setOldClass(c("v_count", "vctrs_vctr"))
 #' @rdname v_count 
 #' @export
 
-v_count <- function(x = integer(), ...){
+v_count <- function(x = integer(), context, ...){
   x <- vctrs::vec_cast(x, integer())
-  .desc <- describe(vctrs::vec_data(x))
-  new_count(x, desc = .desc)
+  desc <- describe(vctrs::vec_data(x))
+  if(missing(context)){
+    context <- methods::new("context")
+  }
+  new_count(x, .desc = desc, .context = context)
 }
 
 #' Predicate function for count objects
@@ -112,9 +115,12 @@ as_count <- function(x) {
 #' @method vec_restore v_count
 #' @export
 vec_restore.v_count <- function(x, to, ..., i = NULL) {
-  # browser()
-  .desc <- describe(vctrs::vec_data(x))
-  new_count(x, desc = .desc)
+  # Update description
+  desc    <- describe(vctrs::vec_data(x))
+  # Maintain context
+  context <- get_context(to)
+  
+  new_count(x, .desc = desc, .context = context)
 }
 
 # Math Operations ####

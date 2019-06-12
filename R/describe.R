@@ -48,7 +48,8 @@ setMethod(
     append(
       standardDescriptors,
       list(
-       proportion = function(x, ...) mean(x, na.rm = TRUE)
+        proportion = function(x, ...) mean(x, na.rm = TRUE),
+        count      = function(x, ...) sum(x, na.rm = TRUE)
       ))
   }
 )
@@ -229,3 +230,19 @@ setMethod(
   }
 )
 
+
+#' @rdname describe
+#' @export
+
+setMethod(
+  f          = "describe",
+  signature  = c("data.frame", "maybeGroup", "maybeWeight", "maybeDescriptor"),
+  definition = function(x, g, w, .descriptors, ...){
+    
+    # TODO: add described() method which detects whether a variable has been 
+    # previously describe()d using the same arguments. If it has, then simply
+    # return the description slot rather than carrying out computations.
+    purrr::map_dfr(x, describe)
+    # as.data.frame(attr(x, "desc"))
+  }
+)

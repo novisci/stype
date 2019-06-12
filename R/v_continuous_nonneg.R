@@ -6,7 +6,7 @@
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
 
-new_continuous_nonneg <- function(x = double(), desc = description()){
+new_continuous_nonneg <- function(x = double(), .desc = description(), .context = context()){
   vctrs::vec_assert(x, ptype = double())
   assertthat::assert_that(
     all(x[!is.na(x)] >= 0),
@@ -14,7 +14,8 @@ new_continuous_nonneg <- function(x = double(), desc = description()){
   )
   # vctrs::vec_assert(desc, ptype = description())
   
-  vctrs::new_vctr(x, desc = desc, class = c("v_continuous_nonneg", "v_continuous"))
+  vctrs::new_vctr(x, desc = .desc, context = .context,
+                  class = c("v_continuous_nonneg", "v_continuous"))
 }
 
 #' @importFrom methods setOldClass
@@ -26,10 +27,13 @@ methods::setOldClass(c("v_continuous_nonneg", "v_continuous", "vctrs_vctr"))
 #' @rdname v_continuous_nonneg 
 #' @export
 
-v_continuous_nonneg <- function(x = double(), ...){
+v_continuous_nonneg <- function(x = double(), context, ...){
   x <- vctrs::vec_cast(x, double())
-  .desc <- describe(vctrs::vec_data(x))
-  new_continuous_nonneg(x, desc = .desc)
+  desc <- describe(vctrs::vec_data(x))
+  if(missing(context)){
+    context <- methods::new("context")
+  }
+  new_continuous_nonneg(x, .desc = desc)
 }
 
 #' Predicate function for count objects
@@ -132,9 +136,12 @@ as_nonneg_continuous <- function(x) {
 #' @method vec_restore v_continuous_nonneg
 #' @export
 vec_restore.v_continuous_nonneg <- function(x, to, ..., i = NULL) {
-  # browser()
-  .desc <- describe(vctrs::vec_data(x))
-  new_continuous_nonneg(x, desc = .desc)
+  # Update description
+  desc    <- describe(vctrs::vec_data(x))
+  # Maintain context
+  context <- get_context(to)
+  
+  new_continuous_nonneg(x, .desc = desc, .context = context)
 }
 
 # Math Operations ####

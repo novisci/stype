@@ -8,7 +8,7 @@ Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"),
 Maintainer: Bradley Saul <bsaul@novisci.com>
 Description: Computes descriptive statistics for most R atomic types plus an API for
     data.frames. The package aims to be tidyverse-friendly but not tidyverse-dependent 
-    (except purrr and tibble).
+    (except purrr).
 Imports:
    methods (>= 3.5),
    vctrs (> 0.1.0),
@@ -31,6 +31,7 @@ Collate:
     'v_continuous_nonneg.R'
     'v_event_time.R'
     'v_binary.R'
-    'descriptionClass.R'
+    'description.R'
     'describe.R'
+    'context.R'
     'aREADME.R'

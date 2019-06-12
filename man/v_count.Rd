@@ -7,9 +7,9 @@
 \alias{as_count}
 \title{Count vectors}
 \usage{
-new_count(x = integer(), desc = description())
+new_count(x = integer(), .desc = description(), .context = context())
 
-v_count(x = integer(), ...)
+v_count(x = integer(), context, ...)
 
 is_count(x)
 

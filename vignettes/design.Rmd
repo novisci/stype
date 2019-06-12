@@ -1,12 +1,14 @@
 ---
-title: "DenverSugar Design}"
+title: "DenverSugar Design"
 author: "B. Saul"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{DenverSugar Design}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include = FALSE}
@@ -16,12 +18,144 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Design Goals
+> NOTE: The terms "vector" and "variable" are (mostly) used interchangably in this document.
 
-* provide an extensible set of classes that in themselves extend some R object classes to be useful in NoviSci's application suite by:
-   * attaching "metadata" to objects
-   * 
+# Design Goals
+
+`DenverSugar` provides an extensible set of data types that in themselves extend certain `R` vector classes to be useful in NoviSci's suite of analytic applications by providing vectors with:
+
+   * data types that align with common statistical data types (e.g. "binary", "continous", "count", "time to event", etc);
+   * a study design `context` with information about how the variable relates to a study design;
+   * a data `description` with relevant summary statistics of the variable;
+   * methods that update the `description` when a vector is subset or modified in certain ways;
+   * various useful utilities such as predicate functions for identifying variables based on the data type or `context`.
    
-## Why not use attributes for metadata?
+## Implementation
 
-Maybe we will.
+The package relies heavily on the [`vctrs`](https://vctrs.r-lib.org/index.html) package whose goals are:
+
+* To propose `vec_size()` and `vec_type()` as alternatives to `length()` and `class()`; `vignette("type-size")`. These definitions are paired with a framework for type-coercion and size-recycling.
+* To define type- and size-stability as desirable function properties, use them to analyse existing base function, and to propose better alternatives; `vignette("stability")`. This work has been particularly motivated by thinking about the ideal properties of `c()`, `ifelse()`, and `rbind()`.
+* To provide a new `vctr` base class that makes it easy to create new S3 vectors; `vignette("s3-vector")`. vctrs provides methods for many base generics in terms of a few new vctrs generics, making implementation considerably simpler and more robust.
+
+## A quick example
+
+Each data type provided by `DenverSugar` (described in more detail below) have constructor functions that begin with `v_<type>`. For example, `v_binary` creates binary ($\{0, 1\}$) data from R's `logical` type.
+
+```{r}
+library(DenverSugar)
+
+x <- v_binary(c(TRUE, TRUE, TRUE, FALSE))
+
+str(x)
+```
+
+The `v_binary` data type prints `0`s and `1`s but the underlying data is `logical`:
+
+```{r}
+x
+vctrs::vec_data(x)
+```
+
+The data type includes some useful utilities such as prettying certain parts of the `description` (here the proportion) and a predicate function.
+
+```{r}
+is_binary(x)
+```
+
+Certain math operations work and pull directly from the `description` where appropriate (rather than recomputing). Note these operations are still under development and should be used with caution:
+```{r}
+mean(x)
+sum(x)
+
+sum(x, x) # See? very experimental
+
+```
+
+Other math/arithmetic operations don't work:
+```{r, error=TRUE}
+# What do you mean you want to add binary and integer?
+x + 2L 
+
+# R's base types are not so safe
+vctrs::vec_data(x) + 2L
+```
+
+Logical operators work as one might expect: 
+
+```{r}
+!x
+all(x)
+any(x)
+```
+
+Here's where the real magic is. 
+
+```{r, error=TRUE}
+# vectors can be combined and ...
+# subsetting maintains and updates attributes
+c(x, !x[1:3])
+
+# But ...
+c(x, v_binary(context = context(purpose = "other")))
+
+```
+
+# Data types
+
+The following table describes the proposed data types (not all of these may be available at this time).
+
+| `v_<type>`               | prototype    | support            | 
+|--------------------------|--------------|--------------------|
+| `v_binary`               | `logical`    | $\{0, 1\}$         |
+| `v_count `               | `integer`    | $(0, 1, 2, \dots)$ |
+| `v_continuous`           | `double`     | $\mathcal{R}$      |
+| --`v_continuous_nonneg`  | `double`     | $\mathcal{R}^+$    |
+| --`v_event_time`         | `double`     | $\mathcal{R}^+$    |
+| `v_categorical_nom`      | `factor`     | |
+| `v_categorical_ord`      | `ordered`    | |
+| `v_date`                 | `Date`       | |
+| `v_character`            | `character`  | |
+
+# Usage in `tibble`
+
+```{r}
+library(dplyr)
+n <- 100 
+
+dt <- tibble::tibble(
+  y1 = v_binary(as.logical(rbinom(n, 1, 0.25)), context = context(purpose = "outcome")),
+  y2 = v_event_time(runif(n, 1, 100), context = context(purpose = "outcome")),
+  y3 = v_continuous(rnorm(n), context = context(purpose = "outcome")),
+  !!! purrr::map(
+    .x  = 1:10, 
+    .f = ~ v_binary(as.logical(rbinom(n, 1, 0.25)), 
+                    context = context(purpose = "covariate"))) %>%
+    setNames(paste0("x", 1:10))
+)
+
+dt
+```
+
+Selecting columns based on data type:
+
+```{r}
+dt %>%
+  select_if(is_binary)
+```
+
+Selecting columns based on context:
+
+```{r}
+dt %>%
+  select_if(is_outcome)
+```
+
+Obtain summary statistics for all outcomes in each subgroups 
+
+```{r}
+dt %>%
+ group_split(x1) %>%
+ purrr::map(.x = ., ~ .x %>% select_if(is_outcome) ) %>%
+ purrr::map(describe)
+```

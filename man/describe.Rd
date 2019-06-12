@@ -5,6 +5,7 @@
 \alias{describe}
 \alias{describe,describable,maybeGroup,maybeWeight,maybeDescriptor-method}
 \alias{describe,described,maybeGroup,maybeWeight,maybeDescriptor-method}
+\alias{describe,data.frame,maybeGroup,maybeWeight,maybeDescriptor-method}
 \title{Describe a variable}
 \usage{
 describe(x, g = NULL, w = NULL, .descriptors, ...)
@@ -13,6 +14,9 @@ describe(x, g = NULL, w = NULL, .descriptors, ...)
   g = NULL, w = NULL, .descriptors, ...)
 
 \S4method{describe}{described,maybeGroup,maybeWeight,maybeDescriptor}(x,
+  g = NULL, w = NULL, .descriptors, ...)
+
+\S4method{describe}{data.frame,maybeGroup,maybeWeight,maybeDescriptor}(x,
   g = NULL, w = NULL, .descriptors, ...)
 }
 \arguments{

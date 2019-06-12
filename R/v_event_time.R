@@ -6,7 +6,7 @@
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
 
-new_event_time <- function(x = double(), desc = description()){
+new_event_time <- function(x = double(), .desc = description(), .context = context()){
   vctrs::vec_assert(x, ptype = double())
   assertthat::assert_that(
     all(x[!is.na(x)] >= 0),
@@ -14,7 +14,8 @@ new_event_time <- function(x = double(), desc = description()){
   )
   # vctrs::vec_assert(desc, ptype = description())
   
-  vctrs::new_vctr(x, desc = desc, class = c("v_event_time", "v_continuous_nonneg", "v_continuous"))
+  vctrs::new_vctr(x, desc = .desc, context = .context,
+                  class = c("v_event_time", "v_continuous_nonneg", "v_continuous"))
 }
 
 #' @importFrom methods setOldClass
@@ -26,10 +27,13 @@ methods::setOldClass(c("v_event_time", "v_continuous_nonneg", "v_continuous", "v
 #' @rdname v_event_time 
 #' @export
 
-v_event_time <- function(x = v_continuous_nonneg(), ...){
+v_event_time <- function(x = v_continuous_nonneg(), context, ...){
   x <- vctrs::vec_cast(x, double())
-  .desc <- describe(vctrs::vec_data(x))
-  new_event_time(x, desc = .desc)
+  desc <- describe(vctrs::vec_data(x))
+  if(missing(context)){
+    context <- methods::new("context")
+  }
+  new_event_time(x, .desc = desc, .context = context)
 }
 
 #' Predicate function for count objects
@@ -138,9 +142,12 @@ as_event_time <- function(x) {
 #' @method vec_restore v_event_time
 #' @export
 vec_restore.v_event_time <- function(x, to, ..., i = NULL) {
-  # browser()
-  .desc <- describe(vctrs::vec_data(x))
-  new_event_time(x, desc = .desc)
+  # Update description
+  desc    <- describe(vctrs::vec_data(x))
+  # Maintain context
+  context <- get_context(to)
+  
+  new_event_time(x, .desc = desc, .context = context)
 }
 
 # Math Operations ####

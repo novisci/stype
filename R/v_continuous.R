@@ -6,11 +6,10 @@
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
 
-new_continuous <- function(x = double(), desc = description()){
+new_continuous <- function(x = double(), .desc = description(), .context = context()){
+  x <- vctrs::vec_cast(x, double())
   vctrs::vec_assert(x, ptype = double())
-  # vctrs::vec_assert(desc, ptype = description())
-  
-  vctrs::new_vctr(x, desc = desc, class = "v_continuous")
+  vctrs::new_vctr(x, desc = .desc, context = .context, class = "v_continuous")
 }
 
 #' @importFrom methods setOldClass
@@ -22,10 +21,13 @@ methods::setOldClass(c("v_continuous", "vctrs_vctr"))
 #' @rdname v_continuous 
 #' @export
 
-v_continuous <- function(x = double(), ...){
+v_continuous <- function(x = double(), context, ...){
   x <- vctrs::vec_cast(x, double())
-  .desc <- describe(vctrs::vec_data(x))
-  new_continuous(x, desc = .desc)
+  desc <- describe(vctrs::vec_data(x))
+  if(missing(context)){
+    context <- methods::new("context")
+  }
+  new_continuous(x, .desc = desc, .context = context)
 }
 
 #' Predicate function for count objects
@@ -120,8 +122,12 @@ as_continuous <- function(x) {
 #' @method vec_restore v_continuous
 #' @export
 vec_restore.v_continuous <- function(x, to, ..., i = NULL) {
-  .desc <- describe(vctrs::vec_data(x))
-  new_continuous(x, desc = .desc)
+  # Update description
+  desc    <- describe(vctrs::vec_data(x))
+  # Maintain context
+  context <- get_context(to)
+  
+  new_continuous(x, .desc = desc, .context = context)
 }
 
 # Math Operations ####

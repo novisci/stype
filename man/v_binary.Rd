@@ -7,9 +7,10 @@
 \alias{as_binary}
 \title{Count vectors}
 \usage{
-new_binary(x = logical(), desc = description())
+new_binary(x = logical(), .desc = description(),
+  .context = context())
 
-v_binary(x = logical(), ...)
+v_binary(x = logical(), context, ...)
 
 is_binary(x)
 

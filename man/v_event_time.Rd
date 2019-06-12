@@ -9,9 +9,10 @@
 \alias{as_event_time}
 \title{event_time vectors}
 \usage{
-new_event_time(x = double(), desc = description())
+new_event_time(x = double(), .desc = description(),
+  .context = context())
 
-v_event_time(x = v_continuous_nonneg(), ...)
+v_event_time(x = v_continuous_nonneg(), context, ...)
 
 is_event_time(x)
 

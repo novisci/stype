@@ -7,9 +7,10 @@
 \alias{as_continuous}
 \title{Continuous vectors}
 \usage{
-new_continuous(x = double(), desc = description())
+new_continuous(x = double(), .desc = description(),
+  .context = context())
 
-v_continuous(x = double(), ...)
+v_continuous(x = double(), context, ...)
 
 is_continuous(x)
 

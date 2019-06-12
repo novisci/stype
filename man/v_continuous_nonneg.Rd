@@ -8,9 +8,10 @@
 \alias{as_nonneg_continuous}
 \title{continuous_nonneg vectors}
 \usage{
-new_continuous_nonneg(x = double(), desc = description())
+new_continuous_nonneg(x = double(), .desc = description(),
+  .context = context())
 
-v_continuous_nonneg(x = double(), ...)
+v_continuous_nonneg(x = double(), context, ...)
 
 is_continuous_nonneg(x)
 

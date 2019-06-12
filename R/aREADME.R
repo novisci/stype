@@ -6,8 +6,9 @@
 #' DenverSugar: a grammar of cohort creation
 #'
 #' TODO: add a description
+#' @include context.R
 #' @include describe.R
-#' @include descriptionClass.R
+#' @include description.R
 #' @include v_binary.R
 #' @include v_event_time.R
 #' @include v_continuous_nonneg.R

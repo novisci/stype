@@ -23,7 +23,7 @@ getDescriptors(x)
 \S4method{getDescriptors}{`NULL`}(x)
 }
 \arguments{
-\item{x}{a \linkS4class{variable} or vector}
+\item{x}{a vector}
 }
 \description{
 A function that returns a list of functions to be applied to a variable

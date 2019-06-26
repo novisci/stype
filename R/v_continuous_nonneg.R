@@ -5,6 +5,7 @@
 #' @name v_continuous_nonneg
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
+#' @inheritParams v_count
 
 new_continuous_nonneg <- function(x = double(), .desc = description(), .context = context()){
   vctrs::vec_assert(x, ptype = double())
@@ -25,9 +26,10 @@ methods::setOldClass(c("v_continuous_nonneg", "v_continuous", "vctrs_vctr"))
 #' 
 #' constructor function for count objects
 #' @rdname v_continuous_nonneg 
+#' @param x nonnegative \code{double}
 #' @export
 
-v_continuous_nonneg <- function(x = double(), context, ...){
+v_continuous_nonneg <- function(x = double(), context){
   x <- vctrs::vec_cast(x, double())
   desc <- describe(vctrs::vec_data(x))
   if(missing(context)){
@@ -104,25 +106,25 @@ vec_type2.numeric.v_continuous_nonneg <- function(x, y, ...) y
 #' @method vec_cast v_continuous_nonneg
 #' @export
 #' @export vec_cast.v_continuous_nonneg
-vec_cast.v_continuous_nonneg <- function(x, to) UseMethod("vec_cast.v_continuous_nonneg")
+vec_cast.v_continuous_nonneg <- function(x, to, ...) UseMethod("vec_cast.v_continuous_nonneg")
 
 #' @method vec_cast.v_continuous_nonneg v_continuous_nonneg
 #' @export
-vec_cast.v_continuous_nonneg.v_continuous_nonneg <- function(x, to) x
+vec_cast.v_continuous_nonneg.v_continuous_nonneg <- function(x, to, ...) x
 
 #' @method vec_cast.v_continuous_nonneg default
 #' @export
-vec_cast.v_continuous_nonneg.default  <- function(x, to) vctrs::vec_default_cast(x, to)
+vec_cast.v_continuous_nonneg.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
 #' @method vec_cast.v_continuous_nonneg numeric
 #' @export
-vec_cast.v_continuous_nonneg.numeric <- function(x, y, ...) v_continuous_nonneg(x)
-vec_cast.numeric.v_continuous_nonneg <- function(x, y, ...) vctrs::vec_data(x)
+vec_cast.v_continuous_nonneg.numeric <- function(x, to, ...) v_continuous_nonneg(x)
+vec_cast.numeric.v_continuous_nonneg <- function(x, to, ...) vctrs::vec_data(x)
 
 #' @method vec_cast.v_continuous_nonneg numeric
 #' @export
-vec_cast.v_continuous_nonneg.numeric <- function(x, y, ...) v_continuous_nonneg(x)
-vec_cast.numeric.v_continuous_nonneg <- function(x, y, ...) vctrs::vec_data(x)
+vec_cast.v_continuous_nonneg.numeric <- function(x, to, ...) v_continuous_nonneg(x)
+vec_cast.numeric.v_continuous_nonneg <- function(x, to, ...) vctrs::vec_data(x)
 
 #' Casting function for count objects
 #' @rdname v_continuous_nonneg 

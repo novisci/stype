@@ -1,4 +1,4 @@
-context("Testing v_nomimal class")
+testthat::context("Testing v_nomimal class")
 
 test_that("v_nomimal class basically behaves", {
   x1 <- v_nomimal(factor(c(rep(LETTERS[1:3], 3), NA)))

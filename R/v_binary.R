@@ -5,6 +5,7 @@
 #' @name v_binary
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
+#' @inheritParams v_count
 
 new_binary <- function(x = logical(), .desc = description(), .context = context()){
   x <- vctrs::vec_cast(x, logical())
@@ -18,10 +19,11 @@ methods::setOldClass(c("v_binary", "vctrs_vctr"))
 #' Count constructor
 #' 
 #' constructor function for count objects
+#' @param x a \code{logical} vector
 #' @rdname v_binary 
 #' @export
 
-v_binary <- function(x = logical(), context, ...){
+v_binary <- function(x = logical(), context){
   x <- vctrs::vec_cast(x, logical())
   desc <- describe(vctrs::vec_data(x))
   if(missing(context)){
@@ -82,27 +84,27 @@ vec_type2.logical.v_binary <- function(x, y, ...) {browser(); y }
 #' @method vec_cast v_binary
 #' @export
 #' @export vec_cast.v_binary
-vec_cast.v_binary <- function(x, to) UseMethod("vec_cast.v_binary")
+vec_cast.v_binary <- function(x, to, ...) UseMethod("vec_cast.v_binary")
 
 #' @method vec_cast.v_binary v_binary
 #' @export
-vec_cast.v_binary.v_binary <- function(x, to) {
+vec_cast.v_binary.v_binary <- function(x, to, ...) {
   browser()
   v_binary(vctrs::vec_data(x), context = get_context(to))
 }
 
 #' @method vec_cast.v_binary default
 #' @export
-vec_cast.v_binary.default  <- function(x, to) vctrs::vec_default_cast(x, to)
+vec_cast.v_binary.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
 #' @method vec_cast.v_binary logical
 #' @export
-vec_cast.v_binary.logical <- function(x, y, ...) v_binary(x)
+vec_cast.v_binary.logical <- function(x, to, ...) v_binary(x)
 
 #' @importFrom vctrs vec_cast.logical
 #' @method vec_cast.logical v_binary
 #' @export
-vec_cast.logical.v_binary <- function(x, y, ...) vctrs::vec_data(x)
+vec_cast.logical.v_binary <- function(x, to, ...) vctrs::vec_data(x)
 
 #' Casting function for count objects
 #' @rdname v_binary 
@@ -249,7 +251,7 @@ obj_print_footer.v_binary <- function(x, ...) {
   has_ctxt <- !is_empty(get_context(x))
   
   # browser()
-
+  
   cat("# Proportion: ", round(attr(x, "desc")[["proportion"]], 2), 
       if(has_miss){
         paste0("; Missing: ", attr(x, "desc")[["n_missing"]])

@@ -3,35 +3,19 @@
 \docType{class}
 \name{context}
 \alias{context}
-\alias{is_purpose}
-\alias{is_purpose,context-method}
-\alias{is_outcome}
-\alias{is_outcome,context-method}
-\alias{is_exposure}
-\alias{is_exposure,context-method}
-\alias{is_covariate}
-\alias{is_covariate,context-method}
-\alias{get_context}
 \title{A context contains study design specific information about a variable}
-\usage{
-is_purpose(context, x)
-
-\S4method{is_purpose}{context}(context, x)
-
-is_outcome(x)
-
-\S4method{is_outcome}{context}(x)
-
-is_exposure(x)
-
-\S4method{is_exposure}{context}(x)
-
-is_covariate(x)
-
-\S4method{is_covariate}{context}(x)
-
-get_context(x)
-}
 \description{
 A context contains study design specific information about a variable
 }
+\section{Slots}{
+
+\describe{
+\item{\code{name}}{a name}
+
+\item{\code{short_label}}{a short_label}
+
+\item{\code{long_label}}{a long_label}
+
+\item{\code{purpose}}{a purpose}
+}}
+

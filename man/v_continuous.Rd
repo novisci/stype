@@ -10,11 +10,20 @@
 new_continuous(x = double(), .desc = description(),
   .context = context())
 
-v_continuous(x = double(), context, ...)
+v_continuous(x = double(), context)
 
 is_continuous(x)
 
 as_continuous(x)
+}
+\arguments{
+\item{x}{a \code{double} vector}
+
+\item{.desc}{a \\code{\link{description}}}
+
+\item{.context}{a \code{\link{context}}}
+
+\item{context}{a \code{\link{context}}}
 }
 \description{
 Some desc

@@ -1,4 +1,4 @@
-context("Testing v_count class")
+testthat::context("Testing v_count class")
 
 test_that(
   "v_count class behaves itself",

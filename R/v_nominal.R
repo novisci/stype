@@ -1,20 +1,10 @@
-#' v_nominal/ordered v_nominal S3 class
-#'
-#' A [v_nominal] is an integer with attribute `levels`, a character vector. There
-#' should be one level for each integer between 1 and `max(x)`.
-#' An [ordered] v_nominal has the same properties as a v_nominal, but possesses
-#' an extra class that marks levels as having a total ordering.
-#'
-#' These functions help the base v_nominal and ordered v_nominal classes fit in to
-#' the vctrs type system by providing constructors, coercion functions,
-#' and casting functions. `new_v_nominal()` and `new_ordered()` are low-level
-#' constructors - they only check that types, but not values, are valid, so
-#' are for expert use only.
-#'
-#' @param x Integer values which index in to `levels`.
+#' v_nominal S3 class
+#' 
+#' A nominal (categorial) variable
+#' 
+#' @name v_nominal
 #' @param .levels Character vector of labels.
-#' @param .desc a description
-#' @param .context a context
+#' @inheritParams v_count
 
 new_nominal <- function(x = integer(), .levels = character(),
                         .desc = description(),
@@ -36,8 +26,9 @@ methods::setOldClass(c("v_nominal", "vctrs_vctr"))
 
 #' Construction for a v_nominal
 #' @rdname v_nominal
+#' @param x a \code{factor}
 #' @export
-v_nomimal <- function(x = factor(), context, ...){
+v_nomimal <- function(x = factor(), context){
   # x <- vctrs::vec_cast(x, factor())
   desc <- describe(x)
   if(missing(context)){
@@ -52,7 +43,6 @@ v_nomimal <- function(x = factor(), context, ...){
 
 # Coerce ------------------------------------------------------------------
 
-#' @rdname new_nominal
 #' @export vec_type2.v_nominal
 #' @method vec_type2 v_nominal
 #' @export
@@ -66,7 +56,7 @@ vec_type2.character <- function(x, y, ...) UseMethod("vec_type2.character", y)
 #' @method vec_type2.v_nominal default
 #' @export
 vec_type2.v_nominal.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
+  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 #' @method vec_type2.character v_nominal
 #' @export
@@ -84,7 +74,6 @@ vec_type2.v_nominal.v_nominal <- function(x, y, ...) {
 
 # Cast --------------------------------------------------------------------
 
-#' @rdname new_nominal
 #' @export vec_cast.v_nominal
 #' @method vec_cast v_nominal
 #' @importFrom vctrs vec_cast.character
@@ -121,12 +110,12 @@ vec_cast.character.v_nominal <- function(x, to, ...) {
 #' @export
 #' @method vec_cast.v_nominal list
 vec_cast.v_nominal.list <- function(x, to, ..., x_arg = "", to_arg = "") {
-  vec_list_cast(x, to, x_arg = x_arg, to_arg = to_arg)
+  vctrs::vec_list_cast(x, to, x_arg = x_arg, to_arg = to_arg)
 }
 #' @export
 #' @method vec_cast.v_nominal default
 vec_cast.v_nominal.default <- function(x, to, ..., x_arg = "", to_arg = "") {
-  vec_default_cast(x, to, x_arg = x_arg, to_arg = to_arg)
+  vctrs::vec_default_cast(x, to, x_arg = x_arg, to_arg = to_arg)
 }
 
 #' @export
@@ -148,22 +137,32 @@ vec_restore.v_nominal <- function(x, to, ..., x_arg = "", to_arg = "") {
 levels.v_nominal <- levels.default
 
 # Math and arithmetic -----------------------------------------------------
+# @export
+# vec_math.v_nominal <- function(.fn, .x, ...) {
+#   stop_unsupported(.x, .fn)
+# }
 
-#' @export
-vec_math.v_nominal <- function(.fn, .x, ...) {
-  stop_unsupported(.x, .fn)
-}
-
-#' @export
-vec_arith.v_nominal <- function(op, x, y, ...) {
-  stop_unsupported(x, op)
-}
+# @export
+# vec_arith.v_nominal <- function(op, x, y, ...) {
+#   vctrs::stop_unsupported(x, op)
+# }
 
 # Print -------------------------------------------------------------------
 
+# Print foot
+#' @importFrom vctrs obj_print_footer
+#' @method obj_print_footer v_nominal
+#' @export
+obj_print_footer.v_nominal <- function(x, ...) {
+  #TODO
+  # cat("# Mean: ", attr(x, "desc")[["mean"]], "\n", sep = "")
+}
+
+
 #' @export
 vec_ptype_full.v_nominal <- function(x, ...) {
-  paste0("nominal<", hash_label(levels(x)), ">")
+  "nominal"
+  # paste0("nominal<", hash_label(levels(x)), ">")
 }
 
 #' @export
@@ -173,12 +172,12 @@ vec_ptype_abbr.v_nominal <- function(x, ...) {
 
 # Helpers -----------------------------------------------------------------
 
-hash_label <- function(x, length = 5) {
-  if (length(x) == 0) {
-    ""
-  } else {
-    # Can't use hash() currently because it hashes the string pointers
-    # for performance, so the values in the test change each time
-    substr(digest::digest(x), 1, length)
-  }
-}
+# hash_label <- function(x, length = 5) {
+#   if (length(x) == 0) {
+#     ""
+#   } else {
+#     # Can't use hash() currently because it hashes the string pointers
+#     # for performance, so the values in the test change each time
+#     substr(digest::digest(x), 1, length)
+#   }
+# }

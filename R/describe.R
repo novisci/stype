@@ -25,7 +25,7 @@ setClassUnion("described",      c("v_count", "v_binary", "v_continuous",
 #'
 #' A function that returns a list of functions to be applied to a variable
 #' 
-#' @param x a \linkS4class{variable} or vector
+#' @param x a vector
 #' @importFrom stats IQR median sd quantile
 #' @export
 

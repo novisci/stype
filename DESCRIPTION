@@ -30,6 +30,7 @@ Collate:
     'v_continuous_nonneg.R'
     'v_event_time.R'
     'v_binary.R'
+    'v_nominal.R'
     'description.R'
     'describe.R'
     'context.R'

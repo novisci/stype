@@ -126,3 +126,14 @@ is_empty <- function(context){
   
   all(empties)
 }
+
+# Check whether two contexts are the same
+compare_contexts <- function(x, y){
+  assertthat::assert_that(
+    all(purrr::map_lgl(
+      .x = methods::slotNames("context"),
+      .f = ~ methods::slot(get_context(x), .x) == methods::slot(get_context(y), .x)
+    )),
+    msg = "All context elements must equal in order to combine"
+  )
+}

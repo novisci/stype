@@ -4,6 +4,7 @@
 \name{getDescriptors}
 \alias{getDescriptors}
 \alias{getDescriptors,logical-method}
+\alias{getDescriptors,factor-method}
 \alias{getDescriptors,character-method}
 \alias{getDescriptors,numeric-method}
 \alias{getDescriptors,NULL-method}
@@ -12,6 +13,8 @@
 getDescriptors(x)
 
 \S4method{getDescriptors}{logical}(x)
+
+\S4method{getDescriptors}{factor}(x)
 
 \S4method{getDescriptors}{character}(x)
 

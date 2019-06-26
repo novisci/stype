@@ -1,4 +1,4 @@
-#' Count vectors
+#' Binary vectors
 #' 
 #'  Some desc
 #' 
@@ -58,6 +58,7 @@ vec_type2.v_binary.vctrs_unspecified <- function(x, y, ...) x
 #' @method vec_type2.v_binary v_binary
 #' @export
 vec_type2.v_binary.v_binary <- function(x, y, ...){
+  browser()
   assertthat::assert_that(
     all(purrr::map_lgl(
       .x = methods::slotNames("context"),
@@ -86,6 +87,7 @@ vec_cast.v_binary <- function(x, to) UseMethod("vec_cast.v_binary")
 #' @method vec_cast.v_binary v_binary
 #' @export
 vec_cast.v_binary.v_binary <- function(x, to) {
+  browser()
   v_binary(vctrs::vec_data(x), context = get_context(to))
 }
 
@@ -114,6 +116,7 @@ as_binary <- function(x) {
 #' @method vec_restore v_binary
 #' @export
 vec_restore.v_binary <- function(x, to, ..., i = NULL) {
+  browser()
   # Update description
   desc    <- describe(vctrs::vec_data(x))
   # Maintain context

@@ -5,7 +5,7 @@
 \alias{new_binary}
 \alias{is_binary}
 \alias{as_binary}
-\title{Count vectors}
+\title{Binary vectors}
 \usage{
 new_binary(x = logical(), .desc = description(),
   .context = context())

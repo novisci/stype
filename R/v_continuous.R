@@ -199,7 +199,7 @@ vec_arith.double.v_continuous <- function(op, x, y) {
   )
 }
 
-#' @rdname vec_arith
+#' @rdname vec_math
 #' @importFrom vctrs vec_math vec_math_base
 #' @method vec_math v_continuous
 #' @export

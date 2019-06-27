@@ -74,7 +74,7 @@ vec_type2.v_continuous_nonneg.default <- function(x, y, ..., x_arg = "", y_arg =
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
-#' @rdname vec_arith
+#' @rdname casting
 #' @method vec_type2 numeric
 #' @export
 #' @export vec_type2.numeric

@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 ^scratch\.R
 ^R\/vctr_generator.R
+^\.gitlab-ci\.yml$

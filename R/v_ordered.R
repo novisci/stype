@@ -147,7 +147,14 @@ levels.v_ordered <- levels.default
 #   vctrs::stop_unsupported(x, op)
 # }
 
-# Print -------------------------------------------------------------------
+# Formatting ####
+#' @method format v_ordered
+#' @export
+format.v_ordered <- function(x, ...) {
+  out <- levels(x)[x]
+  out[is.na(x)] <- NA
+  out
+}
 
 # Print foot
 #' @importFrom vctrs obj_print_footer
@@ -167,6 +174,12 @@ vec_ptype_full.v_ordered <- function(x, ...) {
 
 #' @export
 vec_ptype_abbr.v_ordered <- function(x, ...) {
+  "ord"
+}
+
+#' @importFrom pillar type_sum
+#' @export
+type_sum.v_ordered <- function(x) {
   "ord"
 }
 

@@ -147,7 +147,16 @@ vec_restore.v_continuous_nonneg <- function(x, to, ..., i = NULL) {
 }
 
 # Math Operations ####
+# TODO:?
 
+# Formatting ####
+#' @method format v_continuous_nonneg
+#' @export
+format.v_continuous_nonneg <- function(x, ...) {
+  out <- formatC(signif(vctrs::vec_data(x), 3))
+  out[is.na(x)] <- NA
+  out
+}
 # Print foot
 #' @importFrom vctrs obj_print_footer
 #' @method obj_print_footer v_continuous_nonneg

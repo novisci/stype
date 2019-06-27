@@ -149,6 +149,15 @@ levels.v_nominal <- levels.default
 
 # Print -------------------------------------------------------------------
 
+# Formatting ####
+#' @method format v_nominal
+#' @export
+format.v_nominal <- function(x, ...) {
+  out <- levels(x)[x]
+  out[is.na(x)] <- NA
+  out
+}
+
 # Print foot
 #' @importFrom vctrs obj_print_footer
 #' @method obj_print_footer v_nominal
@@ -167,6 +176,12 @@ vec_ptype_full.v_nominal <- function(x, ...) {
 
 #' @export
 vec_ptype_abbr.v_nominal <- function(x, ...) {
+  "nom"
+}
+
+#' @importFrom pillar type_sum
+#' @export
+type_sum.v_nominal <- function(x) {
   "nom"
 }
 

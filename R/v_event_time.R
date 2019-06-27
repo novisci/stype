@@ -146,6 +146,16 @@ vec_restore.v_event_time <- function(x, to, ..., i = NULL) {
 }
 
 # Math Operations ####
+# TODO: ?
+
+# Formatting ####
+#' @method format v_event_time
+#' @export
+format.v_event_time <- function(x, ...) {
+  out <- formatC(signif(vctrs::vec_data(x), 3))
+  out[is.na(x)] <- NA
+  out
+}
 
 # Print foot
 #' @importFrom vctrs obj_print_footer

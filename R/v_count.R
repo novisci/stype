@@ -219,20 +219,32 @@ range.v_count <- function(..., na.rm = FALSE) {
 }
 
 # Formatting ####
+#' @method format v_count
+#' @export
+format.v_count<- function(x, ...) {
+  out <- vctrs::vec_data(x)
+  out[is.na(x)] <- NA_integer_
+  out
+}
 
-# format.v_count<- function(x, ...) {
-#   out <- formatC(signif(vec_data(x) * 100, 3))
-#   out[is.na(x)] <- NA
-#   out[!is.na(x)] <- paste0(out[!is.na(x)], "%")
-#   out
+# @importFrom vctrs obj_print_header
+# @method obj_print_header v_count
+# @export
+# obj_print_header.v_count <- function(x, ...) {
+#   cat(standard_header(x))
 # }
 
-# Print foot
 #' @importFrom vctrs obj_print_footer
 #' @method obj_print_footer v_count
 #' @export
 obj_print_footer.v_count <- function(x, ...) {
-  cat("# Total: ", attr(x, "desc")[["sum"]], "\n", sep = "")
+  
+  cxtp <- context_printer(x)
+  cat("# ",
+      desc_printer(x, "Total", "sum"), 
+      " ", desc_printer(x, "Mean", "mean"), "\n",
+      if(cxtp != "") paste0("# ", cxtp) else "",
+      sep = "")
 }
 
 #' @importFrom vctrs vec_ptype_full
@@ -250,6 +262,7 @@ vec_ptype_abbr.v_count <- function(x) {
 }
 
 #' @importFrom pillar type_sum
+#' @method type_sum v_count
 #' @export
 type_sum.v_count <- function(x) {
   "cnt"

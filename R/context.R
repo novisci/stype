@@ -80,6 +80,7 @@ setMethod("is_purpose", "NULL", function(context, x){ FALSE } )
 
 #' Is this vector an outcome?
 #' @name is_outcome
+#' @inheritParams is_purpose
 #' @export
 setGeneric("is_outcome", function(x) standardGeneric("is_outcome"))
 
@@ -98,6 +99,7 @@ setMethod("is_outcome", "described", function(x){ is_outcome(attr(x, "context"))
 
 #' Is this vector an exposure?
 #' @name is_exposure
+#' @inheritParams is_purpose
 #' @export
 setGeneric("is_exposure", function(x) standardGeneric("is_exposure"))
 
@@ -113,6 +115,7 @@ setMethod("is_exposure", "described", function(x){ is_exposure(attr(x, "context"
 
 #' Is this vector a covariate?
 #' @name is_covariate
+#' @inheritParams is_purpose
 #' @export
 setGeneric("is_covariate", function(x) standardGeneric("is_covariate"))
 
@@ -128,6 +131,7 @@ setMethod("is_covariate", "described", function(x){ is_covariate(attr(x, "contex
 
 #' Get an object's context
 #' @name get_context
+#' @param x a context
 #' @export
 setGeneric("get_context", function(x) standardGeneric("get_context"))
 

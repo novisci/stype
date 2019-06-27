@@ -15,6 +15,9 @@ is_outcome(x)
 
 \S4method{is_outcome}{described}(x)
 }
+\arguments{
+\item{x}{what to check}
+}
 \description{
 Is this vector an outcome?
 }

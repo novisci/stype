@@ -19,7 +19,7 @@ test_that("v_character class descriptions update appropriately", {
   nuq  <- attr(x1, "desc")[["n_unique"]]
   max1 <- attr(x1, "desc")[["max_char"]]
   min1 <- attr(x1, "desc")[["min_char"]]
-  expect_equivalent(max1, 5)
+  expect_equivalent(max1, 6)
   expect_equivalent(min1, 0)
   expect_equivalent(nuq, 5)
 

@@ -127,7 +127,7 @@ vec_restore.v_nominal <- function(x, to, ..., x_arg = "", to_arg = "") {
   # Maintain context
   ctxt <- get_context(to)
   
-  v_nomimal(out, context = ctxt)
+  v_nominal(out, context = ctxt)
 }
 
 

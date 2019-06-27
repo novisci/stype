@@ -11,6 +11,9 @@ get_context(x)
 
 \S4method{get_context}{described}(x)
 }
+\arguments{
+\item{x}{a context}
+}
 \description{
 Get an object's context
 }

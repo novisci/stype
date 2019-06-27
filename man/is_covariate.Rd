@@ -15,6 +15,9 @@ is_covariate(x)
 
 \S4method{is_covariate}{described}(x)
 }
+\arguments{
+\item{x}{what to check}
+}
 \description{
 Is this vector a covariate?
 }

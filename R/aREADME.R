@@ -9,12 +9,14 @@
 #' @include context.R
 #' @include describe.R
 #' @include description.R
+#' @include v_character.R
+#' @include v_ordered.R
+#' @include v_nominal.R
 #' @include v_binary.R
 #' @include v_event_time.R
 #' @include v_continuous_nonneg.R
 #' @include v_continuous.R
 #' @include v_count.R
-
 "_PACKAGE"
 
 #' Display an object

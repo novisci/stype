@@ -5,6 +5,11 @@
 #' @name v_count
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
+#' @param x a \code{integer} vector
+#' @param .desc a \\code{\link{description}}
+#' @param .context a \code{\link{context}}
+#' @param context a \code{\link{context}}
+
 
 new_count <- function(x = integer(), .desc = description(), .context = context()){
   vctrs::vec_assert(x, ptype = integer())
@@ -26,7 +31,7 @@ methods::setOldClass(c("v_count", "vctrs_vctr"))
 #' @rdname v_count 
 #' @export
 
-v_count <- function(x = integer(), context, ...){
+v_count <- function(x = integer(), context){
   x <- vctrs::vec_cast(x, integer())
   desc <- describe(vctrs::vec_data(x))
   if(missing(context)){
@@ -83,25 +88,25 @@ vec_type2.integer.v_count <- function(x, y, ...) y
 #' @method vec_cast v_count
 #' @export
 #' @export vec_cast.v_count
-vec_cast.v_count <- function(x, to) UseMethod("vec_cast.v_count")
+vec_cast.v_count <- function(x, to, ...) UseMethod("vec_cast.v_count")
 
 #' @method vec_cast.v_count v_count
 #' @export
-vec_cast.v_count.v_count <- function(x, to) x
+vec_cast.v_count.v_count <- function(x, to, ...) x
 
 #' @method vec_cast.v_count default
 #' @export
-vec_cast.v_count.default  <- function(x, to) vctrs::vec_default_cast(x, to)
+vec_cast.v_count.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
 #' @method vec_cast.v_count integer
 #' @export
-vec_cast.v_count.integer <- function(x, y, ...) v_count(x)
-vec_cast.integer.v_count <- function(x, y, ...) vctrs::vec_data(x)
+vec_cast.v_count.integer <- function(x, to, ...) v_count(x)
+vec_cast.integer.v_count <- function(x, to, ...) vctrs::vec_data(x)
 
 #' @method vec_cast.v_count numeric
 #' @export
-vec_cast.v_count.numeric <- function(x, y, ...) v_count(x)
-vec_cast.numeric.v_count <- function(x, y, ...) vctrs::vec_data(x)
+vec_cast.v_count.numeric <- function(x, to, ...) v_count(x)
+vec_cast.numeric.v_count <- function(x, to, ...) vctrs::vec_data(x)
 
 #' Casting function for count objects
 #' @rdname v_count 
@@ -147,7 +152,7 @@ vec_arith.v_count.v_count <- function(op, x, y) {
     op,
     "+" = v_count(vctrs::vec_arith_base(op, x, y)),
     "-" = v_count(vctrs::vec_arith_base(op, x, y)),
-    stop_incompatible_op(op, x, y)
+    vctrs::stop_incompatible_op(op, x, y)
   )
 }
 
@@ -158,7 +163,7 @@ vec_arith.v_count.integer <- function(op, x, y) {
     op,
     "+" = v_count(vctrs::vec_arith_base(op, x, y)),
     "-" = v_count(vctrs::vec_arith_base(op, x, y)),
-    stop_incompatible_op(op, x, y)
+    vctrs::stop_incompatible_op(op, x, y)
   )
 }
 
@@ -176,7 +181,7 @@ vec_arith.integer.v_count <- function(op, x, y) {
     op,
     "+" = v_count(vctrs::vec_arith_base(op, x, y)),
     "-" = v_count(vctrs::vec_arith_base(op, x, y)),
-    stop_incompatible_op(op, x, y)
+    vctrs::stop_incompatible_op(op, x, y)
   )
 }
 
@@ -197,14 +202,14 @@ vec_math.v_count <- function(fun, x, ...) {
 #' @method median v_count
 #' @export
 median.v_count <- function(x, na.rm = FALSE, ...) {
-  median(vctrs::vec_data(x), na.rm, ...)
+  stats::median(vctrs::vec_data(x), na.rm, ...)
 }
 
 #' @importFrom stats quantile
 #' @method quantile v_count
 #' @export
 quantile.v_count <- function(x, ...) {
-  quantile(vctrs::vec_data(x),  ...)
+  stats::quantile(vctrs::vec_data(x),  ...)
 }
 
 #' @method range v_count

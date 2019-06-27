@@ -15,16 +15,17 @@ setClassUnion("maybeMissing",    c("missing", "NULL"))
 setClassUnion("maybeGroup",      c("maybeMissing", "groupVar"))
 setClassUnion("maybeWeight",     c("maybeMissing", "numeric"))
 setClassUnion("maybeDescriptor", c("missing", "NULL", "list"))
-# TODO add more describable
-setClassUnion("describable",    c("integer", "logical", "numeric"))
-setClassUnion("described",      c("v_count", "v_binary", "v_continuous", 
-                                  "v_continuous_nonneg", "v_event_time"))
+setClassUnion("describable",     c("integer", "logical", "numeric", "factor",
+                                   "ordered", "character"))
+setClassUnion("described",       c("v_count", "v_binary", "v_continuous", 
+                                   "v_continuous_nonneg", "v_event_time",
+                                   "v_nominal", "v_ordered", "v_character"))
 
 #' Descriptor
 #'
 #' A function that returns a list of functions to be applied to a variable
 #' 
-#' @param x a \linkS4class{variable} or vector
+#' @param x a vector
 #' @importFrom stats IQR median sd quantile
 #' @export
 
@@ -54,19 +55,41 @@ setMethod(
   }
 )
 
-# @rdname getDescriptors
-# @export
-# TODO: add support for factors and Dates
-# setMethod(
-#   f          = "getDescriptors",
-#   signature  = "factor",
-#   definition = function(x){
-#     list(
-#       table  = function(x, ...) table(x, useNA = "ifany"),
-#       levels = function(x, ...) levels(x)
-#     )
-#   }
-# )
+#' @rdname getDescriptors
+#' @export
+
+setMethod(
+  f          = "getDescriptors",
+  signature  = "factor",
+  definition = function(x){
+    append(
+      standardDescriptors,
+      list(
+        table  = function(x, ...) table(x, useNA = "always"),
+        ptable = function(x, ...) prop.table(table(x, useNA = "always")),
+        levels = function(x, ...) levels(x)
+      )
+    )
+  }
+)
+
+#' @rdname getDescriptors
+#' @export
+
+setMethod(
+  f          = "getDescriptors",
+  signature  = "ordered",
+  definition = function(x){
+    append(
+      standardDescriptors,
+      list(
+        table  = function(x, ...) table(x, useNA = "always"),
+        ptable = function(x, ...) prop.table(table(x, useNA = "always")),
+        levels = function(x, ...) levels(x)
+      )
+    )
+  }
+)
 
 #' @rdname getDescriptors
 #' @export
@@ -79,8 +102,8 @@ setMethod(
       standardDescriptors,
         list(
           n_unique = function(x, ...) length(unique(x)),
-          max_char = function(x, ...) max(nchar(x)),
-          min_char = function(x, ...) min(nchar(x))
+          max_char = function(x, ...) if(length(x) == 0) 0 else max(nchar(x)),
+          min_char = function(x, ...) if(length(x) == 0) 0 else min(nchar(x))
         )
     )
   }

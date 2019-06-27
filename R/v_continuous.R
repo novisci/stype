@@ -5,7 +5,7 @@
 #' @name v_continuous
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
-
+#' @inheritParams v_count
 new_continuous <- function(x = double(), .desc = description(), .context = context()){
   x <- vctrs::vec_cast(x, double())
   vctrs::vec_assert(x, ptype = double())
@@ -19,9 +19,10 @@ methods::setOldClass(c("v_continuous", "vctrs_vctr"))
 #' 
 #' constructor function for count objects
 #' @rdname v_continuous 
+#' @param x a \code{double} vector
 #' @export
 
-v_continuous <- function(x = double(), context, ...){
+v_continuous <- function(x = double(), context){
   x <- vctrs::vec_cast(x, double())
   desc <- describe(vctrs::vec_data(x))
   if(missing(context)){
@@ -90,25 +91,25 @@ vec_type2.double.v_continuous <- function(x, y, ...) y
 #' @method vec_cast v_continuous
 #' @export
 #' @export vec_cast.v_continuous
-vec_cast.v_continuous <- function(x, to) UseMethod("vec_cast.v_continuous")
+vec_cast.v_continuous <- function(x, to, ...) UseMethod("vec_cast.v_continuous")
 
 #' @method vec_cast.v_continuous v_continuous
 #' @export
-vec_cast.v_continuous.v_continuous <- function(x, to) x
+vec_cast.v_continuous.v_continuous <- function(x, to, ...) x
 
 #' @method vec_cast.v_continuous default
 #' @export
-vec_cast.v_continuous.default  <- function(x, to) vctrs::vec_default_cast(x, to)
+vec_cast.v_continuous.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
 #' @method vec_cast.v_continuous double
 #' @export
-vec_cast.v_continuous.double <- function(x, y, ...) v_continuous(x)
-vec_cast.double.v_continuous <- function(x, y, ...) vctrs::vec_data(x)
+vec_cast.v_continuous.double <- function(x, to, ...) v_continuous(x)
+vec_cast.double.v_continuous <- function(x, to, ...) vctrs::vec_data(x)
 
 #' @method vec_cast.v_continuous double
 #' @export
-vec_cast.v_continuous.double <- function(x, y, ...) v_continuous(x)
-vec_cast.double.v_continuous <- function(x, y, ...) vctrs::vec_data(x)
+vec_cast.v_continuous.double <- function(x, to, ...) v_continuous(x)
+vec_cast.double.v_continuous <- function(x, to, ...) vctrs::vec_data(x)
 
 #' Casting function for count objects
 #' @rdname v_continuous 
@@ -156,7 +157,7 @@ vec_arith.v_continuous.v_continuous <- function(op, x, y) {
     "-" = v_continuous(vctrs::vec_arith_base(op, x, y)),
     "/" = v_continuous(vctrs::vec_arith_base(op, x, y)),
     "*" = v_continuous(vctrs::vec_arith_base(op, x, y)),
-    stop_incompatible_op(op, x, y)
+    vctrs::stop_incompatible_op(op, x, y)
   )
 }
 
@@ -169,7 +170,7 @@ vec_arith.v_continuous.double <- function(op, x, y) {
     "-" = v_continuous(vctrs::vec_arith_base(op, x, y)),
     "/" = v_continuous(vctrs::vec_arith_base(op, x, y)),
     "*" = v_continuous(vctrs::vec_arith_base(op, x, y)),
-    stop_incompatible_op(op, x, y)
+    vctrs::stop_incompatible_op(op, x, y)
   )
 }
 
@@ -189,7 +190,7 @@ vec_arith.double.v_continuous <- function(op, x, y) {
     "-" = new_continuous(vctrs::vec_arith_base(op, x, y)),
     "/" = new_continuous(vctrs::vec_arith_base(op, x, y)),
     "*" = new_continuous(vctrs::vec_arith_base(op, x, y)),
-    stop_incompatible_op(op, x, y)
+    vctrs::stop_incompatible_op(op, x, y)
   )
 }
 
@@ -210,14 +211,14 @@ vec_math.v_continuous <- function(fun, x, ...) {
 #' @method median v_continuous
 #' @export
 median.v_continuous <- function(x, na.rm = FALSE, ...) {
-  median(vctrs::vec_data(x), na.rm, ...)
+  stats::median(vctrs::vec_data(x), na.rm, ...)
 }
 
 #' @importFrom stats quantile
 #' @method quantile v_continuous
 #' @export
 quantile.v_continuous <- function(x, ...) {
-  quantile(vctrs::vec_data(x),  ...)
+  stats::quantile(vctrs::vec_data(x),  ...)
 }
 
 # Formatting ####

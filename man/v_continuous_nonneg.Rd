@@ -11,13 +11,22 @@
 new_continuous_nonneg(x = double(), .desc = description(),
   .context = context())
 
-v_continuous_nonneg(x = double(), context, ...)
+v_continuous_nonneg(x = double(), context)
 
 is_continuous_nonneg(x)
 
 is_nonneg(x)
 
 as_nonneg_continuous(x)
+}
+\arguments{
+\item{x}{nonnegative \code{double}}
+
+\item{.desc}{a \\code{\link{description}}}
+
+\item{.context}{a \code{\link{context}}}
+
+\item{context}{a \code{\link{context}}}
 }
 \description{
 Some desc

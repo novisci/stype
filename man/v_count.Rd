@@ -9,11 +9,20 @@
 \usage{
 new_count(x = integer(), .desc = description(), .context = context())
 
-v_count(x = integer(), context, ...)
+v_count(x = integer(), context)
 
 is_count(x)
 
 as_count(x)
+}
+\arguments{
+\item{x}{a \code{integer} vector}
+
+\item{.desc}{a \\code{\link{description}}}
+
+\item{.context}{a \code{\link{context}}}
+
+\item{context}{a \code{\link{context}}}
 }
 \description{
 Some desc

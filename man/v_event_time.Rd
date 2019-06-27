@@ -4,7 +4,6 @@
 \alias{v_event_time}
 \alias{new_event_time}
 \alias{is_event_time}
-\alias{is_nonneg}
 \alias{as_time_to_event}
 \alias{as_event_time}
 \title{event_time vectors}
@@ -12,18 +11,25 @@
 new_event_time(x = double(), .desc = description(),
   .context = context())
 
-v_event_time(x = v_continuous_nonneg(), context, ...)
+v_event_time(x = v_continuous_nonneg(), context)
 
 is_event_time(x)
-
-is_nonneg(x)
 
 as_time_to_event(x)
 
 as_event_time(x)
 }
+\arguments{
+\item{x}{vector of values}
+
+\item{.desc}{a \\code{\link{description}}}
+
+\item{.context}{a \code{\link{context}}}
+
+\item{context}{a \code{\link{context}}}
+}
 \description{
 Some desc
 
-constructor function for count objects
+constructor function for time to evet objects
 }

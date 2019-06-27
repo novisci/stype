@@ -121,9 +121,10 @@ The following table describes the proposed data types (not all of these may be a
 
 ```{r}
 library(dplyr)
+library(tibble)
 n <- 100 
 
-dt <- tibble::tibble(
+dt <- tibble(
   y1 = v_binary(as.logical(rbinom(n, 1, 0.25)), context = context(purpose = "outcome")),
   y2 = v_event_time(runif(n, 1, 100), context = context(purpose = "outcome")),
   y3 = v_continuous(rnorm(n), context = context(purpose = "outcome")),

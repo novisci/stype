@@ -5,19 +5,28 @@
 \alias{new_binary}
 \alias{is_binary}
 \alias{as_binary}
-\title{Count vectors}
+\title{Binary vectors}
 \usage{
 new_binary(x = logical(), .desc = description(),
   .context = context())
 
-v_binary(x = logical(), context, ...)
+v_binary(x = logical(), context)
 
 is_binary(x)
 
 as_binary(x)
 }
+\arguments{
+\item{x}{a \code{logical} vector}
+
+\item{.desc}{a \\code{\link{description}}}
+
+\item{.context}{a \code{\link{context}}}
+
+\item{context}{a \code{\link{context}}}
+}
 \description{
 Some desc
 
-constructor function for count objects
+constructor function for binary objects
 }

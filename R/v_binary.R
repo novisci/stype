@@ -1,10 +1,11 @@
-#' Count vectors
+#' Binary vectors
 #' 
 #'  Some desc
 #' 
 #' @name v_binary
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
+#' @inheritParams v_count
 
 new_binary <- function(x = logical(), .desc = description(), .context = context()){
   x <- vctrs::vec_cast(x, logical())
@@ -15,13 +16,14 @@ new_binary <- function(x = logical(), .desc = description(), .context = context(
 #' @importFrom methods setOldClass
 methods::setOldClass(c("v_binary", "vctrs_vctr"))
 
-#' Count constructor
+#' Binary constructor
 #' 
-#' constructor function for count objects
+#' constructor function for binary objects
+#' @param x a \code{logical} vector
 #' @rdname v_binary 
 #' @export
 
-v_binary <- function(x = logical(), context, ...){
+v_binary <- function(x = logical(), context){
   x <- vctrs::vec_cast(x, logical())
   desc <- describe(vctrs::vec_data(x))
   if(missing(context)){
@@ -58,49 +60,42 @@ vec_type2.v_binary.vctrs_unspecified <- function(x, y, ...) x
 #' @method vec_type2.v_binary v_binary
 #' @export
 vec_type2.v_binary.v_binary <- function(x, y, ...){
-  assertthat::assert_that(
-    all(purrr::map_lgl(
-      .x = methods::slotNames("context"),
-      .f = ~ methods::slot(get_context(x), .x) == methods::slot(get_context(y), .x)
-    )),
-    msg = "All context elements must equal in order to combine"
-  )
+  compare_contexts(x, y)
   v_binary(context = get_context(x))
 }
-# vec_type2.v_binary.v_binary <- function(x, y, ...)   {browser(); new_binary() } 
 
 #' @method vec_type2.v_binary logical
 #' @export
-vec_type2.v_binary.logical <- function(x, y, ...) {browser(); x } 
+vec_type2.v_binary.logical <- function(x, y, ...) { x } 
 
 #' @method vec_type2.logical v_binary
 #' @importFrom vctrs vec_type2.logical
 #' @export 
-vec_type2.logical.v_binary <- function(x, y, ...) {browser(); y }
+vec_type2.logical.v_binary <- function(x, y, ...) { y }
 
 #' @method vec_cast v_binary
 #' @export
 #' @export vec_cast.v_binary
-vec_cast.v_binary <- function(x, to) UseMethod("vec_cast.v_binary")
+vec_cast.v_binary <- function(x, to, ...) UseMethod("vec_cast.v_binary")
 
 #' @method vec_cast.v_binary v_binary
 #' @export
-vec_cast.v_binary.v_binary <- function(x, to) {
+vec_cast.v_binary.v_binary <- function(x, to, ...) {
   v_binary(vctrs::vec_data(x), context = get_context(to))
 }
 
 #' @method vec_cast.v_binary default
 #' @export
-vec_cast.v_binary.default  <- function(x, to) vctrs::vec_default_cast(x, to)
+vec_cast.v_binary.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
 #' @method vec_cast.v_binary logical
 #' @export
-vec_cast.v_binary.logical <- function(x, y, ...) v_binary(x)
+vec_cast.v_binary.logical <- function(x, to, ...) v_binary(x)
 
 #' @importFrom vctrs vec_cast.logical
 #' @method vec_cast.logical v_binary
 #' @export
-vec_cast.logical.v_binary <- function(x, y, ...) vctrs::vec_data(x)
+vec_cast.logical.v_binary <- function(x, to, ...) vctrs::vec_data(x)
 
 #' Casting function for count objects
 #' @rdname v_binary 
@@ -232,7 +227,7 @@ any.v_binary <- function(..., na.rm = TRUE) {
 #' @export
 format.v_binary <- function(x, ...) {
   # Display as 0/1
-  out <- as.integer(vec_data(x))
+  out <- as.integer(vctrs::vec_data(x))
   out[is.na(x)] <- NA
   out
 }
@@ -245,8 +240,6 @@ obj_print_footer.v_binary <- function(x, ...) {
   has_miss <- attr(x, "desc")[["has_missing"]]
   has_ctxt <- !is_empty(get_context(x))
   
-  # browser()
-
   cat("# Proportion: ", round(attr(x, "desc")[["proportion"]], 2), 
       if(has_miss){
         paste0("; Missing: ", attr(x, "desc")[["n_missing"]])

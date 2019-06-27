@@ -5,6 +5,7 @@
 #' @name v_event_time
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
+#' @inheritParams v_count
 
 new_event_time <- function(x = double(), .desc = description(), .context = context()){
   vctrs::vec_assert(x, ptype = double())
@@ -21,13 +22,14 @@ new_event_time <- function(x = double(), .desc = description(), .context = conte
 #' @importFrom methods setOldClass
 methods::setOldClass(c("v_event_time", "v_continuous_nonneg", "v_continuous", "vctrs_vctr"))
 
-#' Count constructor
+#' Time to event constructor
 #' 
-#' constructor function for count objects
+#' constructor function for time to evet objects
+#' @param x vector of values
 #' @rdname v_event_time 
 #' @export
 
-v_event_time <- function(x = v_continuous_nonneg(), context, ...){
+v_event_time <- function(x = v_continuous_nonneg(), context){
   x <- vctrs::vec_cast(x, double())
   desc <- describe(vctrs::vec_data(x))
   if(missing(context)){
@@ -44,13 +46,6 @@ is_event_time <- function(x){
   inherits(x, "v_event_time")
 }
 
-
-#' @rdname v_event_time 
-#' @export
-
-is_nonneg <- function(x){
-  inherits(x, "v_event_time")
-}
 
 # Formatting of example vectors
 
@@ -104,25 +99,25 @@ vec_type2.numeric.v_event_time <- function(x, y, ...) y
 #' @method vec_cast v_event_time
 #' @export
 #' @export vec_cast.v_event_time
-vec_cast.v_event_time <- function(x, to) UseMethod("vec_cast.v_event_time")
+vec_cast.v_event_time <- function(x, to, ...) UseMethod("vec_cast.v_event_time")
 
 #' @method vec_cast.v_event_time v_event_time
 #' @export
-vec_cast.v_event_time.v_event_time <- function(x, to) x
+vec_cast.v_event_time.v_event_time <- function(x, to, ...) x
 
 #' @method vec_cast.v_event_time default
 #' @export
-vec_cast.v_event_time.default  <- function(x, to) vctrs::vec_default_cast(x, to)
+vec_cast.v_event_time.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
 #' @method vec_cast.v_event_time numeric
 #' @export
-vec_cast.v_event_time.numeric <- function(x, y, ...) v_event_time(x)
-vec_cast.numeric.v_event_time <- function(x, y, ...) vctrs::vec_data(x)
+vec_cast.v_event_time.numeric <- function(x, to, ...) v_event_time(x)
+vec_cast.numeric.v_event_time <- function(x, to, ...) vctrs::vec_data(x)
 
 #' @method vec_cast.v_event_time numeric
 #' @export
-vec_cast.v_event_time.numeric <- function(x, y, ...) v_event_time(x)
-vec_cast.numeric.v_event_time <- function(x, y, ...) vctrs::vec_data(x)
+vec_cast.v_event_time.numeric <- function(x, to, ...) v_event_time(x)
+vec_cast.numeric.v_event_time <- function(x, to, ...) vctrs::vec_data(x)
 
 #' Casting function for count objects
 #' @rdname v_event_time 

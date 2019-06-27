@@ -1,5 +1,8 @@
 image: registry.novisci.com/infrastructure/r-build-dock:master
 
+variables:
+  R_LIBS_USER: "$CI_PROJECT_DIR/ci/lib"
+
 stages:
   - testing
   - package

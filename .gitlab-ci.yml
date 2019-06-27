@@ -15,6 +15,18 @@ testing:
     - R -e 'devtools::install_github("r-lib/vctrs")'
     - R -e 'devtools::check(manual = FALSE)'
 
+# create a coverage report and push it to the public folder (for a future website)
+coverage:
+  stage: testing
+  script:
+    - R -e '.libPaths(Sys.getenv("R_LIBS_USER")); cc <- covr::package_coverage(Sys.getenv("CI_PROJECT_DIR")); covr::gitlab(coverage = cc); cat("Code coverage:", paste0(format(covr::percent_coverage(cc), nsmall = 1),"%"))'
+  artifacts:
+    paths:
+      - public
+  #only:
+  #  - master
+
+
 # Store an artifact in gitlab that is the result of R CMD build
 #   Keep it for a week by default. Any longer requires manual intervention
 #   through the UI or API.

@@ -41,8 +41,16 @@ v_nominal <- function(x = factor(), context){
               .context = context)
 }
 
-# Coerce ------------------------------------------------------------------
+#' Predicate function for nominal objects
+#' @rdname v_nominal 
+#' @export
 
+is_nominal <- function(x){
+  inherits(x, "v_nominal")
+}
+
+# Coerce ------------------------------------------------------------------
+#' @rdname casting
 #' @export vec_type2.v_nominal
 #' @method vec_type2 v_nominal
 #' @export
@@ -73,7 +81,7 @@ vec_type2.v_nominal.v_nominal <- function(x, y, ...) {
 }
 
 # Cast --------------------------------------------------------------------
-
+#' @rdname casting
 #' @export vec_cast.v_nominal
 #' @method vec_cast v_nominal
 #' @importFrom vctrs vec_cast.character

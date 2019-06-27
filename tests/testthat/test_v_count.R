@@ -17,7 +17,6 @@ test_that(
   }
 )
 
-
 test_that(
   "v_count math behaves itself",
   {

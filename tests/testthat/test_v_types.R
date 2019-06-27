@@ -33,4 +33,15 @@ test_that("creating a length 0 v_<type> returns the appropriate type without war
     }
   )
 })
+
+test_that(
+  "predicate functions work",
+  purrr::walk(
+    .x = v_types,
+    .f = ~ {
+      tester <- do.call(.x, args = list())
+      do.call(gsub("v_", "is_", .x), args = list(x = tester ))
+    }
+  )
+)
   

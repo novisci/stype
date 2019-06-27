@@ -3,12 +3,15 @@
 \name{v_ordered}
 \alias{v_ordered}
 \alias{new_ordered}
+\alias{is_ordered}
 \title{v_ordered S3 class}
 \usage{
 new_ordered(x = integer(), .levels = character(),
   .desc = description(), .context = context())
 
 v_ordered(x = factor(ordered = TRUE), context)
+
+is_ordered(x)
 }
 \arguments{
 \item{x}{a \code{factor}}

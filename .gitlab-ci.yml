@@ -1,0 +1,37 @@
+image: registry.novisci.com/infrastructure/r-build-dock:master
+
+stages:
+  - testing
+  - package
+
+before_script:
+  - Rscript -e "print(getOption('repos'))"
+
+testing:
+  stage: testing
+  script:
+    - R -e 'install.packages(c("vctrs", "purrr", "pillar"))'
+    - R -e 'devtools::check(manual = FALSE)'
+
+# Store an artifact in gitlab that is the result of R CMD build
+#   Keep it for a week by default. Any longer requires manual intervention
+#   through the UI or API.
+package:
+  stage: package
+  script:
+    - R -e 'install.packages(c("vctrs", "purrr", "pillar"))'
+    - rm -rf .git
+    - R CMD build .
+  artifacts:
+    name: "${CI_PROJECT_NAME}-${SAFE_REF_NAME}"
+    paths:
+      - ./${CI_PROJECT_NAME}_*
+    expire_in: 1 week
+
+minicran:
+  stage: package
+  only:
+    - master
+  script:
+    - R -e 'install.packages(c("miniCRAN"))'
+    - Rscript -e "library(miniCRAN); addLocalPackage('${CI_PROJECT_NAME}', pkgPath='..', path='/mnt/cran.novisci.com', type='source', build=TRUE)"

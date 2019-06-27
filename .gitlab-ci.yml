@@ -21,7 +21,9 @@ testing:
 package:
   stage: package
   script:
-    - R -e 'install.packages(c("vctrs", "purrr", "pillar"))'
+    - R -e 'devtools::install_github("r-lib/rlang@v0.4.0")'
+    - R -e 'install.packages(c("purrr", "pillar"))'
+    - R -e 'devtools::install_github("r-lib/vctrs")'
     - rm -rf .git
     - R CMD build .
   artifacts:

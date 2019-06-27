@@ -16,9 +16,9 @@ new_binary <- function(x = logical(), .desc = description(), .context = context(
 #' @importFrom methods setOldClass
 methods::setOldClass(c("v_binary", "vctrs_vctr"))
 
-#' Count constructor
+#' Binary constructor
 #' 
-#' constructor function for count objects
+#' constructor function for binary objects
 #' @param x a \code{logical} vector
 #' @rdname v_binary 
 #' @export
@@ -60,26 +60,18 @@ vec_type2.v_binary.vctrs_unspecified <- function(x, y, ...) x
 #' @method vec_type2.v_binary v_binary
 #' @export
 vec_type2.v_binary.v_binary <- function(x, y, ...){
-  browser()
-  assertthat::assert_that(
-    all(purrr::map_lgl(
-      .x = methods::slotNames("context"),
-      .f = ~ methods::slot(get_context(x), .x) == methods::slot(get_context(y), .x)
-    )),
-    msg = "All context elements must equal in order to combine"
-  )
+  compare_contexts(x, y)
   v_binary(context = get_context(x))
 }
-# vec_type2.v_binary.v_binary <- function(x, y, ...)   {browser(); new_binary() } 
 
 #' @method vec_type2.v_binary logical
 #' @export
-vec_type2.v_binary.logical <- function(x, y, ...) {browser(); x } 
+vec_type2.v_binary.logical <- function(x, y, ...) { x } 
 
 #' @method vec_type2.logical v_binary
 #' @importFrom vctrs vec_type2.logical
 #' @export 
-vec_type2.logical.v_binary <- function(x, y, ...) {browser(); y }
+vec_type2.logical.v_binary <- function(x, y, ...) { y }
 
 #' @method vec_cast v_binary
 #' @export
@@ -89,7 +81,6 @@ vec_cast.v_binary <- function(x, to, ...) UseMethod("vec_cast.v_binary")
 #' @method vec_cast.v_binary v_binary
 #' @export
 vec_cast.v_binary.v_binary <- function(x, to, ...) {
-  browser()
   v_binary(vctrs::vec_data(x), context = get_context(to))
 }
 
@@ -118,7 +109,6 @@ as_binary <- function(x) {
 #' @method vec_restore v_binary
 #' @export
 vec_restore.v_binary <- function(x, to, ..., i = NULL) {
-  browser()
   # Update description
   desc    <- describe(vctrs::vec_data(x))
   # Maintain context
@@ -237,7 +227,7 @@ any.v_binary <- function(..., na.rm = TRUE) {
 #' @export
 format.v_binary <- function(x, ...) {
   # Display as 0/1
-  out <- as.integer(vec_data(x))
+  out <- as.integer(vctrs::vec_data(x))
   out[is.na(x)] <- NA
   out
 }
@@ -249,8 +239,6 @@ format.v_binary <- function(x, ...) {
 obj_print_footer.v_binary <- function(x, ...) {
   has_miss <- attr(x, "desc")[["has_missing"]]
   has_ctxt <- !is_empty(get_context(x))
-  
-  # browser()
   
   cat("# Proportion: ", round(attr(x, "desc")[["proportion"]], 2), 
       if(has_miss){

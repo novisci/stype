@@ -1,8 +1,8 @@
 testthat::context("Testing v_nomimal class")
 
-test_that("v_nomimal class basically behaves", {
-  x1 <- v_nomimal(factor(c(rep(LETTERS[1:3], 3), NA)))
-  x2 <- v_nomimal(factor(c(rep(LETTERS[3:6], 3))))
+test_that("v_nominal class basically behaves", {
+  x1 <- v_nominal(factor(c(rep(LETTERS[1:3], 3), NA)))
+  x2 <- v_nominal(factor(c(rep(LETTERS[3:6], 3))))
 
   # expect_s3_class(x1, "v_nomimal")
   expect_true(inherits(x1, "v_nominal"))
@@ -13,8 +13,8 @@ test_that("v_nomimal class basically behaves", {
 })
 
 test_that("v_nomimal class descriptions update appropriately", {
-  x1 <- v_nomimal(factor(c(rep(LETTERS[1:3], 3), NA)))
-  x2 <- v_nomimal(factor(c(rep(LETTERS[3:6], 3))))
+  x1 <- v_nominal(factor(c(rep(LETTERS[1:3], 3), NA)))
+  x2 <- v_nominal(factor(c(rep(LETTERS[3:6], 3))))
   
   tab1  <- attr(x1, "desc")[["table"]]
   ptab1 <- attr(x1, "desc")[["ptable"]]

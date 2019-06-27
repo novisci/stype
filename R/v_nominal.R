@@ -28,7 +28,7 @@ methods::setOldClass(c("v_nominal", "vctrs_vctr"))
 #' @rdname v_nominal
 #' @param x a \code{factor}
 #' @export
-v_nomimal <- function(x = factor(), context){
+v_nominal <- function(x = factor(), context){
   # x <- vctrs::vec_cast(x, factor())
   desc <- describe(x)
   if(missing(context)){

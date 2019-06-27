@@ -32,6 +32,8 @@ Collate:
     'v_event_time.R'
     'v_binary.R'
     'v_nominal.R'
+    'v_ordered.R'
+    'v_character.R'
     'description.R'
     'describe.R'
     'context.R'

@@ -56,7 +56,8 @@ setValidity(
 #' @export
 setGeneric("is_purpose", function(context, x) standardGeneric("is_purpose"))
 
-#' @rdname context_info
+#' @rdname is_purpose
+#' @aliases is_purpose,context,context-method
 #' @export
 
 setMethod(
@@ -72,50 +73,66 @@ setMethod(
   }
 )
 
+#' @rdname is_purpose
+#' @aliases is_purpose,NULL,context-method
 #' @export
 setMethod("is_purpose", "NULL", function(context, x){ FALSE } )
 
-#' @rdname context_info
+#' Is this vector an outcome?
+#' @name is_outcome
 #' @export
 setGeneric("is_outcome", function(x) standardGeneric("is_outcome"))
 
-#' @rdname context_info
+#' @rdname is_outcome
+#' @aliases is_outcome,context,context-method
 #' @export
 setMethod("is_outcome", "context", function(x){ is_purpose(x, "outcome") })
 
+#' @rdname is_outcome
+#' @aliases is_outcome,described,context-method
 #' @export 
 setMethod("is_outcome", "described", function(x){ is_outcome(attr(x, "context")) })
 
 # @export
 # setMethod("is_outcome", "ANY", function(x){ is_outcome(attr(x, "context")) })
 
-#' @rdname context_info
+#' Is this vector an exposure?
+#' @name is_exposure
 #' @export
 setGeneric("is_exposure", function(x) standardGeneric("is_exposure"))
 
-#' @rdname context_info
+#' @rdname is_exposure
+#' @aliases is_exposure,context,context-method
 #' @export
 setMethod("is_exposure", "context", function(x){ is_purpose(x, "exposure") })
 
+#' @rdname is_exposure
+#' @aliases is_exposure,described,context-method
 #' @export
 setMethod("is_exposure", "described", function(x){ is_exposure(attr(x, "context")) })
 
-#' @rdname context_info
+#' Is this vector a covariate?
+#' @name is_covariate
 #' @export
 setGeneric("is_covariate", function(x) standardGeneric("is_covariate"))
 
-#' @rdname context_info
+#' @rdname is_covariate
+#' @aliases is_covarite,context,context-method
 #' @export
 setMethod("is_covariate", "context", function(x){ is_purpose(x, "covariate") })
 
+#' @rdname is_covariate
+#' @aliases is_covarite,described,context-method
 #' @export
-setMethod("is_covariate", "vctrs_vctr", function(x){ is_covariate(attr(x, "context")) })
+setMethod("is_covariate", "described", function(x){ is_covariate(attr(x, "context")) })
 
-
-#' @rdname context_info
+#' Get an object's context
+#' @name get_context
 #' @export
 setGeneric("get_context", function(x) standardGeneric("get_context"))
 
+#' @rdname get_context
+#' @aliases get_context,described,context-method
 #' @export
 setMethod("get_context", "described", function(x){ attr(x, "context") })
 

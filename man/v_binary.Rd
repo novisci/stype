@@ -28,5 +28,5 @@ as_binary(x)
 \description{
 Some desc
 
-constructor function for count objects
+constructor function for binary objects
 }

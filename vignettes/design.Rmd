@@ -154,11 +154,3 @@ dt %>%
   select_if(is_outcome)
 ```
 
-Obtain summary statistics for all outcomes in each subgroups 
-
-```{r}
-dt %>%
- group_split(x1) %>%
- purrr::map(.x = ., ~ .x %>% select_if(is_outcome) ) %>%
- purrr::map(describe)
-```

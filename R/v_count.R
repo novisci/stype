@@ -194,9 +194,11 @@ vec_arith.integer.v_count <- function(op, x, y) {
   )
 }
 
-#' @rdname vec_arith
-#' @inheritParams vctrs::vec_math
-#' @inheritParams vctrs::vec_math_base
+#' Math
+#' @name vec_math
+#' @param fun fun
+#' @param x x
+#' @param ... dots
 #' @importFrom vctrs vec_math vec_math_base
 #' @method vec_math v_count
 #' @export

@@ -178,7 +178,7 @@ vec_arith.integer.v_binary <- function(op, x, y) {
   )
 }
 
-#' @rdname vec_arith
+#' @rdname vec_math
 #' @importFrom vctrs vec_math vec_math_base
 #' @method vec_math v_binary
 #' @export

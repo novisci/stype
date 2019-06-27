@@ -11,6 +11,7 @@
 \alias{vec_type2.double}
 \alias{vec_cast.v_continuous}
 \alias{vec_type2.v_continuous_nonneg}
+\alias{vec_type2.numeric}
 \alias{vec_cast.v_continuous_nonneg}
 \alias{vec_type2.v_event_time}
 \alias{vec_cast.v_event_time}
@@ -37,6 +38,8 @@
 \method{vec_cast}{v_continuous}(x, to, ...)
 
 \method{vec_type2}{v_continuous_nonneg}(x, y, ...)
+
+\method{vec_type2}{numeric}(x, y, ...)
 
 \method{vec_cast}{v_continuous_nonneg}(x, to, ...)
 

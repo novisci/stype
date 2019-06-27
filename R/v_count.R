@@ -57,6 +57,9 @@ format.v_count <- function(x, ...) {
 
 # Casting and coercing ####
 
+#' Casting
+#' @name casting
+#' @inheritParams vctrs::vec_type2
 #' @method vec_type2 v_count
 #' @export
 #' @export vec_type2.v_count
@@ -80,11 +83,14 @@ vec_type2.v_count.v_count <- function(x, y, ...) new_count()
 #' @export
 vec_type2.v_count.integer <- function(x, y, ...) x
 
+#' @rdname casting
 #' @method vec_type2.integer v_count
 #' @importFrom vctrs vec_type2.integer 
 #' @export 
 vec_type2.integer.v_count <- function(x, y, ...) y
 
+#' @rdname casting
+#' @inheritParams vctrs::vec_cast
 #' @method vec_cast v_count
 #' @export
 #' @export vec_cast.v_count
@@ -129,7 +135,9 @@ vec_restore.v_count <- function(x, to, ..., i = NULL) {
 }
 
 # Math Operations ####
-
+#' Arithmetic ops
+#' @name vec_arith
+#' @inheritParams vctrs::vec_arith
 #' @importFrom vctrs vec_arith
 #' @method vec_arith v_count
 #' @export
@@ -167,6 +175,7 @@ vec_arith.v_count.integer <- function(op, x, y) {
   )
 }
 
+#' @rdname vec_arith
 #' @method vec_arith integer
 #' @export
 #' @export vec_arith.integer
@@ -185,6 +194,9 @@ vec_arith.integer.v_count <- function(op, x, y) {
   )
 }
 
+#' @rdname vec_arith
+#' @inheritParams vctrs::vec_math
+#' @inheritParams vctrs::vec_math_base
 #' @importFrom vctrs vec_math vec_math_base
 #' @method vec_math v_count
 #' @export
@@ -219,20 +231,32 @@ range.v_count <- function(..., na.rm = FALSE) {
 }
 
 # Formatting ####
+#' @method format v_count
+#' @export
+format.v_count<- function(x, ...) {
+  out <- vctrs::vec_data(x)
+  out[is.na(x)] <- NA_integer_
+  out
+}
 
-# format.v_count<- function(x, ...) {
-#   out <- formatC(signif(vec_data(x) * 100, 3))
-#   out[is.na(x)] <- NA
-#   out[!is.na(x)] <- paste0(out[!is.na(x)], "%")
-#   out
+# @importFrom vctrs obj_print_header
+# @method obj_print_header v_count
+# @export
+# obj_print_header.v_count <- function(x, ...) {
+#   cat(standard_header(x))
 # }
 
-# Print foot
 #' @importFrom vctrs obj_print_footer
 #' @method obj_print_footer v_count
 #' @export
 obj_print_footer.v_count <- function(x, ...) {
-  cat("# Total: ", attr(x, "desc")[["sum"]], "\n", sep = "")
+  
+  cxtp <- context_printer(x)
+  cat("# ",
+      desc_printer(x, "Total", "sum"), 
+      " ", desc_printer(x, "Mean", "mean"), "\n",
+      if(cxtp != "") paste0("# ", cxtp) else "",
+      sep = "")
 }
 
 #' @importFrom vctrs vec_ptype_full
@@ -250,6 +274,7 @@ vec_ptype_abbr.v_count <- function(x) {
 }
 
 #' @importFrom pillar type_sum
+#' @method type_sum v_count
 #' @export
 type_sum.v_count <- function(x) {
   "cnt"

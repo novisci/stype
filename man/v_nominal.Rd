@@ -3,12 +3,15 @@
 \name{v_nominal}
 \alias{v_nominal}
 \alias{new_nominal}
+\alias{is_nominal}
 \title{v_nominal S3 class}
 \usage{
 new_nominal(x = integer(), .levels = character(),
   .desc = description(), .context = context())
 
 v_nominal(x = factor(), context)
+
+is_nominal(x)
 }
 \arguments{
 \item{x}{a \code{factor}}

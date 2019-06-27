@@ -8,7 +8,7 @@
 #' @inheritParams v_count
 
 new_event_time <- function(x = double(), .desc = description(), .context = context()){
-  vctrs::vec_assert(x, ptype = double())
+  # vctrs::vec_assert(x, ptype = double())
   assertthat::assert_that(
     all(x[!is.na(x)] >= 0),
     msg = "Time to event data must be >= 0."
@@ -30,7 +30,7 @@ methods::setOldClass(c("v_event_time", "v_continuous_nonneg", "v_continuous", "v
 #' @export
 
 v_event_time <- function(x = v_continuous_nonneg(), context){
-  x <- vctrs::vec_cast(x, double())
+  # x <- vctrs::vec_cast(x, double())
   desc <- describe(vctrs::vec_data(x))
   if(missing(context)){
     context <- methods::new("context")
@@ -55,7 +55,7 @@ format.v_event_time <- function(x, ...) {
 }
 
 # Casting and coercing ####
-
+#' @rdname casting
 #' @method vec_type2 v_event_time
 #' @export
 #' @export vec_type2.v_event_time
@@ -96,6 +96,7 @@ vec_type2.v_event_time.numeric <- function(x, y, ...) x
 #' @export 
 vec_type2.numeric.v_event_time <- function(x, y, ...) y
 
+#' @rdname casting
 #' @method vec_cast v_event_time
 #' @export
 #' @export vec_cast.v_event_time
@@ -146,6 +147,16 @@ vec_restore.v_event_time <- function(x, to, ..., i = NULL) {
 }
 
 # Math Operations ####
+# TODO: ?
+
+# Formatting ####
+#' @method format v_event_time
+#' @export
+format.v_event_time <- function(x, ...) {
+  out <- formatC(signif(vctrs::vec_data(x), 3))
+  out[is.na(x)] <- NA
+  out
+}
 
 # Print foot
 #' @importFrom vctrs obj_print_footer

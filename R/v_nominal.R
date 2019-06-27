@@ -41,8 +41,16 @@ v_nominal <- function(x = factor(), context){
               .context = context)
 }
 
-# Coerce ------------------------------------------------------------------
+#' Predicate function for nominal objects
+#' @rdname v_nominal 
+#' @export
 
+is_nominal <- function(x){
+  inherits(x, "v_nominal")
+}
+
+# Coerce ------------------------------------------------------------------
+#' @rdname casting
 #' @export vec_type2.v_nominal
 #' @method vec_type2 v_nominal
 #' @export
@@ -73,7 +81,7 @@ vec_type2.v_nominal.v_nominal <- function(x, y, ...) {
 }
 
 # Cast --------------------------------------------------------------------
-
+#' @rdname casting
 #' @export vec_cast.v_nominal
 #' @method vec_cast v_nominal
 #' @importFrom vctrs vec_cast.character
@@ -149,6 +157,15 @@ levels.v_nominal <- levels.default
 
 # Print -------------------------------------------------------------------
 
+# Formatting ####
+#' @method format v_nominal
+#' @export
+format.v_nominal <- function(x, ...) {
+  out <- levels(x)[x]
+  out[is.na(x)] <- NA
+  out
+}
+
 # Print foot
 #' @importFrom vctrs obj_print_footer
 #' @method obj_print_footer v_nominal
@@ -167,6 +184,12 @@ vec_ptype_full.v_nominal <- function(x, ...) {
 
 #' @export
 vec_ptype_abbr.v_nominal <- function(x, ...) {
+  "nom"
+}
+
+#' @importFrom pillar type_sum
+#' @export
+type_sum.v_nominal <- function(x) {
   "nom"
 }
 

@@ -8,7 +8,7 @@
 #' @inheritParams v_count
 
 new_continuous_nonneg <- function(x = double(), .desc = description(), .context = context()){
-  vctrs::vec_assert(x, ptype = double())
+  # vctrs::vec_assert(x, ptype = double())
   assertthat::assert_that(
     all(x[!is.na(x)] >= 0),
     msg = "Count data must be >= 0"
@@ -30,7 +30,7 @@ methods::setOldClass(c("v_continuous_nonneg", "v_continuous", "vctrs_vctr"))
 #' @export
 
 v_continuous_nonneg <- function(x = double(), context){
-  x <- vctrs::vec_cast(x, double())
+  # x <- vctrs::vec_cast(x, double())
   desc <- describe(vctrs::vec_data(x))
   if(missing(context)){
     context <- methods::new("context")
@@ -62,7 +62,7 @@ format.v_continuous_nonneg <- function(x, ...) {
 }
 
 # Casting and coercing ####
-
+#' @rdname casting
 #' @method vec_type2 v_continuous_nonneg
 #' @export
 #' @export vec_type2.v_continuous_nonneg
@@ -74,6 +74,7 @@ vec_type2.v_continuous_nonneg.default <- function(x, y, ..., x_arg = "", y_arg =
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
+#' @rdname vec_arith
 #' @method vec_type2 numeric
 #' @export
 #' @export vec_type2.numeric
@@ -103,6 +104,7 @@ vec_type2.v_continuous_nonneg.numeric <- function(x, y, ...) x
 #' @export 
 vec_type2.numeric.v_continuous_nonneg <- function(x, y, ...) y
 
+#' @rdname casting
 #' @method vec_cast v_continuous_nonneg
 #' @export
 #' @export vec_cast.v_continuous_nonneg
@@ -147,7 +149,16 @@ vec_restore.v_continuous_nonneg <- function(x, to, ..., i = NULL) {
 }
 
 # Math Operations ####
+# TODO:?
 
+# Formatting ####
+#' @method format v_continuous_nonneg
+#' @export
+format.v_continuous_nonneg <- function(x, ...) {
+  out <- formatC(signif(vctrs::vec_data(x), 3))
+  out[is.na(x)] <- NA
+  out
+}
 # Print foot
 #' @importFrom vctrs obj_print_footer
 #' @method obj_print_footer v_continuous_nonneg

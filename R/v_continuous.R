@@ -7,8 +7,8 @@
 #' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
 new_continuous <- function(x = double(), .desc = description(), .context = context()){
-  x <- vctrs::vec_cast(x, double())
-  vctrs::vec_assert(x, ptype = double())
+  # x <- vctrs::vec_cast(x, double())
+  # vctrs::vec_assert(x, ptype = double())
   vctrs::new_vctr(x, desc = .desc, context = .context, class = "v_continuous")
 }
 
@@ -23,7 +23,7 @@ methods::setOldClass(c("v_continuous", "vctrs_vctr"))
 #' @export
 
 v_continuous <- function(x = double(), context){
-  x <- vctrs::vec_cast(x, double())
+  # x <- vctrs::vec_cast(x, double())
   desc <- describe(vctrs::vec_data(x))
   if(missing(context)){
     context <- methods::new("context")
@@ -48,6 +48,7 @@ format.v_continuous <- function(x, ...) {
 
 # Casting and coercing ####
 
+#' @rdname casting
 #' @method vec_type2 v_continuous
 #' @export
 #' @export vec_type2.v_continuous
@@ -59,6 +60,7 @@ vec_type2.v_continuous.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
+#' @rdname casting
 #' @method vec_type2 double
 #' @export
 #' @export vec_type2.double
@@ -88,6 +90,7 @@ vec_type2.v_continuous.double <- function(x, y, ...) x
 #' @export 
 vec_type2.double.v_continuous <- function(x, y, ...) y
 
+#' @rdname casting
 #' @method vec_cast v_continuous
 #' @export
 #' @export vec_cast.v_continuous
@@ -133,6 +136,7 @@ vec_restore.v_continuous <- function(x, to, ..., i = NULL) {
 
 # Math Operations ####
 
+#' @rdname vec_arith
 #' @importFrom vctrs vec_arith
 #' @method vec_arith v_continuous
 #' @export
@@ -174,6 +178,7 @@ vec_arith.v_continuous.double <- function(op, x, y) {
   )
 }
 
+#' @rdname vec_arith
 #' @method vec_arith double
 #' @export
 #' @export vec_arith.double
@@ -194,6 +199,7 @@ vec_arith.double.v_continuous <- function(op, x, y) {
   )
 }
 
+#' @rdname vec_arith
 #' @importFrom vctrs vec_math vec_math_base
 #' @method vec_math v_continuous
 #' @export
@@ -224,7 +230,7 @@ quantile.v_continuous <- function(x, ...) {
 # Formatting ####
 #' @method format v_continuous
 #' @export
-format.v_continuous<- function(x, ...) {
+format.v_continuous <- function(x, ...) {
   out <- formatC(signif(vctrs::vec_data(x), 3))
   out[is.na(x)] <- NA
   out

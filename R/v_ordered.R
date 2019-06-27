@@ -41,8 +41,16 @@ v_ordered <- function(x = factor(ordered = TRUE), context){
               .context = context)
 }
 
-# Coerce ------------------------------------------------------------------
+#' Predicate function for ordered objects
+#' @rdname v_ordered 
+#' @export
 
+is_ordered <- function(x){
+  inherits(x, "v_ordered")
+}
+
+# Coerce ------------------------------------------------------------------
+#' @rdname casting
 #' @export vec_type2.v_ordered
 #' @method vec_type2 v_ordered
 #' @export
@@ -73,7 +81,7 @@ vec_type2.v_ordered.v_ordered <- function(x, y, ...) {
 }
 
 # Cast --------------------------------------------------------------------
-
+#' @rdname casting
 #' @export vec_cast.v_ordered
 #' @method vec_cast v_ordered
 #' @importFrom vctrs vec_cast.character
@@ -147,7 +155,14 @@ levels.v_ordered <- levels.default
 #   vctrs::stop_unsupported(x, op)
 # }
 
-# Print -------------------------------------------------------------------
+# Formatting ####
+#' @method format v_ordered
+#' @export
+format.v_ordered <- function(x, ...) {
+  out <- levels(x)[x]
+  out[is.na(x)] <- NA
+  out
+}
 
 # Print foot
 #' @importFrom vctrs obj_print_footer
@@ -167,6 +182,12 @@ vec_ptype_full.v_ordered <- function(x, ...) {
 
 #' @export
 vec_ptype_abbr.v_ordered <- function(x, ...) {
+  "ord"
+}
+
+#' @importFrom pillar type_sum
+#' @export
+type_sum.v_ordered <- function(x) {
   "ord"
 }
 

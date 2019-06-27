@@ -41,7 +41,7 @@ is_character <- function(x){
 }
 
 # Casting and coercing ####
-
+#' @rdname casting
 #' @method vec_type2 v_character
 #' @export
 #' @export vec_type2.v_character
@@ -64,6 +64,7 @@ vec_type2.v_character.v_character <- function(x, y, ...){
   v_character(context = get_context(x))
 }
 
+#' @rdname casting
 #' @method vec_cast v_character
 #' @export
 #' @export vec_cast.v_character

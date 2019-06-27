@@ -40,3 +40,4 @@ Collate:
     'describe.R'
     'context.R'
     'aREADME.R'
+    'utilities.R'

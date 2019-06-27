@@ -32,7 +32,7 @@ v_binary <- function(x = logical(), context){
   new_binary(x, .desc = desc, .context = context)
 }
 
-#' Predicate function for count objects
+#' Predicate function for binary objects
 #' @rdname v_binary 
 #' @export
 
@@ -41,7 +41,7 @@ is_binary <- function(x){
 }
 
 # Casting and coercing ####
-
+#' @rdname casting
 #' @method vec_type2 v_binary
 #' @export
 #' @export vec_type2.v_binary
@@ -73,6 +73,7 @@ vec_type2.v_binary.logical <- function(x, y, ...) { x }
 #' @export 
 vec_type2.logical.v_binary <- function(x, y, ...) { y }
 
+#' @rdname casting
 #' @method vec_cast v_binary
 #' @export
 #' @export vec_cast.v_binary
@@ -119,6 +120,7 @@ vec_restore.v_binary <- function(x, to, ..., i = NULL) {
 
 # Math Operations ####
 
+#' @rdname vec_arith
 #' @importFrom vctrs vec_arith
 #' @method vec_arith v_binary
 #' @export
@@ -176,6 +178,7 @@ vec_arith.integer.v_binary <- function(op, x, y) {
   )
 }
 
+#' @rdname vec_arith
 #' @importFrom vctrs vec_math vec_math_base
 #' @method vec_math v_binary
 #' @export

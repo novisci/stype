@@ -102,8 +102,8 @@ setMethod(
       standardDescriptors,
         list(
           n_unique = function(x, ...) length(unique(x)),
-          max_char = function(x, ...) max(nchar(x)),
-          min_char = function(x, ...) min(nchar(x))
+          max_char = function(x, ...) if(length(x) == 0) 0 else max(nchar(x)),
+          min_char = function(x, ...) if(length(x) == 0) 0 else min(nchar(x))
         )
     )
   }

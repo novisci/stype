@@ -8,8 +8,8 @@
 #' @inheritParams v_count
 
 new_character <- function(x = character(), .desc = description(), .context = context()){
-  x <- vctrs::vec_cast(x, character())
-  vctrs::vec_assert(x, ptype = character())
+  # x <- vctrs::vec_cast(x, character())
+  # vctrs::vec_assert(x, ptype = character())
   vctrs::new_vctr(x, desc = .desc, context = .context, class = "v_character")
 }
 

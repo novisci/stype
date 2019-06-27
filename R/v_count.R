@@ -197,7 +197,6 @@ vec_arith.integer.v_count <- function(op, x, y) {
 #' Math
 #' @name vec_math
 #' @inheritParams vctrs::vec_math
-#' @inheritParams vctrs::vec_math_base
 #' @importFrom vctrs vec_math vec_math_base
 #' @method vec_math v_count
 #' @export

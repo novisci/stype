@@ -10,8 +10,8 @@ before_script:
 testing:
   stage: testing
   script:
+    - R -e 'install.packages(c("rlang", "purrr", "pillar"))'
     - R -e 'devtools::install_github("r-lib/vctrs")'
-    - R -e 'install.packages(c("purrr", "pillar"))'
     - R -e 'devtools::check(manual = FALSE)'
 
 # Store an artifact in gitlab that is the result of R CMD build

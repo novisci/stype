@@ -53,4 +53,7 @@ minicran:
     - master
   script:
     - R -e 'install.packages(c("miniCRAN"))'
+    - R -e 'devtools::install_github("r-lib/rlang@v0.4.0")'
+    - R -e 'install.packages(c("purrr", "pillar"))'
+    - R -e 'devtools::install_github("r-lib/vctrs")'
     - Rscript -e "library(miniCRAN); addLocalPackage('${CI_PROJECT_NAME}', pkgPath='..', path='/mnt/cran.novisci.com', type='source', build=TRUE)"

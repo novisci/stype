@@ -11,6 +11,7 @@
 # arguments.
 
 setClassUnion("groupVar",        c("character", "factor"))
+setClassUnion("categorical",     c("factor", "ordered"))
 setClassUnion("maybeMissing",    c("missing", "NULL"))
 setClassUnion("maybeGroup",      c("maybeMissing", "groupVar"))
 setClassUnion("maybeWeight",     c("maybeMissing", "numeric"))
@@ -60,25 +61,7 @@ setMethod(
 
 setMethod(
   f          = "getDescriptors",
-  signature  = "factor",
-  definition = function(x){
-    append(
-      standardDescriptors,
-      list(
-        table  = function(x, ...) table(x, useNA = "always"),
-        ptable = function(x, ...) prop.table(table(x, useNA = "always")),
-        levels = function(x, ...) levels(x)
-      )
-    )
-  }
-)
-
-#' @rdname getDescriptors
-#' @export
-
-setMethod(
-  f          = "getDescriptors",
-  signature  = "ordered",
+  signature  = "categorical",
   definition = function(x){
     append(
       standardDescriptors,

@@ -171,8 +171,16 @@ format.v_nominal <- function(x, ...) {
 #' @method obj_print_footer v_nominal
 #' @export
 obj_print_footer.v_nominal <- function(x, ...) {
-  #TODO
-  # cat("# Mean: ", attr(x, "desc")[["mean"]], "\n", sep = "")
+  # TODO: use footer_printer
+  ptab <- attr(x, "desc")[["ptable"]]
+  ptab <- paste0(paste0(dimnames(ptab)$x, ": ", round(ptab, 2)*100, "%"), collapse = " ")
+  
+  cxtp <- context_printer(x)
+  
+  cat(ptab %+% "\n" %+%
+      cxtp,
+      sep = "")
+  
 }
 
 

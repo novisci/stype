@@ -249,16 +249,11 @@ format.v_count<- function(x, ...) {
 # }
 
 #' @importFrom vctrs obj_print_footer
+#' @importFrom crayon "%+%"
 #' @method obj_print_footer v_count
 #' @export
 obj_print_footer.v_count <- function(x, ...) {
-  
-  cxtp <- context_printer(x)
-  cat("# ",
-      desc_printer(x, "Total", "sum"), 
-      " ", desc_printer(x, "Mean", "mean"), "\n",
-      if(cxtp != "") paste0("# ", cxtp) else "",
-      sep = "")
+  footer_printer(x, c(sum = "Total", mean = "Mean"))
 }
 
 #' @importFrom vctrs vec_ptype_full

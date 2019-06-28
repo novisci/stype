@@ -14,11 +14,11 @@
 \method{vec_math}{v_binary}(fun, x, ...)
 }
 \arguments{
-\item{fun}{An mathematical function as a string}
+\item{fun}{fun}
 
-\item{x}{A vector}
+\item{x}{x}
 
-\item{...}{An additional arguments.}
+\item{...}{dots}
 }
 \description{
 Math

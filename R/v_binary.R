@@ -240,24 +240,7 @@ format.v_binary <- function(x, ...) {
 #' @method obj_print_footer v_binary
 #' @export
 obj_print_footer.v_binary <- function(x, ...) {
-  has_miss <- attr(x, "desc")[["has_missing"]]
-  has_ctxt <- !is_empty(get_context(x))
-  
-  cat("# Proportion: ", round(attr(x, "desc")[["proportion"]], 2), 
-      if(has_miss){
-        paste0("; Missing: ", attr(x, "desc")[["n_missing"]])
-      } else {
-        ""
-      },
-      "\n", 
-      if(has_ctxt){
-        paste0("# Purpose: ", 
-               methods::slot(get_context(x), "purpose"),
-               "\n")
-      } else {
-        ""
-      },
-      sep = "")
+  footer_printer(x, c(proportion = "Proportion"))
 }
 
 #' @importFrom vctrs vec_ptype_full

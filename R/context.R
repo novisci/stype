@@ -26,7 +26,9 @@ context <- setClass(
   )
 )
 
-validPurposes <- c("outcome", "exposure", "covariate", "other")
+validPurposes <- c("identifier", "index", 
+                   "outcome", "censoring", "competing",
+                   "exposure", "covariate", "other")
 
 setValidity(
   "context",

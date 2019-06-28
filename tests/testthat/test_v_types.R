@@ -40,7 +40,7 @@ test_that(
     .x = v_types,
     .f = ~ {
       tester <- do.call(.x, args = list())
-      do.call(gsub("v_", "is_", .x), args = list(x = tester ))
+      expect_true(do.call(gsub("v_", "is_", .x), args = list(x = tester )))
     }
   )
 )

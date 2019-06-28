@@ -4,7 +4,7 @@
 #' 
 #' @name v_count
 #' @importFrom methods setOldClass
-#' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
+#' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @param x a \code{integer} vector
 #' @param .desc a \\code{\link{description}}
 #' @param .context a \code{\link{context}}
@@ -59,35 +59,35 @@ format.v_count <- function(x, ...) {
 
 #' Casting
 #' @name casting
-#' @inheritParams vctrs::vec_type2
-#' @method vec_type2 v_count
+#' @inheritParams vctrs::vec_ptype2
+#' @method vec_ptype2 v_count
 #' @export
-#' @export vec_type2.v_count
-vec_type2.v_count <- function(x, y, ...) UseMethod("vec_type2.v_count", y)
+#' @export vec_ptype2.v_count
+vec_ptype2.v_count <- function(x, y, ...) UseMethod("vec_ptype2.v_count", y)
 
-#' @method vec_type2.v_count default
+#' @method vec_ptype2.v_count default
 #' @export
-vec_type2.v_count.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.v_count.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
-#' @method vec_type2.v_count vctrs_unspecified
+#' @method vec_ptype2.v_count vctrs_unspecified
 #' @export
-vec_type2.v_count.vctrs_unspecified <- function(x, y, ...) x
+vec_ptype2.v_count.vctrs_unspecified <- function(x, y, ...) x
 
-#' @method vec_type2.v_count v_count
+#' @method vec_ptype2.v_count v_count
 #' @export
-vec_type2.v_count.v_count <- function(x, y, ...) new_count()
+vec_ptype2.v_count.v_count <- function(x, y, ...) new_count()
 
-#' @method vec_type2.v_count integer
+#' @method vec_ptype2.v_count integer
 #' @export
-vec_type2.v_count.integer <- function(x, y, ...) x
+vec_ptype2.v_count.integer <- function(x, y, ...) x
 
 #' @rdname casting
-#' @method vec_type2.integer v_count
-#' @importFrom vctrs vec_type2.integer 
+#' @method vec_ptype2.integer v_count
+#' @importFrom vctrs vec_ptype2.integer 
 #' @export 
-vec_type2.integer.v_count <- function(x, y, ...) y
+vec_ptype2.integer.v_count <- function(x, y, ...) y
 
 #' @rdname casting
 #' @inheritParams vctrs::vec_cast

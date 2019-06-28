@@ -4,7 +4,7 @@
 #' 
 #' @name v_continuous_nonneg
 #' @importFrom methods setOldClass
-#' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
+#' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
 
 new_continuous_nonneg <- function(x = double(), .desc = description(), .context = context()){
@@ -63,46 +63,46 @@ format.v_continuous_nonneg <- function(x, ...) {
 
 # Casting and coercing ####
 #' @rdname casting
-#' @method vec_type2 v_continuous_nonneg
+#' @method vec_ptype2 v_continuous_nonneg
 #' @export
-#' @export vec_type2.v_continuous_nonneg
-vec_type2.v_continuous_nonneg <- function(x, y, ...) UseMethod("vec_type2.v_continuous_nonneg", y)
+#' @export vec_ptype2.v_continuous_nonneg
+vec_ptype2.v_continuous_nonneg <- function(x, y, ...) UseMethod("vec_ptype2.v_continuous_nonneg", y)
 
-#' @method vec_type2.v_continuous_nonneg default
+#' @method vec_ptype2.v_continuous_nonneg default
 #' @export
-vec_type2.v_continuous_nonneg.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.v_continuous_nonneg.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
 #' @rdname casting
-#' @method vec_type2 numeric
+#' @method vec_ptype2 numeric
 #' @export
-#' @export vec_type2.numeric
-vec_type2.numeric <- function(x, y, ...) UseMethod("vec_type2.numeric", y)
+#' @export vec_ptype2.numeric
+vec_ptype2.numeric <- function(x, y, ...) UseMethod("vec_ptype2.numeric", y)
 
-#' @method vec_type2.numeric default
+#' @method vec_ptype2.numeric default
 #' @export
-vec_type2.numeric.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.numeric.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
 
-#' @method vec_type2.v_continuous_nonneg vctrs_unspecified
+#' @method vec_ptype2.v_continuous_nonneg vctrs_unspecified
 #' @export
-vec_type2.v_continuous_nonneg.vctrs_unspecified <- function(x, y, ...) x
+vec_ptype2.v_continuous_nonneg.vctrs_unspecified <- function(x, y, ...) x
 
-#' @method vec_type2.v_continuous_nonneg v_continuous_nonneg
+#' @method vec_ptype2.v_continuous_nonneg v_continuous_nonneg
 #' @export
-vec_type2.v_continuous_nonneg.v_continuous_nonneg <- function(x, y, ...) new_continuous_nonneg()
+vec_ptype2.v_continuous_nonneg.v_continuous_nonneg <- function(x, y, ...) new_continuous_nonneg()
 
-#' @method vec_type2.v_continuous_nonneg numeric
+#' @method vec_ptype2.v_continuous_nonneg numeric
 #' @export
-vec_type2.v_continuous_nonneg.numeric <- function(x, y, ...) x
+vec_ptype2.v_continuous_nonneg.numeric <- function(x, y, ...) x
 
-#' @method vec_type2.numeric v_continuous_nonneg
-# @importFrom vctrs vec_type2.numeric 
+#' @method vec_ptype2.numeric v_continuous_nonneg
+# @importFrom vctrs vec_ptype2.numeric 
 #' @export 
-vec_type2.numeric.v_continuous_nonneg <- function(x, y, ...) y
+vec_ptype2.numeric.v_continuous_nonneg <- function(x, y, ...) y
 
 #' @rdname casting
 #' @method vec_cast v_continuous_nonneg

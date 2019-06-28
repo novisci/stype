@@ -4,7 +4,7 @@
 #' 
 #' @name v_continuous
 #' @importFrom methods setOldClass
-#' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
+#' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
 new_continuous <- function(x = double(), .desc = description(), .context = context()){
   # x <- vctrs::vec_cast(x, double())
@@ -49,46 +49,46 @@ format.v_continuous <- function(x, ...) {
 # Casting and coercing ####
 
 #' @rdname casting
-#' @method vec_type2 v_continuous
+#' @method vec_ptype2 v_continuous
 #' @export
-#' @export vec_type2.v_continuous
-vec_type2.v_continuous <- function(x, y, ...) UseMethod("vec_type2.v_continuous", y)
+#' @export vec_ptype2.v_continuous
+vec_ptype2.v_continuous <- function(x, y, ...) UseMethod("vec_ptype2.v_continuous", y)
 
-#' @method vec_type2.v_continuous default
+#' @method vec_ptype2.v_continuous default
 #' @export
-vec_type2.v_continuous.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.v_continuous.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
 #' @rdname casting
-#' @method vec_type2 double
+#' @method vec_ptype2 double
 #' @export
-#' @export vec_type2.double
-vec_type2.double <- function(x, y, ...) UseMethod("vec_type2.double", y)
+#' @export vec_ptype2.double
+vec_ptype2.double <- function(x, y, ...) UseMethod("vec_ptype2.double", y)
 
-#' @method vec_type2.double default
+#' @method vec_ptype2.double default
 #' @export
-vec_type2.double.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.double.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
 
-#' @method vec_type2.v_continuous vctrs_unspecified
+#' @method vec_ptype2.v_continuous vctrs_unspecified
 #' @export
-vec_type2.v_continuous.vctrs_unspecified <- function(x, y, ...) x
+vec_ptype2.v_continuous.vctrs_unspecified <- function(x, y, ...) x
 
-#' @method vec_type2.v_continuous v_continuous
+#' @method vec_ptype2.v_continuous v_continuous
 #' @export
-vec_type2.v_continuous.v_continuous <- function(x, y, ...) new_continuous()
+vec_ptype2.v_continuous.v_continuous <- function(x, y, ...) new_continuous()
 
-#' @method vec_type2.v_continuous double
+#' @method vec_ptype2.v_continuous double
 #' @export
-vec_type2.v_continuous.double <- function(x, y, ...) x
+vec_ptype2.v_continuous.double <- function(x, y, ...) x
 
-#' @method vec_type2.double v_continuous
-# @importFrom vctrs vec_type2.double 
+#' @method vec_ptype2.double v_continuous
+# @importFrom vctrs vec_ptype2.double 
 #' @export 
-vec_type2.double.v_continuous <- function(x, y, ...) y
+vec_ptype2.double.v_continuous <- function(x, y, ...) y
 
 #' @rdname casting
 #' @method vec_cast v_continuous

@@ -4,7 +4,7 @@
 #' 
 #' @name v_binary
 #' @importFrom methods setOldClass
-#' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
+#' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
 
 new_binary <- function(x = logical(), .desc = description(), .context = context()){
@@ -42,36 +42,36 @@ is_binary <- function(x){
 
 # Casting and coercing ####
 #' @rdname casting
-#' @method vec_type2 v_binary
+#' @method vec_ptype2 v_binary
 #' @export
-#' @export vec_type2.v_binary
-vec_type2.v_binary <- function(x, y, ...) UseMethod("vec_type2.v_binary", y)
+#' @export vec_ptype2.v_binary
+vec_ptype2.v_binary <- function(x, y, ...) UseMethod("vec_ptype2.v_binary", y)
 
-#' @method vec_type2.v_binary default
+#' @method vec_ptype2.v_binary default
 #' @export
-vec_type2.v_binary.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.v_binary.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
-#' @method vec_type2.v_binary vctrs_unspecified
+#' @method vec_ptype2.v_binary vctrs_unspecified
 #' @export
-vec_type2.v_binary.vctrs_unspecified <- function(x, y, ...) x
+vec_ptype2.v_binary.vctrs_unspecified <- function(x, y, ...) x
 
-#' @method vec_type2.v_binary v_binary
+#' @method vec_ptype2.v_binary v_binary
 #' @export
-vec_type2.v_binary.v_binary <- function(x, y, ...){
+vec_ptype2.v_binary.v_binary <- function(x, y, ...){
   compare_contexts(x, y)
   v_binary(context = get_context(x))
 }
 
-#' @method vec_type2.v_binary logical
+#' @method vec_ptype2.v_binary logical
 #' @export
-vec_type2.v_binary.logical <- function(x, y, ...) { x } 
+vec_ptype2.v_binary.logical <- function(x, y, ...) { x } 
 
-#' @method vec_type2.logical v_binary
-#' @importFrom vctrs vec_type2.logical
+#' @method vec_ptype2.logical v_binary
+#' @importFrom vctrs vec_ptype2.logical
 #' @export 
-vec_type2.logical.v_binary <- function(x, y, ...) { y }
+vec_ptype2.logical.v_binary <- function(x, y, ...) { y }
 
 #' @rdname casting
 #' @method vec_cast v_binary

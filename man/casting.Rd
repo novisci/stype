@@ -4,62 +4,62 @@
 %   R/v_ordered.R, R/v_character.R
 \name{casting}
 \alias{casting}
-\alias{vec_type2.v_count}
-\alias{vec_type2.integer.v_count}
+\alias{vec_ptype2.v_count}
+\alias{vec_ptype2.integer.v_count}
 \alias{vec_cast.v_count}
-\alias{vec_type2.v_continuous}
-\alias{vec_type2.double}
+\alias{vec_ptype2.v_continuous}
+\alias{vec_ptype2.double}
 \alias{vec_cast.v_continuous}
-\alias{vec_type2.v_continuous_nonneg}
-\alias{vec_type2.numeric}
+\alias{vec_ptype2.v_continuous_nonneg}
+\alias{vec_ptype2.numeric}
 \alias{vec_cast.v_continuous_nonneg}
-\alias{vec_type2.v_event_time}
+\alias{vec_ptype2.v_event_time}
 \alias{vec_cast.v_event_time}
-\alias{vec_type2.v_binary}
+\alias{vec_ptype2.v_binary}
 \alias{vec_cast.v_binary}
-\alias{vec_type2.v_nominal}
+\alias{vec_ptype2.v_nominal}
 \alias{vec_cast.v_nominal}
-\alias{vec_type2.v_ordered}
+\alias{vec_ptype2.v_ordered}
 \alias{vec_cast.v_ordered}
-\alias{vec_type2.v_character}
+\alias{vec_ptype2.v_character}
 \alias{vec_cast.v_character}
 \title{Casting}
 \usage{
-\method{vec_type2}{v_count}(x, y, ...)
+\method{vec_ptype2}{v_count}(x, y, ...)
 
-\method{vec_type2.integer}{v_count}(x, y, ...)
+\method{vec_ptype2.integer}{v_count}(x, y, ...)
 
 \method{vec_cast}{v_count}(x, to, ...)
 
-\method{vec_type2}{v_continuous}(x, y, ...)
+\method{vec_ptype2}{v_continuous}(x, y, ...)
 
-\method{vec_type2}{double}(x, y, ...)
+\method{vec_ptype2}{double}(x, y, ...)
 
 \method{vec_cast}{v_continuous}(x, to, ...)
 
-\method{vec_type2}{v_continuous_nonneg}(x, y, ...)
+\method{vec_ptype2}{v_continuous_nonneg}(x, y, ...)
 
-\method{vec_type2}{numeric}(x, y, ...)
+\method{vec_ptype2}{numeric}(x, y, ...)
 
 \method{vec_cast}{v_continuous_nonneg}(x, to, ...)
 
-\method{vec_type2}{v_event_time}(x, y, ...)
+\method{vec_ptype2}{v_event_time}(x, y, ...)
 
 \method{vec_cast}{v_event_time}(x, to, ...)
 
-\method{vec_type2}{v_binary}(x, y, ...)
+\method{vec_ptype2}{v_binary}(x, y, ...)
 
 \method{vec_cast}{v_binary}(x, to, ...)
 
-\method{vec_type2}{v_nominal}(x, y, ...)
+\method{vec_ptype2}{v_nominal}(x, y, ...)
 
 \method{vec_cast}{v_nominal}(x, to, ...)
 
-\method{vec_type2}{v_ordered}(x, y, ...)
+\method{vec_ptype2}{v_ordered}(x, y, ...)
 
 \method{vec_cast}{v_ordered}(x, to, ...)
 
-\method{vec_type2}{v_character}(x, y, ...)
+\method{vec_ptype2}{v_character}(x, y, ...)
 
 \method{vec_cast}{v_character}(x, to, ...)
 }

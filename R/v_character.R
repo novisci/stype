@@ -4,7 +4,7 @@
 #' 
 #' @name v_character
 #' @importFrom methods setOldClass
-#' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
+#' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
 
 new_character <- function(x = character(), .desc = description(), .context = context()){
@@ -42,24 +42,24 @@ is_character <- function(x){
 
 # Casting and coercing ####
 #' @rdname casting
-#' @method vec_type2 v_character
+#' @method vec_ptype2 v_character
 #' @export
-#' @export vec_type2.v_character
-vec_type2.v_character <- function(x, y, ...) UseMethod("vec_type2.v_character", y)
+#' @export vec_ptype2.v_character
+vec_ptype2.v_character <- function(x, y, ...) UseMethod("vec_ptype2.v_character", y)
 
-#' @method vec_type2.v_character default
+#' @method vec_ptype2.v_character default
 #' @export
-vec_type2.v_character.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.v_character.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
-#' @method vec_type2.v_character vctrs_unspecified
+#' @method vec_ptype2.v_character vctrs_unspecified
 #' @export
-vec_type2.v_character.vctrs_unspecified <- function(x, y, ...) x
+vec_ptype2.v_character.vctrs_unspecified <- function(x, y, ...) x
 
-#' @method vec_type2.v_character v_character
+#' @method vec_ptype2.v_character v_character
 #' @export
-vec_type2.v_character.v_character <- function(x, y, ...){
+vec_ptype2.v_character.v_character <- function(x, y, ...){
   compare_contexts(x, y)
   v_character(context = get_context(x))
 }

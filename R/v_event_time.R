@@ -4,7 +4,7 @@
 #' 
 #' @name v_event_time
 #' @importFrom methods setOldClass
-#' @importFrom vctrs vec_cast vec_type2 vec_data new_vctr vec_assert vec_arith_base
+#' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
 
 new_event_time <- function(x = double(), .desc = description(), .context = context()){
@@ -56,45 +56,45 @@ format.v_event_time <- function(x, ...) {
 
 # Casting and coercing ####
 #' @rdname casting
-#' @method vec_type2 v_event_time
+#' @method vec_ptype2 v_event_time
 #' @export
-#' @export vec_type2.v_event_time
-vec_type2.v_event_time <- function(x, y, ...) UseMethod("vec_type2.v_event_time", y)
+#' @export vec_ptype2.v_event_time
+vec_ptype2.v_event_time <- function(x, y, ...) UseMethod("vec_ptype2.v_event_time", y)
 
-#' @method vec_type2.v_event_time default
+#' @method vec_ptype2.v_event_time default
 #' @export
-vec_type2.v_event_time.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.v_event_time.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
-#' @method vec_type2 numeric
+#' @method vec_ptype2 numeric
 #' @export
-#' @export vec_type2.numeric
-vec_type2.numeric <- function(x, y, ...) UseMethod("vec_type2.numeric", y)
+#' @export vec_ptype2.numeric
+vec_ptype2.numeric <- function(x, y, ...) UseMethod("vec_ptype2.numeric", y)
 
-#' @method vec_type2.numeric default
+#' @method vec_ptype2.numeric default
 #' @export
-vec_type2.numeric.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.numeric.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
 
-#' @method vec_type2.v_event_time vctrs_unspecified
+#' @method vec_ptype2.v_event_time vctrs_unspecified
 #' @export
-vec_type2.v_event_time.vctrs_unspecified <- function(x, y, ...) x
+vec_ptype2.v_event_time.vctrs_unspecified <- function(x, y, ...) x
 
-#' @method vec_type2.v_event_time v_event_time
+#' @method vec_ptype2.v_event_time v_event_time
 #' @export
-vec_type2.v_event_time.v_event_time <- function(x, y, ...) new_event_time()
+vec_ptype2.v_event_time.v_event_time <- function(x, y, ...) new_event_time()
 
-#' @method vec_type2.v_event_time numeric
+#' @method vec_ptype2.v_event_time numeric
 #' @export
-vec_type2.v_event_time.numeric <- function(x, y, ...) x
+vec_ptype2.v_event_time.numeric <- function(x, y, ...) x
 
-#' @method vec_type2.numeric v_event_time
-# @importFrom vctrs vec_type2.numeric 
+#' @method vec_ptype2.numeric v_event_time
+# @importFrom vctrs vec_ptype2.numeric 
 #' @export 
-vec_type2.numeric.v_event_time <- function(x, y, ...) y
+vec_ptype2.numeric.v_event_time <- function(x, y, ...) y
 
 #' @rdname casting
 #' @method vec_cast v_event_time

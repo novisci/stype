@@ -51,30 +51,30 @@ is_ordered <- function(x){
 
 # Coerce ------------------------------------------------------------------
 #' @rdname casting
-#' @export vec_type2.v_ordered
-#' @method vec_type2 v_ordered
+#' @export vec_ptype2.v_ordered
+#' @method vec_ptype2 v_ordered
 #' @export
-vec_type2.v_ordered <- function(x, y, ...) UseMethod("vec_type2.v_ordered", y)
+vec_ptype2.v_ordered <- function(x, y, ...) UseMethod("vec_ptype2.v_ordered", y)
 
-#' @method vec_type2 double
+#' @method vec_ptype2 double
 #' @export
-#' @export vec_type2.double
-vec_type2.character <- function(x, y, ...) UseMethod("vec_type2.character", y)
+#' @export vec_ptype2.double
+vec_ptype2.character <- function(x, y, ...) UseMethod("vec_ptype2.character", y)
 
-#' @method vec_type2.v_ordered default
+#' @method vec_ptype2.v_ordered default
 #' @export
-vec_type2.v_ordered.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.v_ordered.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
-#' @method vec_type2.character v_ordered
+#' @method vec_ptype2.character v_ordered
 #' @export
-vec_type2.character.v_ordered <- function(x, y, ...) character()
-#' @method vec_type2.v_ordered character
+vec_ptype2.character.v_ordered <- function(x, y, ...) character()
+#' @method vec_ptype2.v_ordered character
 #' @export
-vec_type2.v_ordered.character <- function(x, y, ...) character()
-#' @method vec_type2.v_ordered v_ordered
+vec_ptype2.v_ordered.character <- function(x, y, ...) character()
+#' @method vec_ptype2.v_ordered v_ordered
 #' @export
-vec_type2.v_ordered.v_ordered <- function(x, y, ...) {
+vec_ptype2.v_ordered.v_ordered <- function(x, y, ...) {
   compare_contexts(x, y)
   new_ordered(.levels =  union(levels(x),levels(y)),
               .context = get_context(x))
@@ -169,8 +169,15 @@ format.v_ordered <- function(x, ...) {
 #' @method obj_print_footer v_ordered
 #' @export
 obj_print_footer.v_ordered <- function(x, ...) {
-  #TODO
-  # cat("# Mean: ", attr(x, "desc")[["mean"]], "\n", sep = "")
+  # TODO: use footer_printer
+  ptab <- attr(x, "desc")[["ptable"]]
+  ptab <- paste0(paste0(dimnames(ptab)$x, ": ", round(ptab, 2)*100, "%"), collapse = " ")
+  
+  cxtp <- context_printer(x)
+  
+  cat(ptab %+% "\n" %+%
+        cxtp,
+      sep = "")
 }
 
 

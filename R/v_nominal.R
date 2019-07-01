@@ -6,9 +6,11 @@
 #' @param .levels Character vector of labels.
 #' @inheritParams v_count
 
-new_nominal <- function(x = integer(), .levels = character(),
-                        .desc = description(),
-                        .context = context()) {
+new_nominal <- function(x = integer(), 
+                        .levels = character(),
+                        .internal_name = character(), 
+                        .data_summary = data_summary(), 
+                        .context = context()){
   # browser()
   stopifnot(is.integer(x))
   stopifnot(is.character(.levels))
@@ -16,8 +18,9 @@ new_nominal <- function(x = integer(), .levels = character(),
   structure(
     x,
     levels  = .levels,
-    context = .context,
-    desc    = .desc,
+    internal_name = .internal_name,
+    data_summary  = .data_summary, 
+    context       = .context,
     class   = c("v_nominal", "vctrs_vctr", "factor")
   )
 }
@@ -28,17 +31,19 @@ methods::setOldClass(c("v_nominal", "vctrs_vctr"))
 #' @rdname v_nominal
 #' @param x a \code{factor}
 #' @export
-v_nominal <- function(x = factor(), context){
+v_nominal <- function(x = factor(), internal_name = "", context){
   # x <- vctrs::vec_cast(x, factor())
-  desc <- describe(x)
+  dsum <- describe(x)
   if(missing(context)){
     context <- methods::new("context")
   }
   
-  new_nominal(x        = as.integer(x),
-              .levels  = levels(x), 
-              .desc    = desc, 
-              .context = context)
+  new_nominal(
+    x        = as.integer(x),
+    .levels  = levels(x), 
+    .internal_name = internal_name,
+    .data_summary  = dsum,
+    .context       = context)
 }
 
 #' Predicate function for nominal objects
@@ -129,15 +134,16 @@ vec_cast.v_nominal.default <- function(x, to, ..., x_arg = "", to_arg = "") {
 #' @export
 #' @method vec_restore v_nominal 
 vec_restore.v_nominal <- function(x, to, ..., x_arg = "", to_arg = "") {
+  
+  iname   <- attr(x, "internal_name")
   x   <- levels(to)[x]
   out <- factor(x, levels = levels(to))
 
   # Maintain context
   ctxt <- get_context(to)
   
-  v_nominal(out, context = ctxt)
+  v_nominal(out, internal_name = iname, context = ctxt)
 }
-
 
 #' @export
 #' @method levels v_nominal 

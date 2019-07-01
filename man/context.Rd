@@ -10,12 +10,16 @@ A context contains study design specific information about a variable
 \section{Slots}{
 
 \describe{
-\item{\code{name}}{a name}
-
 \item{\code{short_label}}{a short_label}
 
 \item{\code{long_label}}{a long_label}
 
+\item{\code{description}}{a description}
+
+\item{\code{derivation}}{a derivation}
+
 \item{\code{purpose}}{a purpose}
+
+\item{\code{security_type}}{security information}
 }}
 

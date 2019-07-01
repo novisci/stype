@@ -7,10 +7,10 @@
 \alias{as_binary}
 \title{Binary vectors}
 \usage{
-new_binary(x = logical(), .desc = description(),
-  .context = context())
+new_binary(x = logical(), .internal_name = character(),
+  .data_summary = data_summary(), .context = context())
 
-v_binary(x = logical(), context)
+v_binary(x = logical(), internal_name = "", context)
 
 is_binary(x)
 
@@ -19,9 +19,13 @@ as_binary(x)
 \arguments{
 \item{x}{a \code{logical} vector}
 
-\item{.desc}{a \\code{\link{description}}}
+\item{.internal_name}{the internal name of the variable}
+
+\item{.data_summary}{a \\code{\link{data_summary}}}
 
 \item{.context}{a \code{\link{context}}}
+
+\item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
 }

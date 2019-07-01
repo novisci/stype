@@ -7,9 +7,10 @@
 \title{v_nominal S3 class}
 \usage{
 new_nominal(x = integer(), .levels = character(),
-  .desc = description(), .context = context())
+  .internal_name = character(), .data_summary = data_summary(),
+  .context = context())
 
-v_nominal(x = factor(), context)
+v_nominal(x = factor(), internal_name = "", context)
 
 is_nominal(x)
 }
@@ -18,9 +19,13 @@ is_nominal(x)
 
 \item{.levels}{Character vector of labels.}
 
-\item{.desc}{a \\code{\link{description}}}
+\item{.internal_name}{the internal name of the variable}
+
+\item{.data_summary}{a \\code{\link{data_summary}}}
 
 \item{.context}{a \code{\link{context}}}
+
+\item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
 }

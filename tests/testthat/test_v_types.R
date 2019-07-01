@@ -35,7 +35,7 @@ test_that("creating a length 0 v_<type> returns the appropriate type without war
 })
 
 test_that(
-  "predicate functions work",
+  "type predicate functions work",
   purrr::walk(
     .x = v_types,
     .f = ~ {
@@ -43,5 +43,25 @@ test_that(
       expect_true(do.call(gsub("v_", "is_", .x), args = list(x = tester )))
     }
   )
+)
+
+test_that(
+  "purpose predicate functions work for all types",
+  {
+    combos <- purrr::cross(list(type = v_types, role = valid_roles))
+    purrr::walk(
+      .x = combos,
+      .f = ~ {
+        ctxt   <- context(purpose = purpose(study_role = .x$role))
+        tester <- do.call(.x$type, args = list(context = ctxt))
+        expect_true(
+          is_study_role(tester, .x$role),
+          label = sprintf("is_study_role(tester, '%s') failed for %s", .x$role, .x$type))
+        expect_true(
+          do.call(sprintf("is_%s", .x$role), args = list(tester)),
+          label = sprintf("is_%s(tester) failed for %s", .x$role, .x$type))
+      }
+    )
+  }
 )
   

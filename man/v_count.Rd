@@ -7,9 +7,10 @@
 \alias{as_count}
 \title{Count vectors}
 \usage{
-new_count(x = integer(), .desc = description(), .context = context())
+new_count(x = integer(), .internal_name = character(),
+  .data_summary = data_summary(), .context = context())
 
-v_count(x = integer(), context)
+v_count(x = integer(), internal_name = "", context)
 
 is_count(x)
 
@@ -18,9 +19,13 @@ as_count(x)
 \arguments{
 \item{x}{a \code{integer} vector}
 
-\item{.desc}{a \\code{\link{description}}}
+\item{.internal_name}{the internal name of the variable}
+
+\item{.data_summary}{a \\code{\link{data_summary}}}
 
 \item{.context}{a \code{\link{context}}}
+
+\item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
 }

@@ -1,8 +1,8 @@
-Package: DenverSugar
+Package: stype
 Type: Package
 Title: Compute descriptive statistics
 Version: 0.1.0
-Date: 2019-06-27
+Date: 2019-07-01
 Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
                             email = "bsaul@novisci.com"))
 Maintainer: Bradley Saul <bsaul@novisci.com>
@@ -22,8 +22,8 @@ Suggests:
    dplyr,
    tibble
 License: GPL-3 + file LICENSE
-URL: https://gitlab.novisci.com/statistics/DenverSugar
-BugReports: https://gitlab.novisci.com/statistics/DenverSugar/issues
+URL: https://gitlab.novisci.com/nsStat/stype
+BugReports: https://gitlab.novisci.com/nsStat/stype/issues
 Encoding: UTF-8
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr

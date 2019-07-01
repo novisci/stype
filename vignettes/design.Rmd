@@ -1,10 +1,10 @@
 ---
-title: "DenverSugar Design"
+title: "stype Design"
 author: "B. Saul"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{DenverSugar Design}
+  %\VignetteIndexEntry{stype Design}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 # Design Goals
 
-`DenverSugar` provides an extensible set of data types that in themselves extend certain `R` vector classes to be useful in NoviSci's suite of analytic applications by providing vectors with:
+`stype` provides an extensible set of data types that in themselves extend certain `R` vector classes to be useful in NoviSci's suite of analytic applications by providing vectors with:
 
    * data types that align with common statistical data types (e.g. "binary", "continous", "count", "time to event", etc);
    * a study design `context` with information about how the variable relates to a study design;
@@ -40,10 +40,10 @@ The package relies heavily on the [`vctrs`](https://vctrs.r-lib.org/index.html) 
 
 ## A quick example
 
-Each data type provided by `DenverSugar` (described in more detail below) have constructor functions that begin with `v_<type>`. For example, `v_binary` creates binary ($\{0, 1\}$) data from R's `logical` type.
+Each data type provided by `stype` (described in more detail below) have constructor functions that begin with `v_<type>`. For example, `v_binary` creates binary ($\{0, 1\}$) data from R's `logical` type.
 
 ```{r}
-library(DenverSugar)
+library(stype)
 
 x <- v_binary(c(TRUE, TRUE, TRUE, FALSE))
 

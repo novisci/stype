@@ -8,7 +8,8 @@
 #' TODO: add a description
 #' @include context.R
 #' @include describe.R
-#' @include description.R
+#' @include data_summary.R
+#' @include purpose.R
 #' @include v_character.R
 #' @include v_ordered.R
 #' @include v_nominal.R

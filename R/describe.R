@@ -212,7 +212,7 @@ setMethod(
       .descriptors
     }
     
-    description(
+    data_summary(
       purrr::map(
         .x = desc,
         .f = function(f) .describe(f, x = x, g = g, w = w, ...))

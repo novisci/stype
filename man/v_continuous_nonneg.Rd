@@ -8,10 +8,10 @@
 \alias{as_nonneg_continuous}
 \title{continuous_nonneg vectors}
 \usage{
-new_continuous_nonneg(x = double(), .desc = description(),
-  .context = context())
+new_continuous_nonneg(x = double(), .internal_name = character(),
+  .data_summary = data_summary(), .context = context())
 
-v_continuous_nonneg(x = double(), context)
+v_continuous_nonneg(x = double(), internal_name = "", context)
 
 is_continuous_nonneg(x)
 
@@ -21,8 +21,6 @@ as_nonneg_continuous(x)
 }
 \arguments{
 \item{x}{nonnegative \code{double}}
-
-\item{.desc}{a \\code{\link{description}}}
 
 \item{.context}{a \code{\link{context}}}
 

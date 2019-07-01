@@ -7,10 +7,10 @@
 \alias{as_continuous}
 \title{Continuous vectors}
 \usage{
-new_continuous(x = double(), .desc = description(),
-  .context = context())
+new_continuous(x = double(), .internal_name = character(),
+  .data_summary = data_summary(), .context = context())
 
-v_continuous(x = double(), context)
+v_continuous(x = double(), internal_name = "", context)
 
 is_continuous(x)
 
@@ -18,8 +18,6 @@ as_continuous(x)
 }
 \arguments{
 \item{x}{a \code{double} vector}
-
-\item{.desc}{a \\code{\link{description}}}
 
 \item{.context}{a \code{\link{context}}}
 

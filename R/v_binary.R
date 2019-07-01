@@ -7,10 +7,19 @@
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
 
-new_binary <- function(x = logical(), .desc = description(), .context = context()){
+new_binary <- function(x = logical(),                     
+                       .internal_name = character(), 
+                       .data_summary = data_summary(), 
+                       .context = context()){
   x <- vctrs::vec_cast(x, logical())
   vctrs::vec_assert(x, ptype = logical())
-  vctrs::new_vctr(x, desc = .desc, context = .context, class = "v_binary")
+  
+  vctrs::new_vctr(
+    x, 
+    internal_name = .internal_name,
+    data_summary  = .data_summary, 
+    context       = .context, 
+    class = "v_binary")
 }
 
 #' @importFrom methods setOldClass
@@ -23,13 +32,17 @@ methods::setOldClass(c("v_binary", "vctrs_vctr"))
 #' @rdname v_binary 
 #' @export
 
-v_binary <- function(x = logical(), context){
+v_binary <- function(x = logical(), internal_name = "", context){
   x <- vctrs::vec_cast(x, logical())
-  desc <- describe(vctrs::vec_data(x))
+  dsum <- describe(vctrs::vec_data(x))
   if(missing(context)){
     context <- methods::new("context")
   }
-  new_binary(x, .desc = desc, .context = context)
+  new_binary(
+    x, 
+   .internal_name = internal_name,
+   .data_summary  = dsum,
+   .context       = context)
 }
 
 #' Predicate function for binary objects
@@ -110,12 +123,13 @@ as_binary <- function(x) {
 #' @method vec_restore v_binary
 #' @export
 vec_restore.v_binary <- function(x, to, ..., i = NULL) {
+  iname   <- attr(x, "internal_name")
   # Update description
   desc    <- describe(vctrs::vec_data(x))
   # Maintain context
   context <- get_context(to)
   
-  new_binary(x, .desc = desc, .context = context)
+  new_binary(x, .internal_name = iname, .data_summary  = desc, .context = context)
 }
 
 # Math Operations ####

@@ -4,7 +4,7 @@
 \name{get_context}
 \alias{get_context}
 \alias{get_context,described-method}
-\alias{get_context,described,context-method}
+\alias{get_context,described,described-method}
 \title{Get an object's context}
 \usage{
 get_context(x)
@@ -12,7 +12,7 @@ get_context(x)
 \S4method{get_context}{described}(x)
 }
 \arguments{
-\item{x}{a context}
+\item{x}{a described object}
 }
 \description{
 Get an object's context

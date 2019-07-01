@@ -7,10 +7,10 @@
 \alias{as_character}
 \title{Character vectors}
 \usage{
-new_character(x = character(), .desc = description(),
-  .context = context())
+new_character(x = character(), .internal_name = character(),
+  .data_summary = description(), .context = context())
 
-v_character(x = character(), context)
+v_character(x = character(), internal_name = "", context)
 
 is_character(x)
 
@@ -18,8 +18,6 @@ as_character(x)
 }
 \arguments{
 \item{x}{a \code{character} vector}
-
-\item{.desc}{a \\code{\link{description}}}
 
 \item{.context}{a \code{\link{context}}}
 

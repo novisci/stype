@@ -7,7 +7,8 @@
 #' @inheritParams v_count
 
 new_ordered <- function(x = integer(), .levels = character(),
-                        .desc = description(),
+                        .internal_name = character(), 
+                        .data_summary = data_summary(), 
                         .context = context()) {
   # browser()
   stopifnot(is.integer(x))
@@ -16,8 +17,9 @@ new_ordered <- function(x = integer(), .levels = character(),
   structure(
     x,
     levels  = .levels,
-    context = .context,
-    desc    = .desc,
+    internal_name = .internal_name,
+    data_summary  = .data_summary, 
+    context       = .context,
     class   = c("v_ordered", "vctrs_vctr", "ordered", "factor")
   )
 }
@@ -28,17 +30,19 @@ methods::setOldClass(c("v_ordered", "vctrs_vctr"))
 #' @rdname v_ordered
 #' @param x a \code{factor}
 #' @export
-v_ordered <- function(x = factor(ordered = TRUE), context){
+v_ordered <- function(x = factor(ordered = TRUE), internal_name = "", context){
   # x <- vctrs::vec_cast(x, factor())
-  desc <- describe(x)
+  dsum <- describe(x)
   if(missing(context)){
     context <- methods::new("context")
   }
   
-  new_ordered(x        = as.integer(x),
-              .levels  = levels(x), 
-              .desc    = desc, 
-              .context = context)
+  new_ordered(
+    x        = as.integer(x),
+    .levels  = levels(x), 
+    .internal_name = internal_name,
+    .data_summary  = dsum,
+    .context       = context)
 }
 
 #' Predicate function for ordered objects
@@ -129,13 +133,14 @@ vec_cast.v_ordered.default <- function(x, to, ..., x_arg = "", to_arg = "") {
 #' @export
 #' @method vec_restore v_ordered 
 vec_restore.v_ordered <- function(x, to, ..., x_arg = "", to_arg = "") {
+  iname   <- attr(x, "internal_name")
   x   <- levels(to)[x]
   out <- factor(x, levels = levels(to), ordered = TRUE)
 
   # Maintain context
   ctxt <- get_context(to)
   
-  v_ordered(out, context = ctxt)
+  v_ordered(out, internal_name = iname, context = ctxt)
 }
 
 

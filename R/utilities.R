@@ -5,7 +5,7 @@ boldmag <- crayon::combine_styles(crayon::bold, crayon::magenta)
 context_printer <- function(x){
   ctxt <- get_context(x)
   if(is_empty(ctxt)){ return("")}
-  prps <- methods::slot(get_context(x), "purpose")
+  prps <- methods::slot(get_purpose(ctxt), "study_role") 
   prps <- if(length(prps) == 0 || prps == "") "<undefined>" else prps
   sprintf("Purpose: %s\n", prps)
 }

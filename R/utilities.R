@@ -11,8 +11,7 @@ context_printer <- function(x){
 }
 
 desc_printer <- function(x, label, what){
-  # TODO: I don't like hardcoding the rounding
-  sprintf("%s = %s", label, round(attr(x, "data_summary")[[what]]), 2)
+  sprintf("%s = %.3f", label, attr(x, "data_summary")[[what]])
 }
 
 missing_printer <- function(x){

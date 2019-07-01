@@ -3,7 +3,7 @@
 # - define collation order of .R files (last to first)
 
 #------------------------------------------------------------------------------#
-#' DenverSugar: a grammar of cohort creation
+#' stype: statistcal data types
 #'
 #' TODO: add a description
 #' @include context.R

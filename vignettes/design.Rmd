@@ -25,9 +25,9 @@ knitr::opts_chunk$set(
 `stype` provides an extensible set of data types that in themselves extend certain `R` vector classes to be useful in NoviSci's suite of analytic applications by providing vectors with:
 
    * data types that align with common statistical data types (e.g. "binary", "continous", "count", "time to event", etc);
-   * a study design `context` with information about how the variable relates to a study design;
-   * a data `description` with relevant summary statistics of the variable;
-   * methods that update the `description` when a vector is subset or modified in certain ways;
+   * a `context` object with information about how the variable relates to a study design;
+   * a `data_summary` with relevant summary statistics of the variable;
+   * methods that update the `data_summary` when a vector is subset or modified in certain ways;
    * various useful utilities such as predicate functions for identifying variables based on the data type or `context`.
    
 ## Implementation
@@ -112,8 +112,8 @@ The following table describes the proposed data types (not all of these may be a
 | `v_continuous`           | `double`     | $\mathcal{R}$      |
 | --`v_continuous_nonneg`  | `double`     | $\mathcal{R}^+$    |
 | --`v_event_time`         | `double`     | $\mathcal{R}^+$    |
-| `v_categorical_nom`      | `factor`     | |
-| `v_categorical_ord`      | `ordered`    | |
+| `v_nominal        `      | `factor`     | |
+| `v_ordered`              | `ordered`    | |
 | `v_date`                 | `Date`       | |
 | `v_character`            | `character`  | |
 

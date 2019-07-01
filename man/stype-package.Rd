@@ -4,7 +4,7 @@
 \name{stype-package}
 \alias{stype}
 \alias{stype-package}
-\title{DenverSugar: a grammar of cohort creation}
+\title{stype: statistcal data types}
 \description{
 TODO: add a description
 }

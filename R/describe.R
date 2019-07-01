@@ -37,7 +37,9 @@ standardDescriptors <-  list(
   n            = function(x, ...) length(x),
   has_missing  = function(x, ...) anyNA(x),
   n_nonmissing = function(x, ...) sum(!is.na(x)),
-  n_missing    = function(x, ...) sum(is.na(x))
+  n_missing    = function(x, ...) sum(is.na(x)),
+  proportion_missing = function(x, ...) mean(is.na(x)),
+  is_constant  = function(x, ...) all(x[1] == x)
 )
 
 #' @rdname getDescriptors
@@ -50,8 +52,9 @@ setMethod(
     append(
       standardDescriptors,
       list(
-        proportion = function(x, ...) mean(x, na.rm = TRUE),
-        count      = function(x, ...) sum(x, na.rm = TRUE)
+        num_0      = function(x, ...) sum(!x, na.rm = TRUE),
+        num_1      = function(x, ...) sum(x, na.rm = TRUE),
+        proportion = function(x, ...) mean(x, na.rm = TRUE)
       ))
   }
 )
@@ -99,6 +102,8 @@ setMethod(
   f          = "getDescriptors",
   signature  = "numeric",
   definition = function(x){
+    
+    qprobs = c(0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99)
     append(
       standardDescriptors,
         list(
@@ -106,7 +111,10 @@ setMethod(
           mean   = function(x, ...) mean(x, na.rm = TRUE),
           sd     = function(x, ...) sd(x, na.rm = TRUE),
           median = function(x, ...) median(x, na.rm = TRUE),
-          iqr    = function(x, ...) IQR(x, na.rm = TRUE)
+          iqr    = function(x, ...) IQR(x, na.rm = TRUE),
+          min    = function(x, ...) { if (length(x) == 0 || all(is.na(x))) NA_real_ else min(x, na.rm = TRUE) },
+          max    = function(x, ...) { if (length(x) == 0 || all(is.na(x))) NA_real_ else max(x, na.rm = TRUE) },
+          qtiles = function(x, ...) quantile(x, probs = qprobs, na.rm = TRUE)
           # hist   = function(x, ...) list(ggplot2::qplot(x, geom = "histogram", ...))
         )
     )

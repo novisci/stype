@@ -11,11 +11,12 @@ context_printer <- function(x){
 }
 
 desc_printer <- function(x, label, what){
-  sprintf("%s = %s", label, attr(x, "desc")[[what]])
+  # TODO: I don't like hardcoding the rounding
+  sprintf("%s = %s", label, round(attr(x, "data_summary")[[what]]), 2)
 }
 
 missing_printer <- function(x){
-  if (attr(x, "desc")[["has_missing"]]){
+  if (attr(x, "data_summary")[["has_missing"]]){
     boldmag(desc_printer(x, "Missing", "n_missing"))
   } else {
     ""

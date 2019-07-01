@@ -9,7 +9,7 @@
 
 new_character <- function(x = character(), 
                           .internal_name = character(),
-                          .data_summary = description(), 
+                          .data_summary = data_summary(), 
                           .context = context()){
   # x <- vctrs::vec_cast(x, character())
   # vctrs::vec_assert(x, ptype = character())

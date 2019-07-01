@@ -6,7 +6,9 @@
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @param x a \code{integer} vector
-#' @param .desc a \\code{\link{description}}
+#' @param .internal_name the internal name of the variable
+#' @param internal_name the internal name of the variable
+#' @param .data_summary a \\code{\link{data_summary}}
 #' @param .context a \code{\link{context}}
 #' @param context a \code{\link{context}}
 

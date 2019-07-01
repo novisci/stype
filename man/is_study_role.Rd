@@ -144,9 +144,9 @@ is_other(object)
 \S4method{is_other}{described}(object)
 }
 \arguments{
-\item{context}{a context}
+\item{object}{an object}
 
-\item{x}{what to check}
+\item{what}{what to role to look for}
 }
 \description{
 Check a study role

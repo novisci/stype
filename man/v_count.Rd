@@ -19,11 +19,15 @@ as_count(x)
 \arguments{
 \item{x}{a \code{integer} vector}
 
+\item{.internal_name}{the internal name of the variable}
+
+\item{.data_summary}{a \\code{\link{data_summary}}}
+
 \item{.context}{a \code{\link{context}}}
 
-\item{context}{a \code{\link{context}}}
+\item{internal_name}{the internal name of the variable}
 
-\item{.desc}{a \\code{\link{description}}}
+\item{context}{a \code{\link{context}}}
 }
 \description{
 Some desc

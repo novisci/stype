@@ -34,8 +34,8 @@ setValidity(
 #' Check a study role
 #' 
 #' @name is_study_role
-#' @param context a context
-#' @param x what to check
+#' @param object an object
+#' @param what what to role to look for
 #' @export
 setGeneric("is_study_role", function(object, what) standardGeneric("is_study_role"))
 

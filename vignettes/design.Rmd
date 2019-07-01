@@ -97,7 +97,7 @@ Here's where the real magic is.
 c(x, !x[1:3])
 
 # But ...
-c(x, v_binary(context = context(purpose = "other")))
+c(x, v_binary(context = context(purpose = purpose(study_role = "other"))))
 
 ```
 
@@ -125,15 +125,18 @@ library(tibble)
 n <- 100 
 
 dt <- tibble(
-  y1 = v_binary(as.logical(rbinom(n, 1, 0.25)), context = context(purpose = "outcome")),
-  y2 = v_event_time(runif(n, 1, 100), context = context(purpose = "outcome")),
-  y3 = v_continuous(rnorm(n), context = context(purpose = "outcome")),
+  y1 = v_binary(as.logical(rbinom(n, 1, 0.25)), 
+                context = context(purpose = purpose(study_role = "outcome"))),
+  y2 = v_event_time(runif(n, 1, 100),
+                    context = context(purpose = purpose(study_role = "outcome"))),
+  y3 = v_continuous(rnorm(n), 
+                    context = context(purpose = purpose(study_role = "outcome"))),
   
   
   !!! purrr::map(
     .x  = 1:10, 
     .f = ~ v_binary(as.logical(rbinom(n, 1, 0.25)), 
-                    context = context(purpose = "covariate"))) %>%
+                    context = context(purpose = purpose(study_role = "covariate")))) %>%
     setNames(paste0("x", 1:10))
 )
 

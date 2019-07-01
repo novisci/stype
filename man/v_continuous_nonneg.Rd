@@ -22,7 +22,13 @@ as_nonneg_continuous(x)
 \arguments{
 \item{x}{nonnegative \code{double}}
 
+\item{.internal_name}{the internal name of the variable}
+
+\item{.data_summary}{a \\code{\link{data_summary}}}
+
 \item{.context}{a \code{\link{context}}}
+
+\item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
 }

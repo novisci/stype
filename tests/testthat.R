@@ -1,3 +1,3 @@
 library(testthat)
 
-test_check("DenverSugar")
+test_check("stype")

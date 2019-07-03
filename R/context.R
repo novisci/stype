@@ -194,6 +194,34 @@ setMethod("is_covariate", "described", function(object){
 })
 
 #' @rdname is_study_role
+#' @aliases is_weight,context,context-method
+#' @export 
+setMethod("is_weight", "context", function(object){ 
+  is_weight(get_purpose(object))
+})
+
+#' @rdname is_study_role
+#' @aliases is_weight,described,described-method
+#' @export 
+setMethod("is_weight", "described", function(object){ 
+  is_weight(get_context(object))
+})
+
+#' @rdname is_study_role
+#' @aliases is_intermediate,context,context-method
+#' @export 
+setMethod("is_intermediate", "context", function(object){ 
+  is_intermediate(get_purpose(object))
+})
+
+#' @rdname is_study_role
+#' @aliases is_intermediate,described,described-method
+#' @export 
+setMethod("is_intermediate", "described", function(object){ 
+  is_intermediate(get_context(object))
+})
+
+#' @rdname is_study_role
 #' @aliases is_other,context,context-method
 #' @export 
 setMethod("is_other", "context", function(object){ 

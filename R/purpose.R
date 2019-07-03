@@ -18,7 +18,8 @@ purpose <- setClass(
 
 valid_roles <- c("identifier", "index", 
                  "outcome", "censoring", "competing",
-                 "exposure", "covariate", "other")
+                 "exposure", "covariate", "weight", 
+                 "intermediate", "other")
 
 setValidity(
   "purpose",
@@ -130,6 +131,26 @@ setGeneric("is_covariate", function(object) standardGeneric("is_covariate"))
 #' @aliases is_covariate,purpose,purpose-method
 #' @export
 setMethod("is_covariate", "purpose", function(object){ is_study_role(object, "covariate") })
+
+#' @rdname is_study_role
+#' @inheritParams is_study_role
+#' @export
+setGeneric("is_weight", function(object) standardGeneric("is_weight"))
+
+#' @rdname is_study_role
+#' @aliases is_other,purpose,purpose-method
+#' @export
+setMethod("is_weight", "purpose", function(object){ is_study_role(object, "weight")})
+
+#' @rdname is_study_role
+#' @inheritParams is_study_role
+#' @export
+setGeneric("is_intermediate", function(object) standardGeneric("is_intermediate"))
+
+#' @rdname is_study_role
+#' @aliases is_other,purpose,purpose-method
+#' @export
+setMethod("is_intermediate", "purpose", function(object){ is_study_role(object, "intermediate")})
 
 #' @rdname is_study_role
 #' @inheritParams is_study_role

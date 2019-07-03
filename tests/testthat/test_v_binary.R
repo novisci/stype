@@ -5,8 +5,13 @@ test_that(
   {
     x1 <- v_binary(c(TRUE, FALSE, TRUE, FALSE, NA))
     x2 <- v_binary(c(TRUE, TRUE, TRUE, FALSE, NA))
+    sx1 <- x1[1:2]
+    expected_attrs <- c("internal_name", "data_summary", "context")     
+
     expect_s3_class(x1, "v_binary")
-    expect_s3_class(x1[1:2], "v_binary")
+    expect_s3_class(sx1, "v_binary")
+    expect_true(all(expected_attrs%in% names(attributes(x1))))
+    expect_true(all(expected_attrs%in% names(attributes(sx1))))
     expect_s3_class(vctrs::vec_c(x1, x2), "v_binary")
     expect_s3_class(c(x1, x2), "v_binary")
   }

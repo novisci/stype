@@ -140,7 +140,7 @@ as_count <- function(x) {
 #' @export
 vec_restore.v_count <- function(x, to, ..., i = NULL) {
   
-  iname   <- attr(x, "internal_name")
+  iname   <- attr(to, "internal_name")
   # Update description
   desc    <- describe(vctrs::vec_data(x))
   # Maintain context

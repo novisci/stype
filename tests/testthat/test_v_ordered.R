@@ -3,11 +3,15 @@ testthat::context("Testing v_ordered class")
 test_that("v_ordered class basically behaves", {
   x1 <- v_ordered(factor(c(rep(LETTERS[1:3], 3), NA), ordered = TRUE))
   x2 <- v_ordered(factor(c(rep(LETTERS[3:6], 3)), ordered = TRUE))
-
+  sx1 <- x1[1:2]
+  expected_attrs <- c("internal_name", "data_summary", "context")     
+  
   # expect_s3_class(x1, "v_nomimal")
   expect_true(inherits(x1, "v_ordered"))
-  expect_s3_class(x1[1:2], "v_ordered")
-  expect_true(inherits(x1[1:2], "v_ordered"))
+  expect_s3_class(sx1, "v_ordered")
+  expect_true(inherits(sx1, "v_ordered"))
+  expect_true(all(expected_attrs%in% names(attributes(x1))))
+  expect_true(all(expected_attrs%in% names(attributes(sx1))))
   expect_s3_class(vctrs::vec_c(x1, x2), "v_ordered")
   expect_true(inherits(vctrs::vec_c(x1, x2), "v_ordered"))
 })

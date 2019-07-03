@@ -135,7 +135,7 @@ vec_cast.v_nominal.default <- function(x, to, ..., x_arg = "", to_arg = "") {
 #' @method vec_restore v_nominal 
 vec_restore.v_nominal <- function(x, to, ..., x_arg = "", to_arg = "") {
   
-  iname   <- attr(x, "internal_name")
+  iname   <- attr(to, "internal_name")
   x   <- levels(to)[x]
   out <- factor(x, levels = levels(to))
 

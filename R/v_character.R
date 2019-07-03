@@ -104,7 +104,7 @@ as_character <- function(x) {
 #' @method vec_restore v_character
 #' @export
 vec_restore.v_character <- function(x, to, ..., i = NULL) {
-  iname   <- attr(x, "internal_name")
+  iname   <- attr(to, "internal_name")
   # Update description
   desc    <- describe(vctrs::vec_data(x))
   # Maintain context

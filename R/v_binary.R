@@ -123,7 +123,7 @@ as_binary <- function(x) {
 #' @method vec_restore v_binary
 #' @export
 vec_restore.v_binary <- function(x, to, ..., i = NULL) {
-  iname   <- attr(x, "internal_name")
+  iname   <- attr(to, "internal_name")
   # Update description
   desc    <- describe(vctrs::vec_data(x))
   # Maintain context

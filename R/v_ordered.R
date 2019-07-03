@@ -133,7 +133,7 @@ vec_cast.v_ordered.default <- function(x, to, ..., x_arg = "", to_arg = "") {
 #' @export
 #' @method vec_restore v_ordered 
 vec_restore.v_ordered <- function(x, to, ..., x_arg = "", to_arg = "") {
-  iname   <- attr(x, "internal_name")
+  iname   <- attr(to, "internal_name")
   x   <- levels(to)[x]
   out <- factor(x, levels = levels(to), ordered = TRUE)
 

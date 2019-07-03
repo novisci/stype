@@ -28,9 +28,13 @@
 \alias{is_covariate}
 \alias{is_covariate,purpose-method}
 \alias{is_covariate,purpose,purpose-method}
+\alias{is_weight}
+\alias{is_weight,purpose-method}
+\alias{is_other,purpose,purpose-method}
+\alias{is_intermediate}
+\alias{is_intermediate,purpose-method}
 \alias{is_other}
 \alias{is_other,purpose-method}
-\alias{is_other,purpose,purpose-method}
 \alias{is_study_role,context-method}
 \alias{is_study_role,context,context-method}
 \alias{is_study_role,described-method}
@@ -63,6 +67,14 @@
 \alias{is_covariate,context,context-method}
 \alias{is_covariate,described-method}
 \alias{is_covariate,described,described-method}
+\alias{is_weight,context-method}
+\alias{is_weight,context,context-method}
+\alias{is_weight,described-method}
+\alias{is_weight,described,described-method}
+\alias{is_intermediate,context-method}
+\alias{is_intermediate,context,context-method}
+\alias{is_intermediate,described-method}
+\alias{is_intermediate,described,described-method}
 \alias{is_other,context-method}
 \alias{is_other,context,context-method}
 \alias{is_other,described-method}
@@ -103,6 +115,14 @@ is_covariate(object)
 
 \S4method{is_covariate}{purpose}(object)
 
+is_weight(object)
+
+\S4method{is_weight}{purpose}(object)
+
+is_intermediate(object)
+
+\S4method{is_intermediate}{purpose}(object)
+
 is_other(object)
 
 \S4method{is_other}{purpose}(object)
@@ -138,6 +158,14 @@ is_other(object)
 \S4method{is_covariate}{context}(object)
 
 \S4method{is_covariate}{described}(object)
+
+\S4method{is_weight}{context}(object)
+
+\S4method{is_weight}{described}(object)
+
+\S4method{is_intermediate}{context}(object)
+
+\S4method{is_intermediate}{described}(object)
 
 \S4method{is_other}{context}(object)
 

@@ -1,8 +1,8 @@
 Package: stype
 Type: Package
 Title: Compute descriptive statistics
-Version: 0.1.2
-Date: 2019-07-01
+Version: 0.1.3
+Date: 2019-07-03
 Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
                             email = "bsaul@novisci.com"))
 Maintainer: Bradley Saul <bsaul@novisci.com>

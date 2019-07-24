@@ -1,5 +1,5 @@
-image: registry.novisci.com/infrastructure/r-build-dock:master
-
+#image: registry.novisci.com/infrastructure/r-build-dock:master
+image: rocker/tidyverse:3.5.2
 #variables:
 #  R_LIBS_USER: "$CI_PROJECT_DIR/ci/lib"
 

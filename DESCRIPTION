@@ -1,7 +1,7 @@
 Package: stype
 Type: Package
 Title: Compute descriptive statistics
-Version: 0.1.3
+Version: 0.1.4
 Date: 2019-07-03
 Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
                             email = "bsaul@novisci.com"))
@@ -11,7 +11,7 @@ Description: Computes descriptive statistics for most R atomic types plus an API
     (except purrr).
 Imports:
    methods (>= 3.5),
-   vctrs (> 0.1.0),
+   vctrs (>= 0.2.0),
    assertthat (>= 0.2.0),
    purrr (>= 0.2.5),
    pillar (>= 1.3.1),

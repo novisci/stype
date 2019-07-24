@@ -13,9 +13,9 @@ before_script:
 testing:
   stage: testing
   script:
-    - R -e 'devtools::install_github("r-lib/rlang@v0.4.0")'
-    - R -e 'install.packages(c("purrr", "pillar"))'
-    - R -e 'devtools::install_github("r-lib/vctrs")'
+#    - R -e 'devtools::install_github("r-lib/rlang@v0.4.0")'
+    - R -e 'install.packages(c("rlang", "purrr", "pillar", "vctrs"))'
+#    - R -e 'devtools::install_github("r-lib/vctrs")'
     - R -e 'devtools::check(manual = FALSE)'
 
 # create a coverage report and push it to the public folder (for a future website)

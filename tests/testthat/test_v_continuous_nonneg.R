@@ -15,6 +15,8 @@ test_that(
     expect_true(all(expected_attrs%in% names(attributes(sx1))))
     expect_true(inherits(vctrs::vec_c(x1, x2), "v_continuous_nonneg"))
     expect_true(inherits(c(x1, x2), "v_continuous_nonneg"))
+    
+    expect_is(as_canonical(x1), "numeric")
   }
 )
 

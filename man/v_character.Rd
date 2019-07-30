@@ -5,6 +5,7 @@
 \alias{new_character}
 \alias{is_character}
 \alias{as_character}
+\alias{as_canonical.v_character}
 \title{Character vectors}
 \usage{
 new_character(x = character(), .internal_name = character(),
@@ -15,6 +16,8 @@ v_character(x = character(), internal_name = "", context)
 is_character(x)
 
 as_character(x)
+
+\method{as_canonical}{v_character}(x)
 }
 \arguments{
 \item{x}{a \code{character} vector}

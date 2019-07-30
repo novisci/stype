@@ -92,11 +92,17 @@ vec_cast.v_character.v_character <- function(x, to, ...) {
 #' @export
 vec_cast.v_character.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
-#' Casting function for count objects
+#' Casting function for character objects
 #' @rdname v_character 
 #' @export
 as_character <- function(x) {
   vctrs::vec_cast(x, new_character())
+}
+
+#' @rdname v_character
+#' @export
+as_canonical.v_character <- function(x){
+  as.character(vctrs::vec_data(x))
 }
 
 # Restoration ####

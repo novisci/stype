@@ -127,11 +127,17 @@ vec_cast.double.v_continuous <- function(x, to, ...) vctrs::vec_data(x)
 vec_cast.v_continuous.double <- function(x, to, ...) v_continuous(x)
 vec_cast.double.v_continuous <- function(x, to, ...) vctrs::vec_data(x)
 
-#' Casting function for count objects
+#' Casting function for continuous objects
 #' @rdname v_continuous 
 #' @export
 as_continuous <- function(x) {
   vctrs::vec_cast(x, new_continuous())
+}
+
+#' @rdname v_continuous
+#' @export
+as_canonical.v_continuous <- function(x){
+  as.numeric(vctrs::vec_data(x))
 }
 
 # Restoration ####
@@ -226,8 +232,8 @@ vec_arith.double.v_continuous <- function(op, x, y) {
 vec_math.v_continuous <- function(fun, x, ...) {
   # TODO implement methods...
   switch(fun,
-         sum  = attr(x, "desc")$sum,
-         mean = attr(x, "desc")$mean,
+         sum  = attr(x, "data_summary")$sum,
+         mean = attr(x, "data_summary")$mean,
          vctrs::vec_math_base(fun, x, ...)
   )
 }

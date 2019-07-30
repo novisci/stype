@@ -111,11 +111,17 @@ vec_cast.v_binary.logical <- function(x, to, ...) v_binary(x)
 #' @export
 vec_cast.logical.v_binary <- function(x, to, ...) vctrs::vec_data(x)
 
-#' Casting function for count objects
+#' Casting function for binary objects
 #' @rdname v_binary 
 #' @export
 as_binary <- function(x) {
   vctrs::vec_cast(x, new_binary())
+}
+
+#' @rdname v_binary 
+#' @export
+as_canonical.v_binary <- function(x){
+  as.logical(vctrs::vec_data(x))
 }
 
 # Restoration ####
@@ -129,7 +135,10 @@ vec_restore.v_binary <- function(x, to, ..., i = NULL) {
   # Maintain context
   context <- get_context(to)
   
-  new_binary(x, .internal_name = iname, .data_summary  = desc, .context = context)
+  new_binary(x, 
+             .internal_name = iname, 
+             .data_summary  = desc,
+             .context       = context)
 }
 
 # Math Operations ####
@@ -200,7 +209,7 @@ vec_arith.integer.v_binary <- function(op, x, y) {
 vec_math.v_binary <- function(fun, x, ...) {
   # TODO implement methods...
   switch(fun,
-         mean = attr(x, "desc")$proportion,
+         mean = attr(x, "data_summary")$proportion,
          vctrs::vec_math_base(fun, x, ...)
   )
 }
@@ -209,7 +218,7 @@ vec_math.v_binary <- function(fun, x, ...) {
 #' @export
 # @export sum.v_binary
 sum.v_binary <- function(..., na.rm = TRUE) {
-  attr(..1, "desc")$count
+  attr(..1, "data_summary")$count
 }
 
 # @method count v_binary

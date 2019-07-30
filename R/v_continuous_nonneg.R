@@ -146,6 +146,12 @@ as_nonneg_continuous <- function(x) {
   vctrs::vec_cast(x, new_continuous_nonneg())
 }
 
+#' @rdname v_continuous_nonneg
+#' @export
+as_canonical.v_continuous_nonneg <- function(x){
+  as.numeric(vctrs::vec_data(x))
+}
+
 # Restoration ####
 #' @importFrom vctrs vec_restore
 #' @method vec_restore v_continuous_nonneg

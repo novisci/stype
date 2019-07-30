@@ -144,6 +144,12 @@ vec_restore.v_ordered <- function(x, to, ..., x_arg = "", to_arg = "") {
 }
 
 
+#' @rdname v_ordered
+#' @export
+as_canonical.v_ordered <- function(x){
+  factor(x, levels(x), ordered = TRUE)
+}
+
 #' @export
 #' @method levels v_ordered 
 
@@ -175,7 +181,7 @@ format.v_ordered <- function(x, ...) {
 #' @export
 obj_print_footer.v_ordered <- function(x, ...) {
   # TODO: use footer_printer
-  ptab <- attr(x, "desc")[["ptable"]]
+  ptab <- attr(x, "data_summary")[["ptable"]]
   ptab <- paste0(paste0(dimnames(ptab)$x, ": ", round(ptab, 2)*100, "%"), collapse = " ")
   
   cxtp <- context_printer(x)

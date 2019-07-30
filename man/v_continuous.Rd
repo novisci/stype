@@ -5,6 +5,7 @@
 \alias{new_continuous}
 \alias{is_continuous}
 \alias{as_continuous}
+\alias{as_canonical.v_continuous}
 \title{Continuous vectors}
 \usage{
 new_continuous(x = double(), .internal_name = character(),
@@ -15,6 +16,8 @@ v_continuous(x = double(), internal_name = "", context)
 is_continuous(x)
 
 as_continuous(x)
+
+\method{as_canonical}{v_continuous}(x)
 }
 \arguments{
 \item{x}{a \code{double} vector}

@@ -5,6 +5,8 @@
 \alias{new_count}
 \alias{is_count}
 \alias{as_count}
+\alias{as_canonical}
+\alias{as_canonical.v_count}
 \title{Count vectors}
 \usage{
 new_count(x = integer(), .internal_name = character(),
@@ -15,6 +17,10 @@ v_count(x = integer(), internal_name = "", context)
 is_count(x)
 
 as_count(x)
+
+as_canonical(x)
+
+\method{as_canonical}{v_count}(x)
 }
 \arguments{
 \item{x}{a \code{integer} vector}

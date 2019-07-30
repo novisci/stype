@@ -134,6 +134,19 @@ as_count <- function(x) {
   vctrs::vec_cast(x, new_count())
 }
 
+#' @rdname v_count 
+#' @export
+
+as_canonical <- function(x){
+  UseMethod("as_canonical")
+}
+
+#' @rdname v_count 
+#' @export
+as_canonical.v_count <- function(x){
+  as.integer(vctrs::vec_data(x))
+}
+
 # Restoration ####
 #' @importFrom vctrs vec_restore
 #' @method vec_restore v_count
@@ -221,8 +234,8 @@ vec_arith.integer.v_count <- function(op, x, y) {
 vec_math.v_count <- function(fun, x, ...) {
   # TODO implement methods...
   switch(fun,
-         sum  = attr(x, "desc")$sum,
-         mean = attr(x, "desc")$mean,
+         sum  = attr(x, "data_summary")$sum,
+         mean = attr(x, "data_summary")$mean,
          vctrs::vec_math_base(fun, x, ...)
   )
 }

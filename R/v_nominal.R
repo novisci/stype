@@ -145,6 +145,12 @@ vec_restore.v_nominal <- function(x, to, ..., x_arg = "", to_arg = "") {
   v_nominal(out, internal_name = iname, context = ctxt)
 }
 
+#' @rdname v_nominal
+#' @export
+as_canonical.v_nominal <- function(x){
+  factor(x, levels(x))
+}
+
 #' @export
 #' @method levels v_nominal 
 
@@ -178,7 +184,7 @@ format.v_nominal <- function(x, ...) {
 #' @export
 obj_print_footer.v_nominal <- function(x, ...) {
   # TODO: use footer_printer
-  ptab <- attr(x, "desc")[["ptable"]]
+  ptab <- attr(x, "data_summary")[["ptable"]]
   ptab <- paste0(paste0(dimnames(ptab)$x, ": ", round(ptab, 2)*100, "%"), collapse = " ")
   
   cxtp <- context_printer(x)

@@ -10,6 +10,8 @@ test_that("v_character class basically behaves", {
   expect_true(inherits(x1[1:2], "v_character"))
   expect_s3_class(vctrs::vec_c(x1, x2), "v_character")
   expect_true(inherits(vctrs::vec_c(x1, x2), "v_character"))
+  
+  expect_is(as_canonical(x1), "character")
 })
 
 test_that("v_character class descriptions update appropriately", {

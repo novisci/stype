@@ -6,6 +6,7 @@
 \alias{is_event_time}
 \alias{as_time_to_event}
 \alias{as_event_time}
+\alias{as_canonical.v_event_time}
 \title{event_time vectors}
 \usage{
 new_event_time(x = double(), .internal_name = character(),
@@ -18,6 +19,8 @@ is_event_time(x)
 as_time_to_event(x)
 
 as_event_time(x)
+
+\method{as_canonical}{v_event_time}(x)
 }
 \arguments{
 \item{x}{vector of values}

@@ -4,6 +4,7 @@
 \alias{v_nominal}
 \alias{new_nominal}
 \alias{is_nominal}
+\alias{as_canonical.v_nominal}
 \title{v_nominal S3 class}
 \usage{
 new_nominal(x = integer(), .levels = character(),
@@ -13,6 +14,8 @@ new_nominal(x = integer(), .levels = character(),
 v_nominal(x = factor(), internal_name = "", context)
 
 is_nominal(x)
+
+\method{as_canonical}{v_nominal}(x)
 }
 \arguments{
 \item{x}{a \code{factor}}

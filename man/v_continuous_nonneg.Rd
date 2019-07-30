@@ -6,6 +6,7 @@
 \alias{is_continuous_nonneg}
 \alias{is_nonneg}
 \alias{as_nonneg_continuous}
+\alias{as_canonical.v_continuous_nonneg}
 \title{continuous_nonneg vectors}
 \usage{
 new_continuous_nonneg(x = double(), .internal_name = character(),
@@ -18,6 +19,8 @@ is_continuous_nonneg(x)
 is_nonneg(x)
 
 as_nonneg_continuous(x)
+
+\method{as_canonical}{v_continuous_nonneg}(x)
 }
 \arguments{
 \item{x}{nonnegative \code{double}}

@@ -14,6 +14,8 @@ test_that("v_nominal class basically behaves", {
   expect_true(all(expected_attrs%in% names(attributes(sx1))))
   expect_s3_class(vctrs::vec_c(x1, x2), "v_nominal")
   expect_true(inherits(vctrs::vec_c(x1, x2), "v_nominal"))
+  
+  expect_is(as_canonical(x1), "factor")
 })
 
 test_that("v_nomimal class descriptions update appropriately", {

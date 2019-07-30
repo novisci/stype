@@ -132,7 +132,7 @@ vec_cast.numeric.v_event_time <- function(x, to, ...) vctrs::vec_data(x)
 vec_cast.v_event_time.numeric <- function(x, to, ...) v_event_time(x)
 vec_cast.numeric.v_event_time <- function(x, to, ...) vctrs::vec_data(x)
 
-#' Casting function for count objects
+#' Casting function for time to event objects
 #' @rdname v_event_time 
 #' @export
 as_time_to_event <- function(x) {
@@ -143,6 +143,12 @@ as_time_to_event <- function(x) {
 #' @export
 as_event_time <- function(x) {
   vctrs::vec_cast(x, new_event_time())
+}
+
+#' @rdname v_event_time
+#' @export
+as_canonical.v_event_time<- function(x){
+  as.numeric(vctrs::vec_data(x))
 }
 
 # Restoration ####

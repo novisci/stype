@@ -5,6 +5,7 @@
 \alias{new_binary}
 \alias{is_binary}
 \alias{as_binary}
+\alias{as_canonical.v_binary}
 \title{Binary vectors}
 \usage{
 new_binary(x = logical(), .internal_name = character(),
@@ -15,6 +16,8 @@ v_binary(x = logical(), internal_name = "", context)
 is_binary(x)
 
 as_binary(x)
+
+\method{as_canonical}{v_binary}(x)
 }
 \arguments{
 \item{x}{a \code{logical} vector}

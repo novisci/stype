@@ -240,7 +240,7 @@ setMethod(
     # TODO: add described() method which detects whether a variable has been 
     # previously describe()d using the same arguments. If it has, then simply
     # return the description slot rather than carrying out computations.
-    as.data.frame(attr(x, "desc"))
+    as.data.frame(attr(x, "data_summary"))
   }
 )
 

@@ -4,6 +4,7 @@
 \alias{v_ordered}
 \alias{new_ordered}
 \alias{is_ordered}
+\alias{as_canonical.v_ordered}
 \title{v_ordered S3 class}
 \usage{
 new_ordered(x = integer(), .levels = character(),
@@ -13,6 +14,8 @@ new_ordered(x = integer(), .levels = character(),
 v_ordered(x = factor(ordered = TRUE), internal_name = "", context)
 
 is_ordered(x)
+
+\method{as_canonical}{v_ordered}(x)
 }
 \arguments{
 \item{x}{a \code{factor}}

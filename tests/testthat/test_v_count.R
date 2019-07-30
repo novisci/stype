@@ -16,6 +16,8 @@ test_that(
     expect_equivalent(max(x1), v_count(NA_integer_))
     expect_equivalent(x1[1:3] + v_count(1L), v_count(c(1L:3L)))
     expect_equivalent(x1[1:3] + 1L, v_count(c(1L:3L)))
+    
+    expect_is(as_canonical(x1), "integer")
   }
 )
 

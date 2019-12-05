@@ -110,12 +110,12 @@ The following table describes the proposed data types (not all of these may be a
 | `v_binary`               | `logical`    | $\{0, 1\}$         |
 | `v_count `               | `integer`    | $(0, 1, 2, \dots)$ |
 | `v_continuous`           | `double`     | $\mathcal{R}$      |
-| --`v_continuous_nonneg`  | `double`     | $\mathcal{R}^+$    |
-| --`v_event_time`         | `double`     | $\mathcal{R}^+$    |
-| `v_nominal        `      | `factor`     | |
-| `v_ordered`              | `ordered`    | |
-| `v_date`                 | `Date`       | |
-| `v_character`            | `character`  | |
+| `v_continuous_nonneg`    | `double`     | $\mathcal{R}^+$    |
+| `v_event_time`           | `double`     | $\mathcal{R}^+$    |
+| `v_nominal`              | `factor`     |                    |
+| `v_ordered`              | `ordered`    |                    |
+| `v_date`                 | `Date`       |                    |
+| `v_character`            | `character`  |                    |
 
 # Usage in `tibble`
 
@@ -156,4 +156,3 @@ Selecting columns based on context:
 dt %>%
   select_if(is_outcome)
 ```
-

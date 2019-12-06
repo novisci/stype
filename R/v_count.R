@@ -8,7 +8,7 @@
 #' @param x a \code{integer} vector
 #' @param .internal_name the internal name of the variable
 #' @param internal_name the internal name of the variable
-#' @param .data_summary a \\code{\link{data_summary}}
+#' @param .data_summary a \code{\link{data_summary}}
 #' @param .context a \code{\link{context}}
 #' @param context a \code{\link{context}}
 

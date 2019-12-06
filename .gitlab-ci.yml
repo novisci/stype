@@ -51,8 +51,8 @@ package:
 
 minicran:
   stage: package
-  #only:
-  #  - master
+  only:
+    - master
   script:
     - R -e 'install.packages(c("miniCRAN"))'
     #- R -e 'devtools::install_github("r-lib/rlang@v0.4.0")'

@@ -42,4 +42,5 @@ Collate:
     'describe.R'
     'context.R'
     'aREADME.R'
+    'stype_str.R'
     'utilities.R'

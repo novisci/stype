@@ -4,6 +4,7 @@
 #' 
 #' @name v_ordered
 #' @param .levels Character vector of labels.
+#' @importFrom vctrs vec_ptype2.character
 #' @inheritParams v_count
 
 new_ordered <- function(x = integer(), .levels = character(),

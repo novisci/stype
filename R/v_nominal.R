@@ -4,6 +4,7 @@
 #' 
 #' @name v_nominal
 #' @param .levels Character vector of labels.
+#' @importFrom vctrs vec_ptype2.character
 #' @inheritParams v_count
 
 new_nominal <- function(x = integer(), 

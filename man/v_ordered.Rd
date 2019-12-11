@@ -18,8 +18,6 @@ is_ordered(x)
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
-
-\item{.levels}{Character vector of labels.}
 }
 \description{
 An ordered (categorial) variable

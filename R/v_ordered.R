@@ -3,12 +3,12 @@
 #' An ordered (categorial) variable
 #' 
 #' @name v_ordered
-#' @param .levels Character vector of labels.
 #' @inheritParams v_count
 NULL
 
 #' The internal builder of v_ordered
 #' @noRd
+#' @param .levels Character vector of labels.
 #' @keywords internal
 new_ordered <- function(x = integer(), .levels = character(),
                         .internal_name = character(), 

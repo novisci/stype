@@ -18,8 +18,6 @@ is_nominal(x)
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
-
-\item{.levels}{Character vector of labels.}
 }
 \description{
 A nominal (categorial) variable

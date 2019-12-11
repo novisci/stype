@@ -240,7 +240,7 @@ setMethod(
     # TODO: add described() method which detects whether a variable has been 
     # previously describe()d using the same arguments. If it has, then simply
     # return the description slot rather than carrying out computations.
-    as.data.frame(attr(x, "data_summary"))
+    as.data.frame(get_data_summary(x))
   }
 )
 
@@ -259,4 +259,35 @@ setMethod(
     purrr::map_dfr(x, describe)
     # as.data.frame(attr(x, "desc"))
   }
+)
+
+
+#' Get the summary from a described variable
+#' 
+#' @param x the object from which to get the \code{data_summary}
+#' @param element either \code{NULL} to get the full \code{data_summary}
+#'  or a length 1 \code{character} to select a particular element of the summary
+#' @export
+
+setGeneric(
+  name = "get_data_summary", 
+  def  = function(x, element) standardGeneric("get_data_summary")
+)
+
+#' @rdname get_data_summary
+#' @export
+
+setMethod(
+  f          = "get_data_summary",
+  signature  = c("described", NULL),
+  definition = function(x, element){ attr(x, "data_summary") }
+)
+
+#' @rdname get_data_summary
+#' @export
+
+setMethod(
+  f          = "get_data_summary",
+  signature  = c("described", "character"),
+  definition = function(x, element){ attr(x, "data_summary")[[element]] }
 )

@@ -9,8 +9,12 @@
 \alias{as_canonical.v_continuous_nonneg}
 \title{continuous_nonneg vectors}
 \usage{
-new_continuous_nonneg(x = double(), .internal_name = character(),
-  .data_summary = data_summary(), .context = context())
+new_continuous_nonneg(
+  x = double(),
+  .internal_name = character(),
+  .data_summary = data_summary(),
+  .context = context()
+)
 
 v_continuous_nonneg(x = double(), internal_name = "", context)
 
@@ -27,7 +31,7 @@ as_nonneg_continuous(x)
 
 \item{.internal_name}{the internal name of the variable}
 
-\item{.data_summary}{a \\code{\link{data_summary}}}
+\item{.data_summary}{a \code{\link{data_summary}}}
 
 \item{.context}{a \code{\link{context}}}
 

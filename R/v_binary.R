@@ -209,7 +209,7 @@ vec_arith.integer.v_binary <- function(op, x, y) {
 vec_math.v_binary <- function(fun, x, ...) {
   # TODO implement methods...
   switch(fun,
-         mean = attr(x, "data_summary")$proportion,
+         mean = get_data_summary(x, "proportion"),
          vctrs::vec_math_base(fun, x, ...)
   )
 }
@@ -218,7 +218,7 @@ vec_math.v_binary <- function(fun, x, ...) {
 #' @export
 # @export sum.v_binary
 sum.v_binary <- function(..., na.rm = TRUE) {
-  attr(..1, "data_summary")$count
+  get_data_summary(..1, "count")
 }
 
 # @method count v_binary

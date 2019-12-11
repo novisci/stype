@@ -181,7 +181,7 @@ format.v_ordered <- function(x, ...) {
 #' @export
 obj_print_footer.v_ordered <- function(x, ...) {
   # TODO: use footer_printer
-  ptab <- attr(x, "data_summary")[["ptable"]]
+  ptab <- get_data_summary(x, "ptable")
   ptab <- paste0(paste0(dimnames(ptab)$x, ": ", round(ptab, 2)*100, "%"), collapse = " ")
   
   cxtp <- context_printer(x)

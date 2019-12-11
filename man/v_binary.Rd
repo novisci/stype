@@ -8,8 +8,12 @@
 \alias{as_canonical.v_binary}
 \title{Binary vectors}
 \usage{
-new_binary(x = logical(), .internal_name = character(),
-  .data_summary = data_summary(), .context = context())
+new_binary(
+  x = logical(),
+  .internal_name = character(),
+  .data_summary = data_summary(),
+  .context = context()
+)
 
 v_binary(x = logical(), internal_name = "", context)
 
@@ -24,7 +28,7 @@ as_binary(x)
 
 \item{.internal_name}{the internal name of the variable}
 
-\item{.data_summary}{a \\code{\link{data_summary}}}
+\item{.data_summary}{a \code{\link{data_summary}}}
 
 \item{.context}{a \code{\link{context}}}
 

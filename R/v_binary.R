@@ -7,6 +7,12 @@
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
 
+NULL
+
+#' The internal builder of v_binary
+#' @noRd
+#' @keywords internal
+
 new_binary <- function(x = logical(),                     
                        .internal_name = character(), 
                        .data_summary = data_summary(), 

@@ -6,7 +6,11 @@
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
+NULL
 
+#' The internal builder of v_event_time
+#' @noRd
+#' @keywords internal
 new_event_time <- function(x = double(), 
                            .internal_name = character(), 
                            .data_summary = data_summary(), 

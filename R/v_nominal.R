@@ -5,7 +5,11 @@
 #' @name v_nominal
 #' @param .levels Character vector of labels.
 #' @inheritParams v_count
+NULL
 
+#' The internal builder of v_nominal
+#' @noRd
+#' @keywords internal
 new_nominal <- function(x = integer(), 
                         .levels = character(),
                         .internal_name = character(), 

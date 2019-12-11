@@ -11,7 +11,11 @@
 #' @param .data_summary a \code{\link{data_summary}}
 #' @param .context a \code{\link{context}}
 #' @param context a \code{\link{context}}
+NULL
 
+#' The internal builder of v_count
+#' @noRd
+#' @keywords internal
 
 new_count <- function(x = integer(),
                       .internal_name = character(), 

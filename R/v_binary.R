@@ -218,8 +218,14 @@ vec_math.v_binary <- function(fun, x, ...) {
 #' @export
 # @export sum.v_binary
 sum.v_binary <- function(..., na.rm = TRUE) {
+  
   dots <- list(...)
-  sum(purrr::map_int(dots, ~ get_data_summary(.x, "num_1")))
+  assertthat::assert_that(
+    length(dots) == 1,
+    msg = "sum for v_binary only works on one vector at type."
+  )
+  
+  get_data_summary(dots[[1]], "num_1")
 }
 
 # @method count v_binary

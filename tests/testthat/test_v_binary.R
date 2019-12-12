@@ -26,5 +26,7 @@ test_that(
     expect_equivalent(vctrs::vec_data(!x1), c(FALSE, TRUE, FALSE, TRUE, NA))
     expect_equal(any(x1, na.rm = TRUE), TRUE)
     expect_equal(all(x1[c(1, 3)], na.rm = TRUE), TRUE)
+    
+    expect_equal(sum(x1[1:4]), 2)
   }
 )

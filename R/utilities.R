@@ -11,11 +11,11 @@ context_printer <- function(x){
 }
 
 desc_printer <- function(x, label, what){
-  sprintf("%s = %.3f", label, attr(x, "data_summary")[[what]])
+  sprintf("%s = %.3f", label, get_data_summary(x, what))
 }
 
 missing_printer <- function(x){
-  if (attr(x, "data_summary")[["has_missing"]]){
+  if (get_data_summary(x, "has_missing")){
     boldmag(desc_printer(x, "Missing", "n_missing"))
   } else {
     ""

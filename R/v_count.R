@@ -238,8 +238,8 @@ vec_arith.integer.v_count <- function(op, x, y) {
 vec_math.v_count <- function(fun, x, ...) {
   # TODO implement methods...
   switch(fun,
-         sum  = attr(x, "data_summary")$sum,
-         mean = attr(x, "data_summary")$mean,
+         sum  = get_data_summary(x, "sum"),
+         mean = get_data_summary(x, "mean"),
          vctrs::vec_math_base(fun, x, ...)
   )
 }

@@ -6,6 +6,7 @@
 \alias{as_canonical.v_nominal}
 \title{v_nominal S3 class}
 \usage{
+
 v_nominal(x = factor(), internal_name = "", context)
 
 is_nominal(x)

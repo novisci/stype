@@ -1,10 +1,12 @@
 Package: stype
 Type: Package
 Title: Compute descriptive statistics
-Version: 0.1.5
-Date: 2019-07-30
+Version: 0.1.6
+Date: 2019-12-11
 Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
-                            email = "bsaul@novisci.com"))
+                            email = "bsaul@novisci.com"),
+                     person("David", "Pritchard", role = c("aut"),
+                            email = "dpritchard@novisci.com"))
 Maintainer: Bradley Saul <bsaul@novisci.com>
 Description: Computes descriptive statistics for most R atomic types plus an API for
     data.frames. The package aims to be tidyverse-friendly but not tidyverse-dependent 

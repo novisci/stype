@@ -4,6 +4,7 @@
 #' 
 #' @name v_ordered
 #' @param .levels Character vector of labels.
+#' @importFrom vctrs vec_ptype2.character
 #' @inheritParams v_count
 
 new_ordered <- function(x = integer(), .levels = character(),
@@ -59,11 +60,6 @@ is_ordered <- function(x){
 #' @method vec_ptype2 v_ordered
 #' @export
 vec_ptype2.v_ordered <- function(x, y, ...) UseMethod("vec_ptype2.v_ordered", y)
-
-#' @method vec_ptype2 double
-#' @export
-#' @export vec_ptype2.double
-vec_ptype2.character <- function(x, y, ...) UseMethod("vec_ptype2.character", y)
 
 #' @method vec_ptype2.v_ordered default
 #' @export

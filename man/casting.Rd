@@ -8,7 +8,6 @@
 \alias{vec_ptype2.integer.v_count}
 \alias{vec_cast.v_count}
 \alias{vec_ptype2.v_continuous}
-\alias{vec_ptype2.double}
 \alias{vec_cast.v_continuous}
 \alias{vec_ptype2.v_continuous_nonneg}
 \alias{vec_ptype2.numeric}
@@ -32,8 +31,6 @@
 \method{vec_cast}{v_count}(x, to, ...)
 
 \method{vec_ptype2}{v_continuous}(x, y, ...)
-
-\method{vec_ptype2}{double}(x, y, ...)
 
 \method{vec_cast}{v_continuous}(x, to, ...)
 

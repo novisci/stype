@@ -5,6 +5,7 @@
 #' @name v_continuous
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
+#' vec_ptype2.double
 #' @inheritParams v_count
 new_continuous <- function(x = double(),
                            .internal_name = character(), 
@@ -73,11 +74,11 @@ vec_ptype2.v_continuous.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
-#' @rdname casting
-#' @method vec_ptype2 double
-#' @export
-#' @export vec_ptype2.double
-vec_ptype2.double <- function(x, y, ...) UseMethod("vec_ptype2.double", y)
+# @rdname casting
+# @method vec_ptype2 double
+# @export
+# @export vec_ptype2.double
+#vec_ptype2.double <- function(x, y, ...) UseMethod("vec_ptype2.double", y)
 
 #' @method vec_ptype2.double default
 #' @export

@@ -4,6 +4,7 @@
 #' 
 #' @name v_ordered
 #' @inheritParams v_count
+#' @importFrom vctrs vec_ptype2.character
 NULL
 
 #' The internal builder of v_ordered

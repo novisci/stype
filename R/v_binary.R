@@ -218,7 +218,8 @@ vec_math.v_binary <- function(fun, x, ...) {
 #' @export
 # @export sum.v_binary
 sum.v_binary <- function(..., na.rm = TRUE) {
-  get_data_summary(..1, "num_1")
+  dots <- list(...)
+  sum(purrr::map_int(dots, ~ get_data_summary(.x, "num_1")))
 }
 
 # @method count v_binary

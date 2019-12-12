@@ -28,5 +28,6 @@ test_that(
     expect_equal(all(x1[c(1, 3)], na.rm = TRUE), TRUE)
     
     expect_equal(sum(x1[1:4]), 2)
+    expect_equal(sum(x1[1:4], x1[1:2]), 3)
   }
 )

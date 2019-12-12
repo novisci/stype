@@ -65,11 +65,6 @@ is_nominal <- function(x){
 #' @export
 vec_ptype2.v_nominal <- function(x, y, ...) UseMethod("vec_ptype2.v_nominal", y)
 
-#' @method vec_ptype2 double
-#' @export
-#' @export vec_ptype2.double
-vec_ptype2.character <- function(x, y, ...) UseMethod("vec_ptype2.character", y)
-
 #' @method vec_ptype2.v_nominal default
 #' @export
 vec_ptype2.v_nominal.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {

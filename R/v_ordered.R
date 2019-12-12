@@ -64,11 +64,6 @@ is_ordered <- function(x){
 #' @export
 vec_ptype2.v_ordered <- function(x, y, ...) UseMethod("vec_ptype2.v_ordered", y)
 
-#' @method vec_ptype2 double
-#' @export
-#' @export vec_ptype2.double
-vec_ptype2.character <- function(x, y, ...) UseMethod("vec_ptype2.character", y)
-
 #' @method vec_ptype2.v_ordered default
 #' @export
 vec_ptype2.v_ordered.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {

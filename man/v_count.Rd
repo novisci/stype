@@ -9,8 +9,12 @@
 \alias{as_canonical.v_count}
 \title{Count vectors}
 \usage{
-new_count(x = integer(), .internal_name = character(),
-  .data_summary = data_summary(), .context = context())
+new_count(
+  x = integer(),
+  .internal_name = character(),
+  .data_summary = data_summary(),
+  .context = context()
+)
 
 v_count(x = integer(), internal_name = "", context)
 
@@ -27,7 +31,7 @@ as_canonical(x)
 
 \item{.internal_name}{the internal name of the variable}
 
-\item{.data_summary}{a \\code{\link{data_summary}}}
+\item{.data_summary}{a \code{\link{data_summary}}}
 
 \item{.context}{a \code{\link{context}}}
 

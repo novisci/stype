@@ -2,19 +2,10 @@
 % Please edit documentation in R/v_ordered.R
 \name{v_ordered}
 \alias{v_ordered}
-\alias{new_ordered}
 \alias{is_ordered}
 \alias{as_canonical.v_ordered}
 \title{v_ordered S3 class}
 \usage{
-new_ordered(
-  x = integer(),
-  .levels = character(),
-  .internal_name = character(),
-  .data_summary = data_summary(),
-  .context = context()
-)
-
 v_ordered(x = factor(ordered = TRUE), internal_name = "", context)
 
 is_ordered(x)
@@ -23,14 +14,6 @@ is_ordered(x)
 }
 \arguments{
 \item{x}{a \code{factor}}
-
-\item{.levels}{Character vector of labels.}
-
-\item{.internal_name}{the internal name of the variable}
-
-\item{.data_summary}{a \code{\link{data_summary}}}
-
-\item{.context}{a \code{\link{context}}}
 
 \item{internal_name}{the internal name of the variable}
 

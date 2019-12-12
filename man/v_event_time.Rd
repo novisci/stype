@@ -2,20 +2,12 @@
 % Please edit documentation in R/v_event_time.R
 \name{v_event_time}
 \alias{v_event_time}
-\alias{new_event_time}
 \alias{is_event_time}
 \alias{as_time_to_event}
 \alias{as_event_time}
 \alias{as_canonical.v_event_time}
 \title{event_time vectors}
 \usage{
-new_event_time(
-  x = double(),
-  .internal_name = character(),
-  .data_summary = data_summary(),
-  .context = context()
-)
-
 v_event_time(x = v_continuous_nonneg(), internal_name = "", context)
 
 is_event_time(x)
@@ -28,12 +20,6 @@ as_event_time(x)
 }
 \arguments{
 \item{x}{vector of values}
-
-\item{.internal_name}{the internal name of the variable}
-
-\item{.data_summary}{a \code{\link{data_summary}}}
-
-\item{.context}{a \code{\link{context}}}
 
 \item{internal_name}{the internal name of the variable}
 

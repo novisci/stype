@@ -3,10 +3,14 @@
 #' A nominal (categorial) variable
 #' 
 #' @name v_nominal
-#' @param .levels Character vector of labels.
-#' @importFrom vctrs vec_ptype2.character
 #' @inheritParams v_count
+#' @importFrom vctrs vec_ptype2.character
+NULL
 
+#' The internal builder of v_nominal
+#' @noRd
+#' @param .levels Character vector of labels.
+#' @keywords internal
 new_nominal <- function(x = integer(), 
                         .levels = character(),
                         .internal_name = character(), 

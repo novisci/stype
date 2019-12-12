@@ -2,19 +2,11 @@
 % Please edit documentation in R/v_continuous.R
 \name{v_continuous}
 \alias{v_continuous}
-\alias{new_continuous}
 \alias{is_continuous}
 \alias{as_continuous}
 \alias{as_canonical.v_continuous}
 \title{Continuous vectors}
 \usage{
-new_continuous(
-  x = double(),
-  .internal_name = character(),
-  .data_summary = data_summary(),
-  .context = context()
-)
-
 v_continuous(x = double(), internal_name = "", context)
 
 is_continuous(x)
@@ -25,12 +17,6 @@ as_continuous(x)
 }
 \arguments{
 \item{x}{a \code{double} vector}
-
-\item{.internal_name}{the internal name of the variable}
-
-\item{.data_summary}{a \code{\link{data_summary}}}
-
-\item{.context}{a \code{\link{context}}}
 
 \item{internal_name}{the internal name of the variable}
 

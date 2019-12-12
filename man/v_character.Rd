@@ -2,19 +2,11 @@
 % Please edit documentation in R/v_character.R
 \name{v_character}
 \alias{v_character}
-\alias{new_character}
 \alias{is_character}
 \alias{as_character}
 \alias{as_canonical.v_character}
 \title{Character vectors}
 \usage{
-new_character(
-  x = character(),
-  .internal_name = character(),
-  .data_summary = data_summary(),
-  .context = context()
-)
-
 v_character(x = character(), internal_name = "", context)
 
 is_character(x)
@@ -25,12 +17,6 @@ as_character(x)
 }
 \arguments{
 \item{x}{a \code{character} vector}
-
-\item{.internal_name}{the internal name of the variable}
-
-\item{.data_summary}{a \code{\link{data_summary}}}
-
-\item{.context}{a \code{\link{context}}}
 
 \item{internal_name}{the internal name of the variable}
 

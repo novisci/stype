@@ -6,12 +6,16 @@
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @param x a \code{integer} vector
-#' @param .internal_name the internal name of the variable
 #' @param internal_name the internal name of the variable
+#' @param context a \code{\link{context}}
+NULL
+
+#' The internal builder of v_count
+#' @noRd
+#' @param .internal_name the internal name of the variable
 #' @param .data_summary a \code{\link{data_summary}}
 #' @param .context a \code{\link{context}}
-#' @param context a \code{\link{context}}
-
+#' @keywords internal
 
 new_count <- function(x = integer(),
                       .internal_name = character(), 

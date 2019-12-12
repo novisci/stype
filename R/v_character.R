@@ -7,6 +7,11 @@
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
 
+NULL
+
+#' The internal builder of v_character 
+#' @noRd
+#' @keywords internal
 new_character <- function(x = character(), 
                           .internal_name = character(),
                           .data_summary = data_summary(), 

@@ -2,20 +2,12 @@
 % Please edit documentation in R/v_count.R
 \name{v_count}
 \alias{v_count}
-\alias{new_count}
 \alias{is_count}
 \alias{as_count}
 \alias{as_canonical}
 \alias{as_canonical.v_count}
 \title{Count vectors}
 \usage{
-new_count(
-  x = integer(),
-  .internal_name = character(),
-  .data_summary = data_summary(),
-  .context = context()
-)
-
 v_count(x = integer(), internal_name = "", context)
 
 is_count(x)
@@ -29,12 +21,15 @@ as_canonical(x)
 \arguments{
 \item{x}{a \code{integer} vector}
 
+<<<<<<< man/v_count.Rd
 \item{.internal_name}{the internal name of the variable}
 
 \item{.data_summary}{a \code{\link{data_summary}}}
 
 \item{.context}{a \code{\link{context}}}
 
+=======
+>>>>>>> man/v_count.Rd
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}

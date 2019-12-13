@@ -2,20 +2,12 @@
 % Please edit documentation in R/v_continuous_nonneg.R
 \name{v_continuous_nonneg}
 \alias{v_continuous_nonneg}
-\alias{new_continuous_nonneg}
 \alias{is_continuous_nonneg}
 \alias{is_nonneg}
 \alias{as_nonneg_continuous}
 \alias{as_canonical.v_continuous_nonneg}
 \title{continuous_nonneg vectors}
 \usage{
-new_continuous_nonneg(
-  x = double(),
-  .internal_name = character(),
-  .data_summary = data_summary(),
-  .context = context()
-)
-
 v_continuous_nonneg(x = double(), internal_name = "", context)
 
 is_continuous_nonneg(x)
@@ -28,12 +20,6 @@ as_nonneg_continuous(x)
 }
 \arguments{
 \item{x}{nonnegative \code{double}}
-
-\item{.internal_name}{the internal name of the variable}
-
-\item{.data_summary}{a \code{\link{data_summary}}}
-
-\item{.context}{a \code{\link{context}}}
 
 \item{internal_name}{the internal name of the variable}
 

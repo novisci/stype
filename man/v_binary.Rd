@@ -2,19 +2,11 @@
 % Please edit documentation in R/v_binary.R
 \name{v_binary}
 \alias{v_binary}
-\alias{new_binary}
 \alias{is_binary}
 \alias{as_binary}
 \alias{as_canonical.v_binary}
 \title{Binary vectors}
 \usage{
-new_binary(
-  x = logical(),
-  .internal_name = character(),
-  .data_summary = data_summary(),
-  .context = context()
-)
-
 v_binary(x = logical(), internal_name = "", context)
 
 is_binary(x)
@@ -25,12 +17,6 @@ as_binary(x)
 }
 \arguments{
 \item{x}{a \code{logical} vector}
-
-\item{.internal_name}{the internal name of the variable}
-
-\item{.data_summary}{a \code{\link{data_summary}}}
-
-\item{.context}{a \code{\link{context}}}
 
 \item{internal_name}{the internal name of the variable}
 

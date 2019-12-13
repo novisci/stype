@@ -22,7 +22,7 @@ is_binary(x)
 mean(x)
 sum(x)
 
-sum(x, x) # See? very experimental
+# sum(x, x) # See? very experimental
 
 
 ## ---- error=TRUE--------------------------------------------------------------

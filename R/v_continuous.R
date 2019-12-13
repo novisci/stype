@@ -7,6 +7,12 @@
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' vec_ptype2.double
 #' @inheritParams v_count
+NULL
+
+#' The internal builder of v_continuous
+#' @noRd
+#' @keywords internal
+
 new_continuous <- function(x = double(),
                            .internal_name = character(), 
                            .data_summary = data_summary(), 
@@ -233,8 +239,8 @@ vec_arith.double.v_continuous <- function(op, x, y) {
 vec_math.v_continuous <- function(fun, x, ...) {
   # TODO implement methods...
   switch(fun,
-         sum  = attr(x, "data_summary")$sum,
-         mean = attr(x, "data_summary")$mean,
+         sum  = get_data_summary(x, "sum"),
+         mean = get_data_summary(x, "mean"),
          vctrs::vec_math_base(fun, x, ...)
   )
 }

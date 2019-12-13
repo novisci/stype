@@ -7,6 +7,12 @@
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
 
+NULL
+
+#' The internal builder of v_binary
+#' @noRd
+#' @keywords internal
+
 new_binary <- function(x = logical(),                     
                        .internal_name = character(), 
                        .data_summary = data_summary(), 
@@ -209,7 +215,7 @@ vec_arith.integer.v_binary <- function(op, x, y) {
 vec_math.v_binary <- function(fun, x, ...) {
   # TODO implement methods...
   switch(fun,
-         mean = attr(x, "data_summary")$proportion,
+         mean = get_data_summary(x, "proportion"),
          vctrs::vec_math_base(fun, x, ...)
   )
 }
@@ -218,7 +224,14 @@ vec_math.v_binary <- function(fun, x, ...) {
 #' @export
 # @export sum.v_binary
 sum.v_binary <- function(..., na.rm = TRUE) {
-  attr(..1, "data_summary")$count
+  
+  dots <- list(...)
+  assertthat::assert_that(
+    length(dots) == 1,
+    msg = "sum for v_binary only works on one vector at type."
+  )
+  
+  get_data_summary(dots[[1]], "num_1")
 }
 
 # @method count v_binary

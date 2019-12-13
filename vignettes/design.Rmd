@@ -68,7 +68,7 @@ Certain math operations work and pull directly from the `description` where appr
 mean(x)
 sum(x)
 
-sum(x, x) # See? very experimental
+# sum(x, x) # See? very experimental
 
 ```
 

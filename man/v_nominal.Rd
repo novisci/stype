@@ -2,19 +2,10 @@
 % Please edit documentation in R/v_nominal.R
 \name{v_nominal}
 \alias{v_nominal}
-\alias{new_nominal}
 \alias{is_nominal}
 \alias{as_canonical.v_nominal}
 \title{v_nominal S3 class}
 \usage{
-new_nominal(
-  x = integer(),
-  .levels = character(),
-  .internal_name = character(),
-  .data_summary = data_summary(),
-  .context = context()
-)
-
 v_nominal(x = factor(), internal_name = "", context)
 
 is_nominal(x)
@@ -24,6 +15,7 @@ is_nominal(x)
 \arguments{
 \item{x}{a \code{factor}}
 
+<<<<<<< man/v_nominal.Rd
 \item{.levels}{Character vector of labels.}
 
 \item{.internal_name}{the internal name of the variable}
@@ -32,6 +24,8 @@ is_nominal(x)
 
 \item{.context}{a \code{\link{context}}}
 
+=======
+>>>>>>> man/v_nominal.Rd
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}

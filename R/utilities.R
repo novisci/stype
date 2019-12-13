@@ -10,7 +10,7 @@ stype_str <- function(x) {
     is(x, "described"),
     msg = "not a stype object"
   )
-  vec_ptype_full(x)
+  vctrs::vec_ptype_full(x)
 }
 
 

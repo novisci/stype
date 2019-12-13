@@ -1,3 +1,18 @@
+#' String Representation of the Statistical Type
+#'
+#' Provides a short phrase identifying the statistical type.
+#'
+#' @param x A stype object.
+#' @export
+stype_str <- function(x) {
+  assertthat::assert_that(
+    is(x, "described"),
+    msg = "not a stype object"
+  )
+  vec_ptype_full(x)
+}
+
+
 #' @importFrom crayon bold red combine_styles
 boldmag <- crayon::combine_styles(crayon::bold, crayon::magenta)
 

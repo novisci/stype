@@ -51,29 +51,29 @@ library(dplyr)
 library(tibble)
 n <- 100 
 
-dt <- tibble(
-  y1 = v_binary(as.logical(rbinom(n, 1, 0.25)), 
-                context = context(purpose = purpose(study_role = "outcome"))),
-  y2 = v_event_time(runif(n, 1, 100),
-                    context = context(purpose = purpose(study_role = "outcome"))),
-  y3 = v_continuous(rnorm(n), 
-                    context = context(purpose = purpose(study_role = "outcome"))),
-  
-  
-  !!! purrr::map(
-    .x  = 1:10, 
+make_context <- function(role){
+  context(purpose = purpose(study_role = role))
+}
+
+covariates <-
+purrr::map(
+    .x  = purrr::set_names(1:10, paste0("x", 1:10)), 
     .f = ~ v_binary(as.logical(rbinom(n, 1, 0.25)), 
-                    context = context(purpose = purpose(study_role = "covariate")))) %>%
-    setNames(paste0("x", 1:10))
+                    context = make_context("covariate"))
+)
+
+dt <- tibble(
+  y1 = v_binary(as.logical(rbinom(n, 1, 0.25)), context = make_context("outcome")),
+  y2 = v_event_time(runif(n, 1, 100), context = make_context("outcome")),
+  y3 = v_continuous(rnorm(n), context = make_context("outcome")),
+  !!! covariates
 )
 
 dt
 
 ## -----------------------------------------------------------------------------
-dt %>%
-  select_if(is_binary)
+dt %>% select_if(is_binary)
 
 ## -----------------------------------------------------------------------------
-dt %>%
-  select_if(is_outcome)
+dt %>% select_if(is_outcome)
 

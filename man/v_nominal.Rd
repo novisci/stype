@@ -6,7 +6,6 @@
 \alias{as_canonical.v_nominal}
 \title{v_nominal S3 class}
 \usage{
-
 v_nominal(x = factor(), internal_name = "", context)
 
 is_nominal(x)
@@ -16,6 +15,17 @@ is_nominal(x)
 \arguments{
 \item{x}{a \code{factor}}
 
+<<<<<<< man/v_nominal.Rd
+\item{.levels}{Character vector of labels.}
+
+\item{.internal_name}{the internal name of the variable}
+
+\item{.data_summary}{a \code{\link{data_summary}}}
+
+\item{.context}{a \code{\link{context}}}
+
+=======
+>>>>>>> man/v_nominal.Rd
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}

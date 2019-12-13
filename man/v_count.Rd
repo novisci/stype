@@ -8,7 +8,6 @@
 \alias{as_canonical.v_count}
 \title{Count vectors}
 \usage{
-
 v_count(x = integer(), internal_name = "", context)
 
 is_count(x)

@@ -25,7 +25,7 @@ License: GPL-3 + file LICENSE
 URL: https://gitlab.novisci.com/nsStat/stype
 BugReports: https://gitlab.novisci.com/nsStat/stype/issues
 Encoding: UTF-8
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 Repository: cran.novisci.com
 Collate: 

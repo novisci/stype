@@ -7,9 +7,13 @@
 \alias{as_canonical.v_nominal}
 \title{v_nominal S3 class}
 \usage{
-new_nominal(x = integer(), .levels = character(),
-  .internal_name = character(), .data_summary = data_summary(),
-  .context = context())
+new_nominal(
+  x = integer(),
+  .levels = character(),
+  .internal_name = character(),
+  .data_summary = data_summary(),
+  .context = context()
+)
 
 v_nominal(x = factor(), internal_name = "", context)
 
@@ -24,7 +28,7 @@ is_nominal(x)
 
 \item{.internal_name}{the internal name of the variable}
 
-\item{.data_summary}{a \\code{\link{data_summary}}}
+\item{.data_summary}{a \code{\link{data_summary}}}
 
 \item{.context}{a \code{\link{context}}}
 

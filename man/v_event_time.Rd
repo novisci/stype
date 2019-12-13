@@ -9,8 +9,12 @@
 \alias{as_canonical.v_event_time}
 \title{event_time vectors}
 \usage{
-new_event_time(x = double(), .internal_name = character(),
-  .data_summary = data_summary(), .context = context())
+new_event_time(
+  x = double(),
+  .internal_name = character(),
+  .data_summary = data_summary(),
+  .context = context()
+)
 
 v_event_time(x = v_continuous_nonneg(), internal_name = "", context)
 
@@ -27,7 +31,7 @@ as_event_time(x)
 
 \item{.internal_name}{the internal name of the variable}
 
-\item{.data_summary}{a \\code{\link{data_summary}}}
+\item{.data_summary}{a \code{\link{data_summary}}}
 
 \item{.context}{a \code{\link{context}}}
 

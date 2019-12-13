@@ -199,7 +199,7 @@ obj_print_footer.v_event_time <- function(x, ...) {
 #' @method vec_ptype_full v_event_time
 #' @export
 vec_ptype_full.v_event_time <- function(x) {
-  "event_time"
+  "time-to-event"
 }
 
 #' @importFrom vctrs vec_ptype_abbr

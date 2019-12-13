@@ -18,3 +18,7 @@ test_that("stype_str methods", {
 
   expect_identical(actual, expected)
 })
+
+test_that("stype_str invalid input", {
+  expect_error(stype_str(1L:5L), "not a stype object")
+})

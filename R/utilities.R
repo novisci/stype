@@ -3,6 +3,7 @@
 #' Provides a short phrase identifying the statistical type.
 #'
 #' @param x A stype object.
+#' @return A string.
 #' @export
 stype_str <- function(x) {
   assertthat::assert_that(

@@ -9,6 +9,9 @@ stype_str(x)
 \arguments{
 \item{x}{A stype object.}
 }
+\value{
+A string.
+}
 \description{
 Provides a short phrase identifying the statistical type.
 }

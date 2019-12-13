@@ -1,0 +1,18 @@
+destination: docs
+template:
+  params:
+    bootswatch: cerulean
+reference:
+  - title: "Data Types"
+    desc: "Algebraic data types for statistical analyses"
+    contents: 
+      - starts_with("v_")
+  - title: "Contexts"
+    desc: "Analysis-specific contextual information for styped vectors"
+    contents:
+      - matches("context")
+      - matches("purpose")
+  - title: "Data summary"
+    desc: "Automatically generated summary information about styped vectors"
+    contents:
+      - matches("data_summary")

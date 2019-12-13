@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 # Design Goals
 
-`stype` provides an extensible set of data types that in themselves extend certain `R` vector classes to be useful in NoviSci's suite of analytic applications by providing vectors with:
+`stype` provides an extensible set of data types that in themselves extend certain `R` vector classes to be useful in a variety of analytic applications by providing vectors with:
 
    * data types that align with common statistical data types (e.g. "binary", "continous", "count", "time to event", etc);
    * a `context` object with information about how the variable relates to a study design;
@@ -103,7 +103,7 @@ c(x, v_binary(context = context(purpose = purpose(study_role = "other"))))
 
 # Data types
 
-The following table describes the proposed data types (not all of these may be available at this time).
+The following table describes the proposed data types (not all of these may be available at this time). A -- indicates that the type inherits properties from the level above..
 
 | `v_<type>`               | prototype    | support            | 
 |--------------------------|--------------|--------------------|
@@ -124,20 +124,22 @@ library(dplyr)
 library(tibble)
 n <- 100 
 
-dt <- tibble(
-  y1 = v_binary(as.logical(rbinom(n, 1, 0.25)), 
-                context = context(purpose = purpose(study_role = "outcome"))),
-  y2 = v_event_time(runif(n, 1, 100),
-                    context = context(purpose = purpose(study_role = "outcome"))),
-  y3 = v_continuous(rnorm(n), 
-                    context = context(purpose = purpose(study_role = "outcome"))),
-  
-  
-  !!! purrr::map(
-    .x  = 1:10, 
+make_context <- function(role){
+  context(purpose = purpose(study_role = role))
+}
+
+covariates <-
+purrr::map(
+    .x  = purrr::set_names(1:10, paste0("x", 1:10)), 
     .f = ~ v_binary(as.logical(rbinom(n, 1, 0.25)), 
-                    context = context(purpose = purpose(study_role = "covariate")))) %>%
-    setNames(paste0("x", 1:10))
+                    context = make_context("covariate"))
+)
+
+dt <- tibble(
+  y1 = v_binary(as.logical(rbinom(n, 1, 0.25)), context = make_context("outcome")),
+  y2 = v_event_time(runif(n, 1, 100), context = make_context("outcome")),
+  y3 = v_continuous(rnorm(n), context = make_context("outcome")),
+  !!! covariates
 )
 
 dt
@@ -146,14 +148,12 @@ dt
 Selecting columns based on data type:
 
 ```{r}
-dt %>%
-  select_if(is_binary)
+dt %>% select_if(is_binary)
 ```
 
 Selecting columns based on context:
 
 ```{r}
-dt %>%
-  select_if(is_outcome)
+dt %>% select_if(is_outcome)
 ```
 

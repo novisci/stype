@@ -10,7 +10,7 @@ test_that("testing that described types at least have all common methods", {
   desired_methods <- c("obj_print_footer", "format",
                        "vec_ptype_full", "vec_ptype_abbr", "type_sum",
                        "vec_cast", "vec_ptype2", "vec_restore",
-                       "as_canonical", "stype_str")
+                       "as_canonical")
   purrr::walk(
     .x = v_types,
     .f = ~ {

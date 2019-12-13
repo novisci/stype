@@ -199,7 +199,7 @@ obj_print_footer.v_continuous_nonneg <- function(x, ...) {
 #' @method vec_ptype_full v_continuous_nonneg
 #' @export
 vec_ptype_full.v_continuous_nonneg <- function(x) {
-  "continuous_nonneg"
+  "continuous nonnegative"
 }
 
 #' @importFrom vctrs vec_ptype_abbr

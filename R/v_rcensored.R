@@ -1,13 +1,11 @@
 #' Right censored vectors
 #' 
-#'  Some desc
+#' TODO: add a description
 #' 
 #' @name v_rcensored
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
-#' @param x a \code{integer} vector
-#' @param internal_name the internal name of the variable
-#' @param context a \code{\link{context}}
+#' @inheritParams v_count
 NULL
 
 #' The internal builder of v_rcensored
@@ -18,17 +16,26 @@ NULL
 #' @importFrom vctrs new_rcrd
 #' @keywords internal
 
-new_rcensored <- function(time     = v_event_time(),
-                          censored = v_binary(),
-                          outcome  = v_binary(),
-                          censor_reason = v_nominal(),
+new_rcensored <- function(time           = v_event_time(),
+                          censored       = v_binary(),
+                          outcome        = v_binary(),
+                          censor_reason  = v_nominal(),
                           outcome_reason = v_nominal(),
+                          .end_time      = numeric(),
                           .internal_name = character(), 
-                          .data_summary = data_summary(), 
-                          .context = context()){
+                          .data_summary  = data_summary(), 
+                          .context       = context()){
   
-  # vctrs::vec_assert(x, ptype = integer())
-  # vctrs::vec_assert(desc, ptype = description())
+  vctrs::vec_assert(time, ptype = v_event_time())
+  vctrs::vec_assert(censored, ptype = v_binary())
+  vctrs::vec_assert(outcome, ptype = v_binary())
+  
+  # TODO: 
+  # Fix following error when following vec_assert are uncommented: 
+  #  `outcome_reason` must be a vector with type <nominal>.
+  #  Instead, it has type <nominal>.
+  # vctrs::vec_assert(outcome_reason, ptype = v_nominal())
+  # vctrs::vec_assert(censor_reason, ptype = v_nominal())
   
   vdat <- list(
     time = time,
@@ -43,6 +50,7 @@ new_rcensored <- function(time     = v_event_time(),
     internal_name = .internal_name,
     data_summary  = .data_summary, 
     context       = .context, 
+    end_time      = .end_time,
     class         = c("v_rcensored", "censored"))
 }
 
@@ -51,21 +59,39 @@ methods::setOldClass(c("v_rcensored", "v_censored", "vctrs_vctr"))
 
 #' Right-censored constructor
 #' 
-#' constructor function for right censored objects
-#' 
-#' @param outcomes a \code{list} of \code{v_event_time} vectors
-#' @param censors a \code{list} of \code{v_event_time} vectors
-#' @param end_time a scalar
+#' @param outcomes A \code{list} of \code{v_event_time} vectors that define the 
+#' outcomes. The order of this list defines the precedence of outcomes. That is,
+#' if the first outcome and second outcome occur at the same time, the first 
+#' outcome is the reason for the outcome.
+#' @param censors A \code{list} of \code{v_event_time} vectors that define the 
+#' censor The order of this list defines the precedence of censoring That is,
+#' if the first censor and second censor occur at the same time, the first 
+#' censor is the reason for the censoring
+#' @param end_time A \code{numeric} scalar defining the end of follow-up.
 #' @rdname v_rcensored 
 #' @export
 
 v_rcensored <- function(outcomes = list(), 
                         censors = list(),
                         end_time = Inf,
-                        internal_name = "", context){
+                        internal_name = "", 
+                        context){
   
-  # TODO: assert that inputs are v_event_times
-  # TODO: assert that end_time is length one
+  if(is_event_time(outcomes)){
+    outcomes <- list(outcomes)
+  }
+  
+  if(is_event_time(censors)){
+    censors <- list(censors)
+  }
+  
+  # TODO: drop requirement that inputs be v_event_time()? 
+  purrr::walk(
+    .x = append(outcomes, censors),
+    .f = ~ is_event_time(.x)
+  )
+  
+  vctrs::vec_assert(end_time, ptype = numeric(), size = c(1L))
   
   vdat <- .v_rcensored(outcomes, censors, end_time)
   
@@ -74,11 +100,12 @@ v_rcensored <- function(outcomes = list(),
   }
   
   out <- new_rcensored(
-    time           = vdat$time, 
-    censored       = vdat$censored,
-    outcome        = vdat$outcome,
-    outcome_reason = vdat$outcome_reason,
-    censor_reason  = vdat$censor_reason, 
+    time           = vdat[["times"]], 
+    censored       = vdat[["censored"]],
+    outcome        = vdat[["outcome"]],
+    outcome_reason = vdat[["outcome_reason"]],
+    censor_reason  = vdat[["censor_reason"]], 
+    .end_time      = end_time,
     .internal_name = internal_name,
     .data_summary  = data_summary(),
     .context       = context)
@@ -122,59 +149,66 @@ gather_times_reasons <- function(times, levs){
   )
 }
 
+#' Internal function for getting levels and labels for censoring and outcomes
+#' @noRd
+
+get_levels_labels <- function(x){
+  
+  # - handle the case that neither internal name *nor* short labels are defined
+  # - handle the case that either  internal name *or* short labels are defined
+  # - handle the case that both internal name and short labels are defined
+  poss_levels <- purrr::map_chr(x, ~ attr(.x, "internal_name"))
+  poss_labels <- purrr::map_chr(x, ~ get_context(.x)@short_label)
+  poss_pos    <- 1:length(x)
+  
+  has_empty_levels <- any(poss_levels == "")
+  has_empty_labels <- any(poss_labels == "")
+  has_all_levels   <- all(poss_levels != "")
+  has_all_labels   <- all(poss_labels != "")
+  
+  if ( has_empty_levels && has_empty_labels ) {
+    poss_levels <- poss_labels <- poss_pos
+  } else if ( has_all_levels && has_empty_labels ){
+    poss_labels <- poss_levels
+  } else if ( has_empty_levels && has_all_labels ){
+    poss_levels <- poss_labels
+  }
+
+  list(levels = poss_levels, labels = poss_labels)
+}
+
+
 #' Internal Right-censored constructor
 #' @noRd
 .v_rcensored <- function(outcomes, censors, end_time){
   
-  #TODO: 
-  # - handle the case that neither internal name *nor* short labels are defined
-  # - handle the case that either  internal name *or* short labels are defined
-  # - handle the case that both internal name and short labels are defined
-  poss_creasons_levels <- purrr::map_chr(censors, ~ attr(.x, "internal_name"))
-  poss_creasons_labels <- purrr::map_chr(censors, ~ get_context(.x)@short_label)
-  
-  if(any(poss_creasons_labels == "")){
-    poss_creasons_labels <- poss_creasons_levels
-  }
-  
-  poss_oreasons_levels <- purrr::map_chr(outcomes, ~ attr(.x, "internal_name"))
-  poss_oreasons_labels <- purrr::map_chr(outcomes, ~ get_context(.x)@short_label)
-  
-  if(any(poss_oreasons_labels == "")){
-    poss_oreasons_labels <- poss_oreasons_levels
-  }
-  
-  cens <- gather_times_reasons(
-    censors,
-    c("not_censored", poss_creasons_levels)
-  )
-  
-  outs <- gather_times_reasons(
-    outcomes,
-    c("not_outcome", poss_oreasons_levels)
-  )
+  clev <- get_levels_labels(censors)
+  olev <- get_levels_labels(outcomes)
+
+  cens <- gather_times_reasons(censors, c("not_censored", clev[["levels"]]))
+  outs <- gather_times_reasons(outcomes,c("not_outcome", olev[["levels"]]))
   
   hold <- gather_times_reasons(
-    append(list(outs$times, cens$times), list(v_event_time(end_time))),
+    append(list(outs[["times"]], cens[["times"]]), list(v_event_time(end_time))),
     levs =  c("none", "outcome", "censor", "admin")
   )
   
-  creas <- cens$reasons
-  creas[hold$reasons != "censor"] <- NA
+  creas <- cens[["reasons"]]
+  creas[hold[["reasons"]] != "censor"] <- NA
   creas <- factor(as.character(creas), 
-                  levels = poss_creasons_levels,
-                  labels = poss_creasons_labels)
+                  levels = clev[["levels"]],
+                  labels = clev[["labels"]])
   
-  oreas <- outs$reasons
-  oreas[hold$reasons != "outcome"] <- NA
+  oreas <- outs[["reasons"]]
+  oreas[hold[["reasons"]] != "outcome"] <- NA
   oreas <- factor(as.character(oreas), 
-                  levels = poss_oreasons_levels,
-                  labels = poss_oreasons_labels)
+                  levels = olev[["levels"]],
+                  labels = olev[["labels"]])
   
   list(
-    times    = hold$times,
-    censored = v_binary(hold$reasons == "censor"),
-    outcome  = v_binary(hold$reasons == "outcome"),
+    times    = hold[["times"]],
+    censored = v_binary(hold[["reasons"]] == "censor"),
+    outcome  = v_binary(hold[["reasons"]] == "outcome"),
     censor_reason  = v_nominal(creas),
     outcome_reason = v_nominal(oreas)
   )
@@ -247,6 +281,7 @@ vec_cast.v_rcensored.default  <- function(x, to, ...) vctrs::vec_default_cast(x,
 
 #' @rdname v_rcensored 
 #' @export
+# TODO: Is the canonical acutally a Surv object
 as_canonical.v_rcensored <- function(x){
   as.list(vctrs::vec_data(x))
 }

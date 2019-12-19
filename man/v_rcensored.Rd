@@ -19,11 +19,17 @@ is_rcensored(x)
 \method{as_canonical}{v_rcensored}(x)
 }
 \arguments{
-\item{outcomes}{a \code{list} of \code{v_event_time} vectors}
+\item{outcomes}{A \code{list} of \code{v_event_time} vectors that define the 
+outcomes. The order of this list defines the precedence of outcomes. That is,
+if the first outcome and second outcome occur at the same time, the first 
+outcome is the reason for the outcome.}
 
-\item{censors}{a \code{list} of \code{v_event_time} vectors}
+\item{censors}{A \code{list} of \code{v_event_time} vectors that define the 
+censor The order of this list defines the precedence of censoring That is,
+if the first censor and second censor occur at the same time, the first 
+censor is the reason for the censoring}
 
-\item{end_time}{a scalar}
+\item{end_time}{A \code{numeric} scalar defining the end of follow-up.}
 
 \item{internal_name}{the internal name of the variable}
 
@@ -32,7 +38,5 @@ is_rcensored(x)
 \item{x}{a \code{integer} vector}
 }
 \description{
-Some desc
-
-constructor function for right censored objects
+TODO: add a description
 }

@@ -11,7 +11,7 @@ test_that("print functions work", {
   )
   
   z <- v_binary(c(TRUE, NA), context = context(purpose = purpose(study_role = "outcome")))
-  expect_equal(print_missing(z), "\033[1m\033[35mMissing = 1.000\033[39m\033[22m") 
+  expect_match(print_missing(z), "Missing = 1.000") 
   expect_output(
     print_footer(z, c(proportion = "Proportion")), 
     "Proportion = 1.000; Missing = 1.000\nPurpose: outcome"

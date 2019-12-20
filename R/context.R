@@ -174,6 +174,171 @@ setMethod("get_security_type", "described",
 # TODO: can these functions and their documentation be automatically generated?
 # TODO: since these are essentially functors, can purrr::lift be used?
 
+# Context setters ####
+
+#' @rdname context_get_set
+#' @aliases set_context
+#' @param to what to set the element to
+#' @importFrom methods "slot<-"
+#' @export
+setGeneric("set_context", function(x, to) standardGeneric("set_context"))
+
+#' @rdname context_get_set
+#' @aliases set_context,described,described-method
+#' @export
+setMethod("set_context", c("described", "context"), 
+           function(x, to){ attr(x, "context") <- to; x  })
+
+#' @rdname context_get_set
+#' @export
+setGeneric("set_short_label", function(x, to) standardGeneric("set_short_label"))
+
+#' @template context_get_set
+#' @templateVar getorset set
+#' @templateVar slot short_label 
+#' @templateVar class context
+setMethod("set_short_label", c("context", "character"),
+          function(x, to) { slot(x, "short_label") <- to; x } )
+
+#' @template context_get_set
+#' @templateVar getorset set
+#' @templateVar slot short_label 
+#' @templateVar class described
+setMethod(
+  f = "set_short_label",
+  signature  = c("described", "character"),
+  definition = function(x, to) { 
+    attr(x, "context") <- set_short_label(attr(x, "context"), to)
+    x
+   }
+)
+
+
+
+#' @rdname context_get_set
+#' @export
+setGeneric("set_long_label", function(x, to) standardGeneric("set_long_label"))
+
+#' @template context_get_set
+#' @templateVar getorset set
+#' @templateVar slot long_label 
+#' @templateVar class context
+setMethod("set_long_label", c("context", "character"),
+          function(x, to) { slot(x, "long_label") <- to; x } )
+
+#' @template context_get_set
+#' @templateVar getorset set
+#' @templateVar slot long_label 
+#' @templateVar class described
+setMethod(
+  f = "set_long_label",
+  signature  = c("described", "character"),
+  definition = function(x, to) { 
+    attr(x, "context") <- set_long_label(attr(x, "context"), to)
+    x
+  }
+)
+
+
+#' @rdname context_get_set
+#' @export
+setGeneric("set_description", function(x, to) standardGeneric("set_description"))
+
+#' @template context_get_set
+#' @templateVar getorset set
+#' @templateVar slot description 
+#' @templateVar class context
+setMethod("set_description", c("context", "character"),
+          function(x, to) { slot(x, "description") <- to; x } )
+
+#' @template context_get_set
+#' @templateVar getorset set
+#' @templateVar slot description 
+#' @templateVar class described
+setMethod(
+  f = "set_description",
+  signature  = c("described", "character"),
+  definition = function(x, to) { 
+    attr(x, "context") <- set_description(attr(x, "context"), to)
+    x
+  }
+)
+
+
+#' @rdname context_get_set
+#' @export
+setGeneric("set_derivation", function(x, to) standardGeneric("set_derivation"))
+
+#' @template context_get_set
+#' @templateVar getorset set
+#' @templateVar slot derivation 
+#' @templateVar class context
+setMethod("set_derivation", c("context", "character"),
+          function(x, to) { slot(x, "derivation") <- to; x } )
+
+#' @template context_get_set
+#' @templateVar getorset set
+#' @templateVar slot derivation 
+#' @templateVar class described
+setMethod(
+  f = "set_derivation",
+  signature  = c("described", "character"),
+  definition = function(x, to) { 
+    attr(x, "context") <- set_derivation(attr(x, "context"), to)
+    x
+  }
+)
+
+
+#' @rdname context_get_set
+#' @export
+setGeneric("set_purpose", function(x, to) standardGeneric("set_purpose"))
+
+#' @template context_get_set
+#' @templateVar getorset set
+#' @templateVar slot purpose 
+#' @templateVar class context
+setMethod("set_purpose", c("context", "purpose"),
+          function(x, to) { slot(x, "purpose") <- to; x } )
+
+#' @template context_get_set
+#' @templateVar getorset set
+#' @templateVar slot purpose 
+#' @templateVar class described
+setMethod(
+  f = "set_purpose",
+  signature  = c("described", "purpose"),
+  definition = function(x, to) { 
+    attr(x, "context") <- set_purpose(attr(x, "context"), to)
+    x
+  }
+)
+
+#' @rdname context_get_set
+#' @export
+setGeneric("set_security_type", function(x, to) standardGeneric("set_security_type"))
+
+#' @template context_get_set
+#' @templateVar getorset set
+#' @templateVar slot security_type 
+#' @templateVar class context
+setMethod("set_security_type", c("context", "character"),
+          function(x, to) { slot(x, "security_type") <- to; x } )
+
+#' @template context_get_set
+#' @templateVar getorset set
+#' @templateVar slot security_type 
+#' @templateVar class described
+setMethod(
+  f = "set_security_type",
+  signature  = c("described", "character"),
+  definition = function(x, to) { 
+    attr(x, "context") <- set_security_type(attr(x, "context"), to)
+    x
+  }
+)
+
+# Context predicates ####
 #' @rdname is_study_role
 #' @aliases is_study_role,context,context-method
 #' @export 

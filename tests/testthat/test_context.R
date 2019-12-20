@@ -21,6 +21,13 @@ test_that("context class has get/set methods for all slots", {
     .x = ctxt_slots,
     .f = ~ {
       expect_true(methods::hasMethod(sprintf("get_%s", .x), "context"))
+      
+      if (.x != "purpose"){
+        expect_true(
+          methods::hasMethod(sprintf("set_%s", .x), c("context", "character"))
+        )
+      }
+      
     }
   )
 })

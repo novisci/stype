@@ -35,6 +35,39 @@
 \alias{get_security_type,context,context-method}
 \alias{get_security_type,described-method}
 \alias{get_security_type,described,described-method}
+\alias{set_context}
+\alias{set_context,described,context-method}
+\alias{set_context,described,described-method}
+\alias{set_short_label}
+\alias{set_short_label,context,character-method}
+\alias{set_short_label,context,context-method}
+\alias{set_short_label,described,character-method}
+\alias{set_short_label,described,described-method}
+\alias{set_long_label}
+\alias{set_long_label,context,character-method}
+\alias{set_long_label,context,context-method}
+\alias{set_long_label,described,character-method}
+\alias{set_long_label,described,described-method}
+\alias{set_description}
+\alias{set_description,context,character-method}
+\alias{set_description,context,context-method}
+\alias{set_description,described,character-method}
+\alias{set_description,described,described-method}
+\alias{set_derivation}
+\alias{set_derivation,context,character-method}
+\alias{set_derivation,context,context-method}
+\alias{set_derivation,described,character-method}
+\alias{set_derivation,described,described-method}
+\alias{set_purpose}
+\alias{set_purpose,context,purpose-method}
+\alias{set_purpose,context,context-method}
+\alias{set_purpose,described,purpose-method}
+\alias{set_purpose,described,described-method}
+\alias{set_security_type}
+\alias{set_security_type,context,character-method}
+\alias{set_security_type,context,context-method}
+\alias{set_security_type,described,character-method}
+\alias{set_security_type,described,described-method}
 \title{Get an object's context or elements thereof}
 \usage{
 get_context(x)
@@ -76,9 +109,51 @@ get_security_type(x)
 \S4method{get_security_type}{context}(x)
 
 \S4method{get_security_type}{described}(x)
+
+set_context(x, to)
+
+\S4method{set_context}{described,context}(x, to)
+
+set_short_label(x, to)
+
+\S4method{set_short_label}{context,character}(x, to)
+
+\S4method{set_short_label}{described,character}(x, to)
+
+set_long_label(x, to)
+
+\S4method{set_long_label}{context,character}(x, to)
+
+\S4method{set_long_label}{described,character}(x, to)
+
+set_description(x, to)
+
+\S4method{set_description}{context,character}(x, to)
+
+\S4method{set_description}{described,character}(x, to)
+
+set_derivation(x, to)
+
+\S4method{set_derivation}{context,character}(x, to)
+
+\S4method{set_derivation}{described,character}(x, to)
+
+set_purpose(x, to)
+
+\S4method{set_purpose}{context,purpose}(x, to)
+
+\S4method{set_purpose}{described,purpose}(x, to)
+
+set_security_type(x, to)
+
+\S4method{set_security_type}{context,character}(x, to)
+
+\S4method{set_security_type}{described,character}(x, to)
 }
 \arguments{
 \item{x}{a described object}
+
+\item{to}{what to set the element to}
 }
 \description{
 Get an object's context or elements thereof

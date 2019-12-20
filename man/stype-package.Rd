@@ -4,9 +4,19 @@
 \name{stype-package}
 \alias{stype}
 \alias{stype-package}
-\title{stype: statistcal data types}
+\title{Statistical algebraic data types}
 \description{
-TODO: add a description
+\code{stype} (pronounced "stipe") uses the \link[vctrs]{vctrs} package
+to implement algebraic data types that:
+}
+\details{
+\itemize{
+ \item provide S3 classes aligned with statistical language: binary, 
+ continuous, count, non-negative continuous, time to event, etc;
+ \item create variable-level metadata useful for sharing information 
+ about a variable across applications;
+ \item add automatically generated summary statistics to the variable metadata.
+}
 }
 \seealso{
 Useful links:

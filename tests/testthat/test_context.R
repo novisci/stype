@@ -13,3 +13,14 @@ test_that("context class and predicate functions work as hoped", {
   )
   
 })
+
+test_that("context class has get/set methods for all slots", {
+  ctxt_slots <- slotNames("context")
+  
+  purrr::walk(
+    .x = ctxt_slots,
+    .f = ~ {
+      expect_true(methods::hasMethod(sprintf("get_%s", .x), "context"))
+    }
+  )
+})

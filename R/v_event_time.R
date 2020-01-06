@@ -192,7 +192,7 @@ format.v_event_time <- function(x, ...) {
 #' @method obj_print_footer v_event_time
 #' @export
 obj_print_footer.v_event_time <- function(x, ...) {
-  footer_printer(x, c(median = "Median survival"))
+  print_footer(x, c(median = "Median survival"))
 }
 
 #' @importFrom vctrs vec_ptype_full

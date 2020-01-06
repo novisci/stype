@@ -3,7 +3,7 @@
 \name{describe}
 \alias{describe}
 \alias{describe,describable,maybeGroup,maybeWeight,maybeDescriptor-method}
-\alias{describe,described,maybeGroup,maybeWeight,maybeDescriptor-method}
+\alias{describe,v_rcensored,maybeGroup,maybeWeight,maybeDescriptor-method}
 \alias{describe,data.frame,maybeGroup,maybeWeight,maybeDescriptor-method}
 \title{Describe a variable}
 \usage{
@@ -11,7 +11,7 @@ describe(x, g = NULL, w = NULL, .descriptors, ...)
 
 \S4method{describe}{describable,maybeGroup,maybeWeight,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
 
-\S4method{describe}{described,maybeGroup,maybeWeight,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
+\S4method{describe}{v_rcensored,maybeGroup,maybeWeight,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
 
 \S4method{describe}{data.frame,maybeGroup,maybeWeight,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
 }

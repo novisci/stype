@@ -17,10 +17,11 @@ setClassUnion("maybeGroup",      c("maybeMissing", "groupVar"))
 setClassUnion("maybeWeight",     c("maybeMissing", "numeric"))
 setClassUnion("maybeDescriptor", c("missing", "NULL", "list"))
 setClassUnion("describable",     c("integer", "logical", "numeric", "factor",
-                                   "ordered", "character"))
+                                   "ordered", "character", "v_rcensored"))
 setClassUnion("described",       c("v_count", "v_binary", "v_continuous", 
                                    "v_continuous_nonneg", "v_event_time",
-                                   "v_nominal", "v_ordered", "v_character"))
+                                   "v_nominal", "v_ordered", "v_character",
+                                   "v_rcensored"))
 
 #' Descriptor
 #'
@@ -120,6 +121,8 @@ setMethod(
     )
   }
 )
+
+
 
 # @rdname getDescriptors
 # @export
@@ -228,21 +231,40 @@ setMethod(
   }
 )
 
-
 #' @rdname describe
+#' @importFrom vctrs field
 #' @export
 
 setMethod(
   f          = "describe",
-  signature  = c("described", "maybeGroup", "maybeWeight", "maybeDescriptor"),
+  signature  = c("v_rcensored", "maybeGroup", "maybeWeight", "maybeDescriptor"),
   definition = function(x, g, w, .descriptors, ...){
     
-    # TODO: add described() method which detects whether a variable has been 
-    # previously describe()d using the same arguments. If it has, then simply
-    # return the description slot rather than carrying out computations.
-    as.data.frame(get_data_summary(x))
+    
+    data_summary(
+      purrr::map(
+        .x = standardDescriptors,
+        .f = function(f) .describe(f, x = as_canonical(vctrs::field(x, "time")), ...)
+        )
+    )
   }
 )
+
+
+# @rdname describe
+# @export
+
+# setMethod(
+#   f          = "describe",
+#   signature  = c("described", "maybeGroup", "maybeWeight", "maybeDescriptor"),
+#   definition = function(x, g, w, .descriptors, ...){
+#     
+#     # TODO: add described() method which detects whether a variable has been 
+#     # previously describe()d using the same arguments. If it has, then simply
+#     # return the description slot rather than carrying out computations.
+#     as.data.frame(get_data_summary(x))
+#   }
+# )
 
 
 #' @rdname describe

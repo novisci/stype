@@ -141,7 +141,9 @@ format.v_character <- function(x, ...) {
 #' @method obj_print_footer v_character
 #' @export
 obj_print_footer.v_character <- function(x, ...) {
-  footer_printer(x, c(max_char = "Max char", min_char = "Min char", n_unique = "# unique"))
+  print_footer(
+    x, 
+    c(max_char = "Max char", min_char = "Min char", n_unique = "# unique"))
 
 }
 

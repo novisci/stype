@@ -1,8 +1,8 @@
 Package: stype
 Type: Package
 Title: Compute descriptive statistics
-Version: 0.1.6
-Date: 2019-12-11
+Version: 0.1.7
+Date: 2019-12-18
 Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
                             email = "bsaul@novisci.com"),
                      person("David", "Pritchard", role = c("aut"),
@@ -39,6 +39,7 @@ Collate:
     'v_nominal.R'
     'v_ordered.R'
     'v_character.R'
+    'v_rcensored.R'
     'purpose.R'
     'data_summary.R'
     'describe.R'

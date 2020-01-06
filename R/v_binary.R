@@ -276,7 +276,7 @@ format.v_binary <- function(x, ...) {
 #' @method obj_print_footer v_binary
 #' @export
 obj_print_footer.v_binary <- function(x, ...) {
-  footer_printer(x, c(proportion = "Proportion"))
+  print_footer(x, c(proportion = "Proportion"))
 }
 
 #' @importFrom vctrs vec_ptype_full

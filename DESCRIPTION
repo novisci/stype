@@ -37,6 +37,7 @@ Collate:
     'v_nominal.R'
     'v_ordered.R'
     'v_character.R'
+    'v_rcensored.R'
     'purpose.R'
     'data_summary.R'
     'describe.R'

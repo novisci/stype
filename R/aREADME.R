@@ -20,6 +20,7 @@
 #' @include describe.R
 #' @include data_summary.R
 #' @include purpose.R
+#' @include v_rcensored.R
 #' @include v_character.R
 #' @include v_ordered.R
 #' @include v_nominal.R

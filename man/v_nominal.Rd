@@ -4,7 +4,7 @@
 \alias{v_nominal}
 \alias{is_nominal}
 \alias{as_canonical.v_nominal}
-\title{v_nominal S3 class}
+\title{Nominal categorical vectors}
 \usage{
 v_nominal(x = factor(), internal_name = "", context)
 
@@ -20,5 +20,21 @@ is_nominal(x)
 \item{context}{a \code{\link{context}}}
 }
 \description{
-A nominal (categorial) variable
+{
+Support: see \code{\link{factor}}
+
+Prototype: \code{\link{integer}}
 }
+}
+\seealso{
+Other stype types: 
+\code{\link{v_binary}},
+\code{\link{v_character}},
+\code{\link{v_continuous_nonneg}},
+\code{\link{v_continuous}},
+\code{\link{v_count}},
+\code{\link{v_event_time}},
+\code{\link{v_ordered}},
+\code{\link{v_rcensored}}
+}
+\concept{stype types}

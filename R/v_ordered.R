@@ -1,10 +1,14 @@
-#' v_ordered S3 class
+#' Ordered categorical vectors
 #' 
-#' An ordered (categorial) variable
+#' @description  {
+#' Support: see \code{\link{factor}}
 #' 
+#' Prototype: \code{\link{integer}}
+#' }
 #' @name v_ordered
 #' @inheritParams v_count
 #' @importFrom vctrs vec_ptype2.character
+#' @family stype types
 NULL
 
 #' The internal builder of v_ordered

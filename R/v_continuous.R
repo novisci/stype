@@ -1,12 +1,19 @@
 #' Continuous vectors
 #' 
-#'  Some desc
+#' @description  {
+#' Support: \eqn{\mathbf{R}}{the Reals}* (plus \code{\link{NA_real_}})
+#' 
+#' Prototype: \code{\link{double}}
+#' 
+#' * - technically a double-precision number
+#' }
 #' 
 #' @name v_continuous
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' vec_ptype2.double
 #' @inheritParams v_count
+#' @family stype types
 NULL
 
 #' The internal builder of v_continuous
@@ -31,8 +38,6 @@ new_continuous <- function(x = double(),
 methods::setOldClass(c("v_continuous", "vctrs_vctr"))
 
 #' Count constructor
-#' 
-#' constructor function for count objects
 #' @rdname v_continuous 
 #' @param x a \code{double} vector
 #' @export

@@ -4,7 +4,7 @@
 \alias{v_ordered}
 \alias{is_ordered}
 \alias{as_canonical.v_ordered}
-\title{v_ordered S3 class}
+\title{Ordered categorical vectors}
 \usage{
 v_ordered(x = factor(ordered = TRUE), internal_name = "", context)
 
@@ -20,5 +20,21 @@ is_ordered(x)
 \item{context}{a \code{\link{context}}}
 }
 \description{
-An ordered (categorial) variable
+{
+Support: see \code{\link{factor}}
+
+Prototype: \code{\link{integer}}
 }
+}
+\seealso{
+Other stype types: 
+\code{\link{v_binary}},
+\code{\link{v_character}},
+\code{\link{v_continuous_nonneg}},
+\code{\link{v_continuous}},
+\code{\link{v_count}},
+\code{\link{v_event_time}},
+\code{\link{v_nominal}},
+\code{\link{v_rcensored}}
+}
+\concept{stype types}

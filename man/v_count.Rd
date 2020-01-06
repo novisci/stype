@@ -26,7 +26,21 @@ as_canonical(x)
 \item{context}{a \code{\link{context}}}
 }
 \description{
-Some desc
+{
+Support: \eqn{\mathbf{N^+}}{the non-negative Integers}* (plus \code{\link{NA_integer_}})
 
-constructor function for count objects
+Prototype: \code{\link{integer}}
 }
+}
+\seealso{
+Other stype types: 
+\code{\link{v_binary}},
+\code{\link{v_character}},
+\code{\link{v_continuous_nonneg}},
+\code{\link{v_continuous}},
+\code{\link{v_event_time}},
+\code{\link{v_nominal}},
+\code{\link{v_ordered}},
+\code{\link{v_rcensored}}
+}
+\concept{stype types}

@@ -1,11 +1,16 @@
 #' Binary vectors
 #' 
-#'  Some desc
+#' @description {
+#' Support: \eqn{0, 1}{\{0, 1\}} (plus \code{\link{NA}})
+#' 
+#' Prototype: \code{\link{logical}}
+#' }
 #' 
 #' @name v_binary
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
+#' @family stype types
 
 NULL
 
@@ -32,8 +37,6 @@ new_binary <- function(x = logical(),
 methods::setOldClass(c("v_binary", "vctrs_vctr"))
 
 #' Binary constructor
-#' 
-#' constructor function for binary objects
 #' @param x a \code{logical} vector
 #' @rdname v_binary 
 #' @export

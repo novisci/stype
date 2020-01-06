@@ -1,11 +1,18 @@
-#' continuous_nonneg vectors
+#' Non-negative continuous vectors
 #' 
-#'  Some desc
+#' @description  {
+#' Support: \eqn{\mathbf{R^+}}{the nonnegative Reals}* (plus \code{\link{NA_real_}})
+#' 
+#' Prototype: \code{\link{double}}
+#' 
+#' * - technically a double-precision number
+#' }
 #' 
 #' @name v_continuous_nonneg
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
+#' @family stype types
 NULL
 
 #' The internal builder of v_continuous_nonneg
@@ -34,9 +41,7 @@ new_continuous_nonneg <- function(x = double(),
 #' @importFrom methods setOldClass
 methods::setOldClass(c("v_continuous_nonneg", "v_continuous", "vctrs_vctr"))
 
-#' Count constructor
-#' 
-#' constructor function for count objects
+#' Non-negative continuous constructor
 #' @rdname v_continuous_nonneg 
 #' @param x nonnegative \code{double}
 #' @export

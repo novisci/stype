@@ -55,16 +55,16 @@ setValidity(
 # Context Getters ####
 
 #' Get an object's context or elements thereof
-#' @name context_get_set
-#' @aliases get_context
-#' @param x a described object
+# @name context_get_set
+#' @param x a stype object
+#' @rdname context_get_set
 #' @export
 setGeneric("get_context", function(x) standardGeneric("get_context"))
 
 #' @rdname context_get_set
-#' @aliases get_context,described,described-method
+# @aliases get_context,stype,stype-method
 #' @export
-setMethod("get_context", "described", function(x){ attr(x, "context") })
+setMethod("get_context", "stype", function(x){ attr(x, "context") })
 
 #' @rdname context_get_set
 #' @export
@@ -79,10 +79,8 @@ setMethod("get_short_label", "context", function(x) slot(x, "short_label"))
 #' @template context_get_set
 #' @templateVar getorset get
 #' @templateVar slot short_label 
-#' @templateVar class described
-setMethod("get_short_label", "described", function(x) get_short_label(get_context(x)))
-
-
+#' @templateVar class stype
+setMethod("get_short_label", "stype", function(x) get_short_label(get_context(x)))
 
 #' @rdname context_get_set
 #' @export
@@ -97,9 +95,8 @@ setMethod("get_long_label", "context", function(x) slot(x, "long_label"))
 #' @template context_get_set
 #' @templateVar getorset get
 #' @templateVar slot long_label 
-#' @templateVar class described
-setMethod("get_long_label", "described",function(x) get_long_label(get_context(x)))
-
+#' @templateVar class stype
+setMethod("get_long_label", "stype",function(x) get_long_label(get_context(x)))
 
 #' @rdname context_get_set
 #' @export
@@ -114,9 +111,8 @@ setMethod("get_description", "context", function(x) slot(x, "description"))
 #' @template context_get_set
 #' @templateVar getorset get
 #' @templateVar slot description 
-#' @templateVar class described
-setMethod("get_description", "described", function(x) get_description(get_context(x)))
-
+#' @templateVar class stype
+setMethod("get_description", "stype", function(x) get_description(get_context(x)))
 
 #' @rdname context_get_set
 #' @export
@@ -131,10 +127,8 @@ setMethod("get_derivation", "context", function(x) slot(x, "derivation"))
 #' @template context_get_set
 #' @templateVar getorset get
 #' @templateVar slot derivation 
-#' @templateVar class described
-setMethod("get_derivation", "described", function(x) get_derivation(get_context(x)))
-
-
+#' @templateVar class stype
+setMethod("get_derivation", "stype", function(x) get_derivation(get_context(x)))
 
 #' @rdname context_get_set
 #' @export
@@ -149,10 +143,8 @@ setMethod("get_purpose", "context", function(x) slot(x, "purpose"))
 #' @template context_get_set
 #' @templateVar getorset get
 #' @templateVar slot purpose 
-#' @templateVar class described
-setMethod("get_purpose", "described", function(x) get_purpose(get_context(x)))
-
-
+#' @templateVar class stype
+setMethod("get_purpose", "stype", function(x) get_purpose(get_context(x)))
 
 #' @rdname context_get_set
 #' @export
@@ -167,9 +159,15 @@ setMethod("get_security_type", "context", function(x) slot(x, "security_type"))
 #' @template context_get_set
 #' @templateVar getorset get
 #' @templateVar slot security_type 
-#' @templateVar class described
-setMethod("get_security_type", "described", 
+#' @templateVar class stype
+setMethod("get_security_type", "stype", 
           function(x) get_security_type(get_context(x)))
+
+#' @rdname get_purpose
+#' @aliases get_purpose,stype,stype-method
+#' @export
+setMethod("get_purpose", "stype", function(x){ get_purpose(get_context(x)) })
+
 
 # TODO: can these functions and their documentation be automatically generated?
 # TODO: since these are essentially functors, can purrr::lift be used?
@@ -184,9 +182,9 @@ setMethod("get_security_type", "described",
 setGeneric("set_context", function(x, to) standardGeneric("set_context"))
 
 #' @rdname context_get_set
-#' @aliases set_context,described,described-method
+#' @aliases set_context,stype,stype-method
 #' @export
-setMethod("set_context", c("described", "context"), 
+setMethod("set_context", c("stype", "context"), 
            function(x, to){ attr(x, "context") <- to; x  })
 
 #' @rdname context_get_set
@@ -203,10 +201,10 @@ setMethod("set_short_label", c("context", "character"),
 #' @template context_get_set
 #' @templateVar getorset set
 #' @templateVar slot short_label 
-#' @templateVar class described
+#' @templateVar class stype
 setMethod(
   f = "set_short_label",
-  signature  = c("described", "character"),
+  signature  = c("stype", "character"),
   definition = function(x, to) { 
     attr(x, "context") <- set_short_label(attr(x, "context"), to)
     x
@@ -229,10 +227,10 @@ setMethod("set_long_label", c("context", "character"),
 #' @template context_get_set
 #' @templateVar getorset set
 #' @templateVar slot long_label 
-#' @templateVar class described
+#' @templateVar class stype
 setMethod(
   f = "set_long_label",
-  signature  = c("described", "character"),
+  signature  = c("stype", "character"),
   definition = function(x, to) { 
     attr(x, "context") <- set_long_label(attr(x, "context"), to)
     x
@@ -254,10 +252,10 @@ setMethod("set_description", c("context", "character"),
 #' @template context_get_set
 #' @templateVar getorset set
 #' @templateVar slot description 
-#' @templateVar class described
+#' @templateVar class stype
 setMethod(
   f = "set_description",
-  signature  = c("described", "character"),
+  signature  = c("stype", "character"),
   definition = function(x, to) { 
     attr(x, "context") <- set_description(attr(x, "context"), to)
     x
@@ -279,10 +277,10 @@ setMethod("set_derivation", c("context", "character"),
 #' @template context_get_set
 #' @templateVar getorset set
 #' @templateVar slot derivation 
-#' @templateVar class described
+#' @templateVar class stype
 setMethod(
   f = "set_derivation",
-  signature  = c("described", "character"),
+  signature  = c("stype", "character"),
   definition = function(x, to) { 
     attr(x, "context") <- set_derivation(attr(x, "context"), to)
     x
@@ -304,10 +302,10 @@ setMethod("set_purpose", c("context", "purpose"),
 #' @template context_get_set
 #' @templateVar getorset set
 #' @templateVar slot purpose 
-#' @templateVar class described
+#' @templateVar class stype
 setMethod(
   f = "set_purpose",
-  signature  = c("described", "purpose"),
+  signature  = c("stype", "purpose"),
   definition = function(x, to) { 
     attr(x, "context") <- set_purpose(attr(x, "context"), to)
     x
@@ -328,10 +326,10 @@ setMethod("set_security_type", c("context", "character"),
 #' @template context_get_set
 #' @templateVar getorset set
 #' @templateVar slot security_type 
-#' @templateVar class described
+#' @templateVar class stype
 setMethod(
   f = "set_security_type",
-  signature  = c("described", "character"),
+  signature  = c("stype", "character"),
   definition = function(x, to) { 
     attr(x, "context") <- set_security_type(attr(x, "context"), to)
     x
@@ -347,9 +345,9 @@ setMethod("is_study_role", "context", function(object, what){
 })
 
 #' @rdname is_study_role
-#' @aliases is_study_role,described,described-method
+#' @aliases is_study_role,stype,stype-method
 #' @export 
-setMethod("is_study_role", "described", function(object, what){ 
+setMethod("is_study_role", "stype", function(object, what){ 
   is_study_role(get_purpose(object), what)
 })
 
@@ -361,9 +359,9 @@ setMethod("is_identifier", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_identifier,described,described-method
+#' @aliases is_identifier,stype,stype-method
 #' @export 
-setMethod("is_identifier", "described", function(object){ 
+setMethod("is_identifier", "stype", function(object){ 
   is_identifier(get_context(object))
 })
 
@@ -375,9 +373,9 @@ setMethod("is_index", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_index,described,described-method
+#' @aliases is_index,stype,stype-method
 #' @export 
-setMethod("is_index", "described", function(object){ 
+setMethod("is_index", "stype", function(object){ 
   is_index(get_context(object))
 })
 
@@ -389,9 +387,9 @@ setMethod("is_outcome", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_outcome,described,described-method
+#' @aliases is_outcome,stype,stype-method
 #' @export 
-setMethod("is_outcome", "described", function(object){ 
+setMethod("is_outcome", "stype", function(object){ 
   is_outcome(get_context(object))
 })
 
@@ -403,9 +401,9 @@ setMethod("is_censoring", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_censoring,described,described-method
+#' @aliases is_censoring,stype,stype-method
 #' @export 
-setMethod("is_censoring", "described", function(object){ 
+setMethod("is_censoring", "stype", function(object){ 
   is_censoring(get_context(object))
 })
 
@@ -417,9 +415,9 @@ setMethod("is_competing", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_competing,described,described-method
+#' @aliases is_competing,stype,stype-method
 #' @export 
-setMethod("is_competing", "described", function(object){ 
+setMethod("is_competing", "stype", function(object){ 
   is_competing(get_context(object))
 })
 
@@ -431,9 +429,9 @@ setMethod("is_exposure", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_exposure,described,described-method
+#' @aliases is_exposure,stype,stype-method
 #' @export 
-setMethod("is_exposure", "described", function(object){ 
+setMethod("is_exposure", "stype", function(object){ 
   is_exposure(get_context(object))
 })
 
@@ -445,9 +443,9 @@ setMethod("is_covariate", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_covariate,described,described-method
+#' @aliases is_covariate,stype,stype-method
 #' @export 
-setMethod("is_covariate", "described", function(object){ 
+setMethod("is_covariate", "stype", function(object){ 
   is_covariate(get_context(object))
 })
 
@@ -459,9 +457,9 @@ setMethod("is_weight", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_weight,described,described-method
+#' @aliases is_weight,stype,stype-method
 #' @export 
-setMethod("is_weight", "described", function(object){ 
+setMethod("is_weight", "stype", function(object){ 
   is_weight(get_context(object))
 })
 
@@ -473,9 +471,9 @@ setMethod("is_intermediate", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_intermediate,described,described-method
+#' @aliases is_intermediate,stype,stype-method
 #' @export 
-setMethod("is_intermediate", "described", function(object){ 
+setMethod("is_intermediate", "stype", function(object){ 
   is_intermediate(get_context(object))
 })
 
@@ -487,9 +485,9 @@ setMethod("is_other", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_other,described,described-method
+#' @aliases is_other,stype,stype-method
 #' @export 
-setMethod("is_other", "described", function(object){ 
+setMethod("is_other", "stype", function(object){ 
   is_other(get_context(object))
 })
 

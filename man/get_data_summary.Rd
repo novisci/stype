@@ -2,15 +2,15 @@
 % Please edit documentation in R/describe.R
 \name{get_data_summary}
 \alias{get_data_summary}
-\alias{get_data_summary,described,ANY-method}
-\alias{get_data_summary,described,character-method}
-\title{Get the summary from a described variable}
+\alias{get_data_summary,stype,ANY-method}
+\alias{get_data_summary,stype,character-method}
+\title{Get the summary from a stype variable}
 \usage{
 get_data_summary(x, element)
 
-\S4method{get_data_summary}{described,ANY}(x, element)
+\S4method{get_data_summary}{stype,ANY}(x, element)
 
-\S4method{get_data_summary}{described,character}(x, element)
+\S4method{get_data_summary}{stype,character}(x, element)
 }
 \arguments{
 \item{x}{the object from which to get the \code{data_summary}}
@@ -19,5 +19,5 @@ get_data_summary(x, element)
 or a length 1 \code{character} to select a particular element of the summary}
 }
 \description{
-Get the summary from a described variable
+Get the summary from a stype variable
 }

@@ -18,7 +18,7 @@ setClassUnion("maybeWeight",     c("maybeMissing", "numeric"))
 setClassUnion("maybeDescriptor", c("missing", "NULL", "list"))
 setClassUnion("describable",     c("integer", "logical", "numeric", "factor",
                                    "ordered", "character", "v_rcensored"))
-setClassUnion("described",       c("v_count", "v_binary", "v_continuous", 
+setClassUnion("stype",           c("v_count", "v_binary", "v_continuous", 
                                    "v_continuous_nonneg", "v_event_time",
                                    "v_nominal", "v_ordered", "v_character",
                                    "v_rcensored"))
@@ -210,8 +210,8 @@ setMethod(
   signature  = c("describable", "maybeGroup", "maybeWeight", "maybeDescriptor"),
   definition = function(x, g, w, .descriptors, ...){
     
-    # TODO: add described() method which detects whether a variable has been 
-    # previously describe()d using the same arguments. If it has, then simply
+    # TODO: add styped() method which detects whether a variable has been 
+    # previously styped()d using the same arguments. If it has, then simply
     # return the description slot rather than carrying out computations.
     
     desc <- if (missing(.descriptors) || methods::is(.descriptors, "maybeMissing")){
@@ -250,23 +250,6 @@ setMethod(
   }
 )
 
-
-# @rdname describe
-# @export
-
-# setMethod(
-#   f          = "describe",
-#   signature  = c("described", "maybeGroup", "maybeWeight", "maybeDescriptor"),
-#   definition = function(x, g, w, .descriptors, ...){
-#     
-#     # TODO: add described() method which detects whether a variable has been 
-#     # previously describe()d using the same arguments. If it has, then simply
-#     # return the description slot rather than carrying out computations.
-#     as.data.frame(get_data_summary(x))
-#   }
-# )
-
-
 #' @rdname describe
 #' @export
 
@@ -284,7 +267,7 @@ setMethod(
 )
 
 
-#' Get the summary from a described variable
+#' Get the summary from a stype variable
 #' 
 #' @param x the object from which to get the \code{data_summary}
 #' @param element either \code{NULL} to get the full \code{data_summary}
@@ -301,7 +284,7 @@ setGeneric(
 
 setMethod(
   f          = "get_data_summary",
-  signature  = c("described", NULL),
+  signature  = c("stype", NULL),
   definition = function(x, element){ attr(x, "data_summary") }
 )
 
@@ -310,6 +293,15 @@ setMethod(
 
 setMethod(
   f          = "get_data_summary",
-  signature  = c("described", "character"),
+  signature  = c("stype", "character"),
   definition = function(x, element){ attr(x, "data_summary")[[element]] }
 )
+
+#' Check that an object is a stype vector
+#' 
+#' @param object any \code{R} object
+#' @export
+
+is_stype <- function(object) {
+  is(object, "stype")
+}

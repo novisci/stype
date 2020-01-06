@@ -36,48 +36,48 @@
 \alias{is_other,purpose-method}
 \alias{is_study_role,context-method}
 \alias{is_study_role,context,context-method}
-\alias{is_study_role,described-method}
-\alias{is_study_role,described,described-method}
+\alias{is_study_role,stype-method}
+\alias{is_study_role,stype,stype-method}
 \alias{is_identifier,context-method}
 \alias{is_identifier,context,context-method}
-\alias{is_identifier,described-method}
-\alias{is_identifier,described,described-method}
+\alias{is_identifier,stype-method}
+\alias{is_identifier,stype,stype-method}
 \alias{is_index,context-method}
 \alias{is_index,context,context-method}
-\alias{is_index,described-method}
-\alias{is_index,described,described-method}
+\alias{is_index,stype-method}
+\alias{is_index,stype,stype-method}
 \alias{is_outcome,context-method}
 \alias{is_outcome,context,context-method}
-\alias{is_outcome,described-method}
-\alias{is_outcome,described,described-method}
+\alias{is_outcome,stype-method}
+\alias{is_outcome,stype,stype-method}
 \alias{is_censoring,context-method}
 \alias{is_censoring,context,context-method}
-\alias{is_censoring,described-method}
-\alias{is_censoring,described,described-method}
+\alias{is_censoring,stype-method}
+\alias{is_censoring,stype,stype-method}
 \alias{is_competing,context-method}
 \alias{is_competing,context,context-method}
-\alias{is_competing,described-method}
-\alias{is_competing,described,described-method}
+\alias{is_competing,stype-method}
+\alias{is_competing,stype,stype-method}
 \alias{is_exposure,context-method}
 \alias{is_exposure,context,context-method}
-\alias{is_exposure,described-method}
-\alias{is_exposure,described,described-method}
+\alias{is_exposure,stype-method}
+\alias{is_exposure,stype,stype-method}
 \alias{is_covariate,context-method}
 \alias{is_covariate,context,context-method}
-\alias{is_covariate,described-method}
-\alias{is_covariate,described,described-method}
+\alias{is_covariate,stype-method}
+\alias{is_covariate,stype,stype-method}
 \alias{is_weight,context-method}
 \alias{is_weight,context,context-method}
-\alias{is_weight,described-method}
-\alias{is_weight,described,described-method}
+\alias{is_weight,stype-method}
+\alias{is_weight,stype,stype-method}
 \alias{is_intermediate,context-method}
 \alias{is_intermediate,context,context-method}
-\alias{is_intermediate,described-method}
-\alias{is_intermediate,described,described-method}
+\alias{is_intermediate,stype-method}
+\alias{is_intermediate,stype,stype-method}
 \alias{is_other,context-method}
 \alias{is_other,context,context-method}
-\alias{is_other,described-method}
-\alias{is_other,described,described-method}
+\alias{is_other,stype-method}
+\alias{is_other,stype,stype-method}
 \title{Check a study role}
 \usage{
 is_study_role(object, what)
@@ -128,47 +128,47 @@ is_other(object)
 
 \S4method{is_study_role}{context}(object, what)
 
-\S4method{is_study_role}{described}(object, what)
+\S4method{is_study_role}{stype}(object, what)
 
 \S4method{is_identifier}{context}(object)
 
-\S4method{is_identifier}{described}(object)
+\S4method{is_identifier}{stype}(object)
 
 \S4method{is_index}{context}(object)
 
-\S4method{is_index}{described}(object)
+\S4method{is_index}{stype}(object)
 
 \S4method{is_outcome}{context}(object)
 
-\S4method{is_outcome}{described}(object)
+\S4method{is_outcome}{stype}(object)
 
 \S4method{is_censoring}{context}(object)
 
-\S4method{is_censoring}{described}(object)
+\S4method{is_censoring}{stype}(object)
 
 \S4method{is_competing}{context}(object)
 
-\S4method{is_competing}{described}(object)
+\S4method{is_competing}{stype}(object)
 
 \S4method{is_exposure}{context}(object)
 
-\S4method{is_exposure}{described}(object)
+\S4method{is_exposure}{stype}(object)
 
 \S4method{is_covariate}{context}(object)
 
-\S4method{is_covariate}{described}(object)
+\S4method{is_covariate}{stype}(object)
 
 \S4method{is_weight}{context}(object)
 
-\S4method{is_weight}{described}(object)
+\S4method{is_weight}{stype}(object)
 
 \S4method{is_intermediate}{context}(object)
 
-\S4method{is_intermediate}{described}(object)
+\S4method{is_intermediate}{stype}(object)
 
 \S4method{is_other}{context}(object)
 
-\S4method{is_other}{described}(object)
+\S4method{is_other}{stype}(object)
 }
 \arguments{
 \item{object}{an object}

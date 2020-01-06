@@ -2,16 +2,16 @@
 % Please edit documentation in R/context.R
 \name{get_context}
 \alias{get_context}
-\alias{get_context,described-method}
-\alias{get_context,described,described-method}
+\alias{get_context,stype-method}
+\alias{get_context,stype,stype-method}
 \title{Get an object's context}
 \usage{
 get_context(x)
 
-\S4method{get_context}{described}(x)
+\S4method{get_context}{stype}(x)
 }
 \arguments{
-\item{x}{a described object}
+\item{x}{a stype object}
 }
 \description{
 Get an object's context

@@ -4,18 +4,18 @@
 \alias{get_purpose}
 \alias{get_purpose,context-method}
 \alias{get_purpose,context,context-method}
-\alias{get_purpose,described-method}
-\alias{get_purpose,described,described-method}
+\alias{get_purpose,stype-method}
+\alias{get_purpose,stype,stype-method}
 \title{Get an object's purpose}
 \usage{
 get_purpose(x)
 
 \S4method{get_purpose}{context}(x)
 
-\S4method{get_purpose}{described}(x)
+\S4method{get_purpose}{stype}(x)
 }
 \arguments{
-\item{x}{a described object}
+\item{x}{a stype object}
 }
 \description{
 Get an object's purpose

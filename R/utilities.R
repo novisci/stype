@@ -7,7 +7,7 @@
 #' @export
 stype_str <- function(x) {
   assertthat::assert_that(
-    is(x, "described"),
+    is(x, "stype"),
     msg = "not a stype object"
   )
   vctrs::vec_ptype_full(x)

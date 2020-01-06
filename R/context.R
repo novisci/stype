@@ -53,18 +53,18 @@ setValidity(
 
 #' Get an object's context
 #' @name get_context
-#' @param x a described object
+#' @param x a stype object
 #' @export
 setGeneric("get_context", function(x) standardGeneric("get_context"))
 
 #' @rdname get_context
-#' @aliases get_context,described,described-method
+#' @aliases get_context,stype,stype-method
 #' @export
-setMethod("get_context", "described", function(x){ attr(x, "context") })
+setMethod("get_context", "stype", function(x){ attr(x, "context") })
 
 #' Get an object's purpose
 #' @name get_purpose
-#' @param x a described object
+#' @param x a stype object
 #' @export
 setGeneric("get_purpose", function(x) standardGeneric("get_purpose"))
 
@@ -74,9 +74,9 @@ setGeneric("get_purpose", function(x) standardGeneric("get_purpose"))
 setMethod("get_purpose", "context", function(x){ slot(x, "purpose") })
 
 #' @rdname get_purpose
-#' @aliases get_purpose,described,described-method
+#' @aliases get_purpose,stype,stype-method
 #' @export
-setMethod("get_purpose", "described", function(x){ get_purpose(get_context(x)) })
+setMethod("get_purpose", "stype", function(x){ get_purpose(get_context(x)) })
 
 # TODO: can these functions and their documentation be automatically generated?
 # TODO: since these are essentially functors, can purrr::lift be used?
@@ -89,9 +89,9 @@ setMethod("is_study_role", "context", function(object, what){
 })
 
 #' @rdname is_study_role
-#' @aliases is_study_role,described,described-method
+#' @aliases is_study_role,stype,stype-method
 #' @export 
-setMethod("is_study_role", "described", function(object, what){ 
+setMethod("is_study_role", "stype", function(object, what){ 
   is_study_role(get_purpose(object), what)
 })
 
@@ -103,9 +103,9 @@ setMethod("is_identifier", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_identifier,described,described-method
+#' @aliases is_identifier,stype,stype-method
 #' @export 
-setMethod("is_identifier", "described", function(object){ 
+setMethod("is_identifier", "stype", function(object){ 
   is_identifier(get_context(object))
 })
 
@@ -117,9 +117,9 @@ setMethod("is_index", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_index,described,described-method
+#' @aliases is_index,stype,stype-method
 #' @export 
-setMethod("is_index", "described", function(object){ 
+setMethod("is_index", "stype", function(object){ 
   is_index(get_context(object))
 })
 
@@ -131,9 +131,9 @@ setMethod("is_outcome", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_outcome,described,described-method
+#' @aliases is_outcome,stype,stype-method
 #' @export 
-setMethod("is_outcome", "described", function(object){ 
+setMethod("is_outcome", "stype", function(object){ 
   is_outcome(get_context(object))
 })
 
@@ -145,9 +145,9 @@ setMethod("is_censoring", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_censoring,described,described-method
+#' @aliases is_censoring,stype,stype-method
 #' @export 
-setMethod("is_censoring", "described", function(object){ 
+setMethod("is_censoring", "stype", function(object){ 
   is_censoring(get_context(object))
 })
 
@@ -159,9 +159,9 @@ setMethod("is_competing", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_competing,described,described-method
+#' @aliases is_competing,stype,stype-method
 #' @export 
-setMethod("is_competing", "described", function(object){ 
+setMethod("is_competing", "stype", function(object){ 
   is_competing(get_context(object))
 })
 
@@ -173,9 +173,9 @@ setMethod("is_exposure", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_exposure,described,described-method
+#' @aliases is_exposure,stype,stype-method
 #' @export 
-setMethod("is_exposure", "described", function(object){ 
+setMethod("is_exposure", "stype", function(object){ 
   is_exposure(get_context(object))
 })
 
@@ -187,9 +187,9 @@ setMethod("is_covariate", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_covariate,described,described-method
+#' @aliases is_covariate,stype,stype-method
 #' @export 
-setMethod("is_covariate", "described", function(object){ 
+setMethod("is_covariate", "stype", function(object){ 
   is_covariate(get_context(object))
 })
 
@@ -201,9 +201,9 @@ setMethod("is_weight", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_weight,described,described-method
+#' @aliases is_weight,stype,stype-method
 #' @export 
-setMethod("is_weight", "described", function(object){ 
+setMethod("is_weight", "stype", function(object){ 
   is_weight(get_context(object))
 })
 
@@ -215,9 +215,9 @@ setMethod("is_intermediate", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_intermediate,described,described-method
+#' @aliases is_intermediate,stype,stype-method
 #' @export 
-setMethod("is_intermediate", "described", function(object){ 
+setMethod("is_intermediate", "stype", function(object){ 
   is_intermediate(get_context(object))
 })
 
@@ -229,9 +229,9 @@ setMethod("is_other", "context", function(object){
 })
 
 #' @rdname is_study_role
-#' @aliases is_other,described,described-method
+#' @aliases is_other,stype,stype-method
 #' @export 
-setMethod("is_other", "described", function(object){ 
+setMethod("is_other", "stype", function(object){ 
   is_other(get_context(object))
 })
 

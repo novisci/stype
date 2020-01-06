@@ -27,7 +27,7 @@ A `stype` vector also contains a `data_summary` object, which is  *automatically
 
 Each type has additional summary statistics relevant to its data. For example, `v_continuous` contains the mean, standard deviation, min, max, and various quantiles. The `data_summary` is updated whenever a variable is subset or two vectors of the type are combined.
 
-The package also prints certain attributes:
+The package also prints certain attributes, for example:
 
 ```
 > stype::v_binary(c(TRUE, FALSE, TRUE))

@@ -284,11 +284,10 @@ format.v_count<- function(x, ...) {
 # }
 
 #' @importFrom vctrs obj_print_footer
-#' @importFrom crayon "%+%"
 #' @method obj_print_footer v_count
 #' @export
 obj_print_footer.v_count <- function(x, ...) {
-  footer_printer(x, c(sum = "Total", mean = "Mean"))
+  print_footer(x, c(sum = "Total", mean = "Mean"))
 }
 
 #' @importFrom vctrs vec_ptype_full

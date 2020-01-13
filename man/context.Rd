@@ -3,9 +3,9 @@
 \docType{class}
 \name{context}
 \alias{context}
-\title{A context contains study design specific information about a variable}
+\title{stype contexts}
 \description{
-A context contains study design specific information about a variable
+A context contains study design specific information about a variable.
 }
 \section{Slots}{
 

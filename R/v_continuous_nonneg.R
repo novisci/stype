@@ -197,7 +197,7 @@ format.v_continuous_nonneg <- function(x, ...) {
 #' @method obj_print_footer v_continuous_nonneg
 #' @export
 obj_print_footer.v_continuous_nonneg <- function(x, ...) {
-  footer_printer(x, c(mean = "Mean", sd = "SD"))
+  print_footer(x, c(mean = "Mean", sd = "SD"))
 }
 
 #' @importFrom vctrs vec_ptype_full

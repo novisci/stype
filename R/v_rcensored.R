@@ -294,7 +294,8 @@ as_canonical.v_rcensored <- function(x){
 obj_print_footer.v_rcensored <- function(x, ...) {
   
   # cent <- get_data_summary(vctrs::field(x, "censor_reason"), "ptable")
-  out <- desc_printer(vctrs::field(x, "censored"), "Proportion censored", "proportion")
+  out <- print_data_summary(vctrs::field(x, "censored"), 
+                            "Proportion censored", "proportion")
   cat(out, "\n")
 }
 

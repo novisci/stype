@@ -278,7 +278,7 @@ format.v_continuous <- function(x, ...) {
 #' @method obj_print_footer v_continuous
 #' @export
 obj_print_footer.v_continuous <- function(x, ...) {
-  footer_printer(x, c(mean = "Mean", sd = "SD"))
+  print_footer(x, c(mean = "Mean", sd = "SD"))
 }
 
 #' @importFrom vctrs vec_ptype_full

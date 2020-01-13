@@ -8,9 +8,7 @@ Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"),
                      person("David", "Pritchard", role = c("aut"),
                             email = "dpritchard@novisci.com"))
 Maintainer: Bradley Saul <bsaul@novisci.com>
-Description: Computes descriptive statistics for most R atomic types plus an API for
-    data.frames. The package aims to be tidyverse-friendly but not tidyverse-dependent 
-    (except purrr).
+Description: Provides S3 classes aligned with statistical language such as binary, continuous, count, non-negative continuous, time to event, etc. Provides variable-level metadata useful for sharing information about a variable across applications. Automatically generates summary statistics to the variable metadata.
 Imports:
    methods (>= 3.5),
    vctrs (>= 0.2.0),

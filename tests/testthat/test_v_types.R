@@ -4,7 +4,7 @@ testthat::context("Checks common to all types")
 library(vctrs)
 library(pillar)
 
-v_types <- names(methods::getClass("described")@subclasses)
+v_types <- names(methods::getClass("stype")@subclasses)
 
 test_that("testing that described types at least have all common methods", {
   desired_methods <- c("obj_print_footer", "format",

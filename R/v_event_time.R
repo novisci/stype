@@ -1,11 +1,18 @@
-#' event_time vectors
+#' Time to event vectors
 #' 
-#'  Some desc
+#' @description  {
+#' Support: \eqn{\mathbf{R^+}}{the nonnegative Reals}* (plus \code{\link{NA_real_}})
+#' 
+#' Prototype: \code{\link{double}}
+#' 
+#' * - i.e. floating-point number
+#' }
 #' 
 #' @name v_event_time
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
+#' @family stype types
 NULL
 
 #' The internal builder of v_event_time
@@ -34,8 +41,6 @@ new_event_time <- function(x = double(),
 methods::setOldClass(c("v_event_time", "v_continuous_nonneg", "v_continuous", "vctrs_vctr"))
 
 #' Time to event constructor
-#' 
-#' constructor function for time to evet objects
 #' @param x vector of values
 #' @rdname v_event_time 
 #' @export

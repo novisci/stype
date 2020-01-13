@@ -6,7 +6,7 @@
 \alias{is_nonneg}
 \alias{as_nonneg_continuous}
 \alias{as_canonical.v_continuous_nonneg}
-\title{continuous_nonneg vectors}
+\title{Non-negative continuous vectors}
 \usage{
 v_continuous_nonneg(x = double(), internal_name = "", context)
 
@@ -26,7 +26,23 @@ as_nonneg_continuous(x)
 \item{context}{a \code{\link{context}}}
 }
 \description{
-Some desc
+{
+Support: \eqn{\mathbf{R^+}}{the nonnegative Reals}* (plus \code{\link{NA_real_}})
 
-constructor function for count objects
+Prototype: \code{\link{double}}
+
+* - technically a double-precision number
 }
+}
+\seealso{
+Other stype types: 
+\code{\link{v_binary}},
+\code{\link{v_character}},
+\code{\link{v_continuous}},
+\code{\link{v_count}},
+\code{\link{v_event_time}},
+\code{\link{v_nominal}},
+\code{\link{v_ordered}},
+\code{\link{v_rcensored}}
+}
+\concept{stype types}

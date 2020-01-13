@@ -1,10 +1,14 @@
-#' v_nominal S3 class
+#' Nominal categorical vectors
 #' 
-#' A nominal (categorial) variable
+#' @description  {
+#' Support: see \code{\link{factor}}
 #' 
+#' Prototype: \code{\link{integer}}
+#' }
 #' @name v_nominal
 #' @inheritParams v_count
 #' @importFrom vctrs vec_ptype2.character
+#' @family stype types
 NULL
 
 #' The internal builder of v_nominal

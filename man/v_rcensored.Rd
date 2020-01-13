@@ -40,3 +40,15 @@ censor is the reason for the censoring}
 \description{
 TODO: add a description
 }
+\seealso{
+Other stype types: 
+\code{\link{v_binary}},
+\code{\link{v_character}},
+\code{\link{v_continuous_nonneg}},
+\code{\link{v_continuous}},
+\code{\link{v_count}},
+\code{\link{v_event_time}},
+\code{\link{v_nominal}},
+\code{\link{v_ordered}}
+}
+\concept{stype types}

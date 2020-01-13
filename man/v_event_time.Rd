@@ -6,7 +6,7 @@
 \alias{as_time_to_event}
 \alias{as_event_time}
 \alias{as_canonical.v_event_time}
-\title{event_time vectors}
+\title{Time to event vectors}
 \usage{
 v_event_time(x = v_continuous_nonneg(), internal_name = "", context)
 
@@ -26,7 +26,23 @@ as_event_time(x)
 \item{context}{a \code{\link{context}}}
 }
 \description{
-Some desc
+{
+Support: \eqn{\mathbf{R^+}}{the nonnegative Reals}* (plus \code{\link{NA_real_}})
 
-constructor function for time to evet objects
+Prototype: \code{\link{double}}
+
+* - technically a double-precision number
 }
+}
+\seealso{
+Other stype types: 
+\code{\link{v_binary}},
+\code{\link{v_character}},
+\code{\link{v_continuous_nonneg}},
+\code{\link{v_continuous}},
+\code{\link{v_count}},
+\code{\link{v_nominal}},
+\code{\link{v_ordered}},
+\code{\link{v_rcensored}}
+}
+\concept{stype types}

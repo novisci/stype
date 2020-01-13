@@ -1,6 +1,10 @@
 #' Count vectors
 #' 
-#'  Some desc
+#' @description  {
+#' Support: \eqn{\mathbf{N^+}}{the non-negative Integers}* (plus \code{\link{NA_integer_}})
+#' 
+#' Prototype: \code{\link{integer}}
+#' }
 #' 
 #' @name v_count
 #' @importFrom methods setOldClass
@@ -8,6 +12,7 @@
 #' @param x a \code{integer} vector
 #' @param internal_name the internal name of the variable
 #' @param context a \code{\link{context}}
+#' @family stype types
 NULL
 
 #' The internal builder of v_count
@@ -40,8 +45,6 @@ new_count <- function(x = integer(),
 methods::setOldClass(c("v_count", "vctrs_vctr"))
 
 #' Count constructor
-#' 
-#' constructor function for count objects
 #' @rdname v_count 
 #' @export
 

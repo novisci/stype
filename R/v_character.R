@@ -1,11 +1,16 @@
 #' Character vectors
+#'
+#' @description {
+#' Support: see \code{\link{character}}
 #' 
-#'  Some desc
+#' Prototype: \code{\link{character}}
+#' } 
 #' 
 #' @name v_character
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
+#' @family stype types
 
 NULL
 
@@ -30,8 +35,6 @@ new_character <- function(x = character(),
 methods::setOldClass(c("v_character", "vctrs_vctr"))
 
 #' Character constructor
-#' 
-#' constructor function for character objects
 #' @param x a \code{character} vector
 #' @rdname v_character 
 #' @export

@@ -5,7 +5,7 @@
 #' 
 #' Prototype: \code{\link{double}}
 #' 
-#' * - technically a double-precision number
+#' * - i.e. floating-point number
 #' }
 #' 
 #' @name v_continuous

@@ -31,7 +31,7 @@ Support: \eqn{\mathbf{R^+}}{the nonnegative Reals}* (plus \code{\link{NA_real_}}
 
 Prototype: \code{\link{double}}
 
-* - technically a double-precision number
+* - i.e. floating-point number
 }
 }
 \seealso{

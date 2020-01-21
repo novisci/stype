@@ -26,7 +26,7 @@ new_count <- function(x = integer(),
                       .internal_name = character(), 
                       .data_summary = data_summary(), 
                       .context = context()){
-  vctrs::vec_assert(x, ptype = integer())
+  # vctrs::vec_assert(x, ptype = integer())
   assertthat::assert_that(
     all(x[!is.na(x)] >= 0),
     msg = "Count data must be >= 0"
@@ -51,13 +51,16 @@ methods::setOldClass(c("v_count", "vctrs_vctr"))
 v_count <- function(x = integer(), internal_name = "", context){
   x <- vctrs::vec_cast(x, integer())
   dsum <- describe(vctrs::vec_data(x))
+  
   if(missing(context)){
     context <- methods::new("context")
   }
-  new_count(x, 
-            .internal_name = internal_name,
-            .data_summary = dsum,
-            .context = context)
+  
+  new_count(
+    x, 
+    .internal_name = internal_name,
+    .data_summary = dsum,
+    .context = context)
 }
 
 #' Predicate function for count objects
@@ -109,6 +112,16 @@ vec_ptype2.v_count.integer <- function(x, y, ...) x
 #' @export 
 vec_ptype2.integer.v_count <- function(x, y, ...) y
 
+#' @method vec_ptype2.v_count double
+#' @export
+vec_ptype2.v_count.double <- function(x, y, ...) x
+
+#' @method vec_ptype2.double v_count
+#' @importFrom vctrs vec_ptype2.double 
+#' @export 
+vec_ptype2.double.v_count <- function(x, y, ...) y
+
+
 #' @rdname casting
 #' @inheritParams vctrs::vec_cast
 #' @method vec_cast v_count
@@ -129,10 +142,10 @@ vec_cast.v_count.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 vec_cast.v_count.integer <- function(x, to, ...) v_count(x)
 vec_cast.integer.v_count <- function(x, to, ...) vctrs::vec_data(x)
 
-#' @method vec_cast.v_count numeric
+#' @method vec_cast.v_count double
 #' @export
-vec_cast.v_count.numeric <- function(x, to, ...) v_count(x)
-vec_cast.numeric.v_count <- function(x, to, ...) vctrs::vec_data(x)
+vec_cast.v_count.double <- function(x, to, ...) v_count(x)
+vec_cast.double.v_count <- function(x, to, ...) vctrs::vec_data(x)
 
 #' Casting function for count objects
 #' @rdname v_count 

@@ -5,9 +5,11 @@ test_that(
   {
     x1 <- v_count(c(0L, 1L, 2L, NA_integer_))
     sx1 <- x1[1:2]
+    x2 <- v_count(c(0L, 1L, 2L, NA_integer_))
     expected_attrs <- c("internal_name", "data_summary", "context")     
     
     expect_s3_class(x1, "v_count")
+    expect_s3_class(vctrs::vec_c(x1, x2), "v_count")
     expect_true(all(expected_attrs %in% names(attributes(x1))))
     expect_true(all(expected_attrs %in% names(attributes(sx1))))
     expect_equivalent(min(x1, na.rm = TRUE), v_count(0L))

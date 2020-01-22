@@ -1,6 +1,5 @@
 testthat::context("Testing v_rcensored")
 
-
 ctimes <- list(
    v_event_time(c(5, 6, 10, NA_integer_, 1, NA_integer_, 19), internal_name = "cA"),
    v_event_time(c(4, 1, 15, NA_integer_, NA_integer_, NA_integer_, 21), internal_name = "cB")
@@ -11,29 +10,12 @@ otimes <- list(
   v_event_time(c(1, NA_integer_, 10, NA_integer_, NA_integer_, NA_integer_, 23), internal_name = "oB")
 )
 
-test_that("v_rcensored class basically behaves", {
-  x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
-  x2 <- v_rcensored(outcomes = otimes[[1]], censors = ctimes[[1]], end_time = 15)
-  
-  sx1 <- x1[1:2]
-  expected_attrs <- c("internal_name", "data_summary", "context")     
-  
-  # expect_s3_class(x1, "v_nomimal")
-  expect_true(inherits(x1, "v_rcensored"))
-  expect_s3_class(sx1, "v_rcensored")
-  expect_true(inherits(sx1, "v_rcensored"))
-  expect_true(all(expected_attrs%in% names(attributes(x1))))
-  expect_true(all(expected_attrs%in% names(attributes(sx1))))
-  expect_s3_class(vctrs::vec_c(x1, x2), "v_rcensored")
-  expect_true(inherits(vctrs::vec_c(x1, x2), "v_rcensored"))
-  
-  expect_is(as_canonical(x1), "list")
-  
-  expect_error(
-    v_rcensored(outcomes = otimes, censors = ctimes, end_time = c(15, 30))
-  )
-
-})
+stype_tester(
+  v_type         = "v_rcensored",
+  canonical_type = "list",
+  generator      = list(outcomes = otimes, censors = ctimes, end_time = 15),
+  error_generators = list(function() { c("A", "B") })
+)
 
 test_that("v_rcensored class descriptions update appropriately", {
   x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)

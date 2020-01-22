@@ -1,23 +1,12 @@
 testthat::context("Testing v_continuous class")
 
-test_that(
-  "v_continuous class behaves itself",
-  {
-    x1 <- v_continuous(rnorm(5))
-    x2 <- v_continuous(rnorm(5))
-    sx1 <- x1[1:2]
-    expected_attrs <- c("internal_name", "data_summary", "context") 
-    
-    expect_s3_class(x1, "v_continuous")
-    expect_s3_class(sx1, "v_continuous")
-    expect_true(all(expected_attrs%in% names(attributes(x1))))
-    expect_true(all(expected_attrs%in% names(attributes(sx1))))
-    expect_s3_class(vctrs::vec_c(x1, x2), "v_continuous")
-    expect_s3_class(c(x1, x2), "v_continuous")
-    
-    expect_is(as_canonical(x1), "numeric")
-  }
+stype_tester(
+  v_type         = "v_continuous",
+  canonical_type = "numeric",
+  generator      = function() { rnorm(5) },
+  error_generators = list(function() { c("A", "B") })
 )
+
 
 
 test_that(

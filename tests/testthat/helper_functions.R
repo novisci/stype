@@ -77,11 +77,13 @@ stype_tester <- function(v_type, canonical_type, generator, error_generators){
       ctxt <- get_context(x1c)
       expect_is(ctxt, "context")
       
-      # 
+      # Check context elements are as expected
       expect_equal(get_short_label(x1c), "test label")
       expect_equal(get_short_label(x1c[1:2]), "test label")
-      # TODO
-      # expect_equal(get_short_label(c(x1c, x1c)), "test label")
+      
+      # Check contexts are handled correctly when combining vectors
+      expect_equal(get_short_label(c(x1c, x1c)), "test label")
+      expect_error(c(x1c, x2c))
     }
   )
   

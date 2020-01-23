@@ -106,7 +106,10 @@ vec_ptype2.v_event_time.vctrs_unspecified <- function(x, y, ...) x
 
 #' @method vec_ptype2.v_event_time v_event_time
 #' @export
-vec_ptype2.v_event_time.v_event_time <- function(x, y, ...) new_event_time()
+vec_ptype2.v_event_time.v_event_time <- function(x, y, ...) {
+  compare_contexts(x, y)
+  v_event_time(context = get_context(x))
+}
 
 #' @method vec_ptype2.v_event_time numeric
 #' @export

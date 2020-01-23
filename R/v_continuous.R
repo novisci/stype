@@ -104,7 +104,11 @@ vec_ptype2.v_continuous.vctrs_unspecified <- function(x, y, ...) x
 
 #' @method vec_ptype2.v_continuous v_continuous
 #' @export
-vec_ptype2.v_continuous.v_continuous <- function(x, y, ...) new_continuous()
+vec_ptype2.v_continuous.v_continuous <- function(x, y, ...) {
+  compare_contexts(x, y)
+  v_continuous(context = get_context(x))
+}
+
 
 #' @method vec_ptype2.v_continuous double
 #' @export

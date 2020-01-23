@@ -114,7 +114,10 @@ vec_ptype2.v_continuous_nonneg.vctrs_unspecified <- function(x, y, ...) x
 
 #' @method vec_ptype2.v_continuous_nonneg v_continuous_nonneg
 #' @export
-vec_ptype2.v_continuous_nonneg.v_continuous_nonneg <- function(x, y, ...) new_continuous_nonneg()
+vec_ptype2.v_continuous_nonneg.v_continuous_nonneg <- function(x, y, ...) {
+  compare_contexts(x, y)
+  v_continuous_nonneg(context = get_context(x))
+}
 
 #' @method vec_ptype2.v_continuous_nonneg numeric
 #' @export

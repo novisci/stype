@@ -262,7 +262,10 @@ vec_ptype2.v_rcensored.vctrs_unspecified <- function(x, y, ...) x
 
 #' @method vec_ptype2.v_rcensored v_rcensored
 #' @export
-vec_ptype2.v_rcensored.v_rcensored <- function(x, y, ...) new_rcensored()
+vec_ptype2.v_rcensored.v_rcensored <- function(x, y, ...) {
+  compare_contexts(x, y)
+  v_rcensored(context = get_context(x))
+}
 
 #' @rdname casting
 #' @inheritParams vctrs::vec_cast

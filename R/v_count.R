@@ -26,12 +26,14 @@ new_count <- function(x = integer(),
                       .internal_name = character(), 
                       .data_summary = data_summary(), 
                       .context = context()){
-  # vctrs::vec_assert(x, ptype = integer())
+  
+  # x <- vctrs::vec_cast(x, integer())
+  vctrs::vec_assert(vctrs::vec_data(x), ptype = integer())
+  
   assertthat::assert_that(
     all(x[!is.na(x)] >= 0),
     msg = "Count data must be >= 0"
   )
-  # vctrs::vec_assert(desc, ptype = description())
   
   vctrs::new_vctr(
     x, 
@@ -100,7 +102,10 @@ vec_ptype2.v_count.vctrs_unspecified <- function(x, y, ...) x
 
 #' @method vec_ptype2.v_count v_count
 #' @export
-vec_ptype2.v_count.v_count <- function(x, y, ...) new_count()
+vec_ptype2.v_count.v_count <- function(x, y, ...) {
+  compare_contexts(x, y)
+  v_count(context = get_context(x))
+} 
 
 #' @method vec_ptype2.v_count integer
 #' @export

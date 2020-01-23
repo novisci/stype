@@ -514,7 +514,7 @@ compare_contexts <- function(x, y){
       .x = cslts[!(cslts == "purpose")],
       .f = ~ methods::slot(get_context(x), .x) == methods::slot(get_context(y), .x)
     )),
-    msg = "All context elements must equal in order to combine"
+    msg = "All context elements must be equal in order to combine stypes."
   )
   
   pslts <- methods::slotNames("purpose")
@@ -524,6 +524,6 @@ compare_contexts <- function(x, y){
         .x = pslts,
         .f = ~ methods::slot(get_purpose(x), .x) == methods::slot(get_purpose(y), .x)
       )),
-    msg = "All purpose elements must equal in order to combine"
+    msg = "All purpose elements must be equal in order to combine stypes."
   )
 }

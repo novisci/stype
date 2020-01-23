@@ -22,7 +22,8 @@ new_event_time <- function(x = double(),
                            .internal_name = character(), 
                            .data_summary = data_summary(), 
                            .context = context()){
-  # vctrs::vec_assert(x, ptype = double())
+  
+  vctrs::vec_assert(vctrs::vec_data(x), ptype = double())
   assertthat::assert_that(
     all(x[!is.na(x)] >= 0),
     msg = "Time to event data must be >= 0."
@@ -106,7 +107,10 @@ vec_ptype2.v_event_time.vctrs_unspecified <- function(x, y, ...) x
 
 #' @method vec_ptype2.v_event_time v_event_time
 #' @export
-vec_ptype2.v_event_time.v_event_time <- function(x, y, ...) new_event_time()
+vec_ptype2.v_event_time.v_event_time <- function(x, y, ...) {
+  compare_contexts(x, y)
+  v_event_time(context = get_context(x))
+}
 
 #' @method vec_ptype2.v_event_time numeric
 #' @export

@@ -1,22 +1,11 @@
 testthat::context("Testing v_ordered class")
 
-test_that("v_ordered class basically behaves", {
-  x1 <- v_ordered(factor(c(rep(LETTERS[1:3], 3), NA), ordered = TRUE))
-  x2 <- v_ordered(factor(c(rep(LETTERS[3:6], 3)), ordered = TRUE))
-  sx1 <- x1[1:2]
-  expected_attrs <- c("internal_name", "data_summary", "context")     
-  
-  # expect_s3_class(x1, "v_nomimal")
-  expect_true(inherits(x1, "v_ordered"))
-  expect_s3_class(sx1, "v_ordered")
-  expect_true(inherits(sx1, "v_ordered"))
-  expect_true(all(expected_attrs%in% names(attributes(x1))))
-  expect_true(all(expected_attrs%in% names(attributes(sx1))))
-  expect_s3_class(vctrs::vec_c(x1, x2), "v_ordered")
-  expect_true(inherits(vctrs::vec_c(x1, x2), "v_ordered"))
-  
-  expect_is(as_canonical(x1), "ordered")
-})
+stype_tester(
+  v_type         = "v_ordered",
+  canonical_type = "ordered",
+  generator      = function() { factor(c(rep(LETTERS[1:3], 3), NA), ordered = TRUE) },
+  error_generators = list(function() { c(1.25, 6) })
+)
 
 test_that("v_ordered class descriptions update appropriately", {
   x1 <- v_ordered(factor(c(rep(LETTERS[1:3], 3), NA), ordered = TRUE))

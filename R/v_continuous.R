@@ -24,8 +24,10 @@ new_continuous <- function(x = double(),
                            .internal_name = character(), 
                            .data_summary = data_summary(), 
                            .context = context()){
+  
   # x <- vctrs::vec_cast(x, double())
-  # vctrs::vec_assert(x, ptype = double())
+  vctrs::vec_assert(vctrs::vec_data(x), ptype = double())
+  
   vctrs::new_vctr(
     x,
     internal_name = .internal_name,

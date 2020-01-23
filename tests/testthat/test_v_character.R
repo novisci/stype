@@ -1,18 +1,11 @@
 testthat::context("Testing v_character class")
 
-test_that("v_character class basically behaves", {
-  x1 <- v_character(c("This", "is", "some", "vector"))
-  x2 <- v_character(c("This", "is", "another", "but", "EVENLONGER", "vector"))
-
-  # expect_s3_class(x1, "v_nomimal")
-  expect_true(inherits(x1, "v_character"))
-  expect_s3_class(x1[1:2], "v_character")
-  expect_true(inherits(x1[1:2], "v_character"))
-  expect_s3_class(vctrs::vec_c(x1, x2), "v_character")
-  expect_true(inherits(vctrs::vec_c(x1, x2), "v_character"))
-  
-  expect_is(as_canonical(x1), "character")
-})
+stype_tester(
+  v_type         = "v_character",
+  canonical_type = "character",
+  generator      = function() { c("This", "is", "some", "vector") },
+  error_generators = list()
+)
 
 test_that("v_character class descriptions update appropriately", {
   x1 <- v_character(c("This", "is", "some", "some", "", "vector"))

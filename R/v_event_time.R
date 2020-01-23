@@ -22,7 +22,8 @@ new_event_time <- function(x = double(),
                            .internal_name = character(), 
                            .data_summary = data_summary(), 
                            .context = context()){
-  # vctrs::vec_assert(x, ptype = double())
+  
+  vctrs::vec_assert(vctrs::vec_data(x), ptype = double())
   assertthat::assert_that(
     all(x[!is.na(x)] >= 0),
     msg = "Time to event data must be >= 0."

@@ -163,7 +163,7 @@ setMethod("get_security_type", "context", function(x) slot(x, "security_type"))
 setMethod("get_security_type", "stype", 
           function(x) get_security_type(get_context(x)))
 
-#' @rdname get_purpose
+#' @rdname context_get_set
 #' @aliases get_purpose,stype,stype-method
 #' @export
 setMethod("get_purpose", "stype", function(x){ get_purpose(get_context(x)) })

@@ -352,6 +352,11 @@ setMethod("is_study_role", "stype", function(object, what){
 })
 
 #' @rdname is_study_role
+#' @aliases is_study_role,ANY,ANY-method
+#' @export 
+setMethod("is_study_role", "ANY", function(object, what){ FALSE })
+
+#' @rdname is_study_role
 #' @aliases is_identifier,context,context-method
 #' @export 
 setMethod("is_identifier", "context", function(object){ 
@@ -364,6 +369,11 @@ setMethod("is_identifier", "context", function(object){
 setMethod("is_identifier", "stype", function(object){ 
   is_identifier(get_context(object))
 })
+
+#' @rdname is_study_role
+#' @aliases is_identifier,ANY,ANY-method
+#' @export 
+setMethod("is_identifier", "ANY", function(object){ FALSE })
 
 #' @rdname is_study_role
 #' @aliases is_index,context,context-method
@@ -380,6 +390,11 @@ setMethod("is_index", "stype", function(object){
 })
 
 #' @rdname is_study_role
+#' @aliases is_index,ANY,ANY-method
+#' @export 
+setMethod("is_index", "ANY", function(object){ FALSE })
+
+#' @rdname is_study_role
 #' @aliases is_outcome,context,context-method
 #' @export 
 setMethod("is_outcome", "context", function(object){ 
@@ -392,6 +407,11 @@ setMethod("is_outcome", "context", function(object){
 setMethod("is_outcome", "stype", function(object){ 
   is_outcome(get_context(object))
 })
+
+#' @rdname is_study_role
+#' @aliases is_outcome,ANY,ANY-method
+#' @export 
+setMethod("is_outcome", "ANY", function(object){ FALSE })
 
 #' @rdname is_study_role
 #' @aliases is_censoring,context,context-method
@@ -408,6 +428,11 @@ setMethod("is_censoring", "stype", function(object){
 })
 
 #' @rdname is_study_role
+#' @aliases is_censoring,ANY,ANY-method
+#' @export 
+setMethod("is_censoring", "ANY", function(object){ FALSE })
+
+#' @rdname is_study_role
 #' @aliases is_competing,context,context-method
 #' @export 
 setMethod("is_competing", "context", function(object){ 
@@ -420,6 +445,11 @@ setMethod("is_competing", "context", function(object){
 setMethod("is_competing", "stype", function(object){ 
   is_competing(get_context(object))
 })
+
+#' @rdname is_study_role
+#' @aliases is_competing,ANY,ANY-method
+#' @export 
+setMethod("is_competing", "ANY", function(object){ FALSE })
 
 #' @rdname is_study_role
 #' @aliases is_exposure,context,context-method
@@ -436,6 +466,12 @@ setMethod("is_exposure", "stype", function(object){
 })
 
 #' @rdname is_study_role
+#' @aliases is_exposure,ANY,ANY-method
+#' @export 
+setMethod("is_exposure", "ANY", function(object){ FALSE })
+
+
+#' @rdname is_study_role
 #' @aliases is_covariate,context,context-method
 #' @export 
 setMethod("is_covariate", "context", function(object){ 
@@ -448,6 +484,11 @@ setMethod("is_covariate", "context", function(object){
 setMethod("is_covariate", "stype", function(object){ 
   is_covariate(get_context(object))
 })
+
+#' @rdname is_study_role
+#' @aliases is_covariate,ANY,ANY-method
+#' @export 
+setMethod("is_covariate", "ANY", function(object){ FALSE })
 
 #' @rdname is_study_role
 #' @aliases is_weight,context,context-method
@@ -464,6 +505,12 @@ setMethod("is_weight", "stype", function(object){
 })
 
 #' @rdname is_study_role
+#' @aliases is_weight,ANY,ANY-method
+#' @export 
+setMethod("is_weight", "ANY", function(object){ FALSE })
+
+
+#' @rdname is_study_role
 #' @aliases is_intermediate,context,context-method
 #' @export 
 setMethod("is_intermediate", "context", function(object){ 
@@ -478,6 +525,11 @@ setMethod("is_intermediate", "stype", function(object){
 })
 
 #' @rdname is_study_role
+#' @aliases is_intermediate,ANY,ANY-method
+#' @export 
+setMethod("is_intermediate", "ANY", function(object){ FALSE })
+
+#' @rdname is_study_role
 #' @aliases is_other,context,context-method
 #' @export 
 setMethod("is_other", "context", function(object){ 
@@ -490,6 +542,12 @@ setMethod("is_other", "context", function(object){
 setMethod("is_other", "stype", function(object){ 
   is_other(get_context(object))
 })
+
+#' @rdname is_study_role
+#' @aliases is_other,ANY,ANY-method
+#' @export 
+setMethod("is_other", "ANY", function(object){ FALSE })
+
 
 setGeneric("is_empty", function(x) standardGeneric("is_empty"))
 setMethod("is_empty", "character", function(x)  length(x) == 0 | nchar(x) == 0)

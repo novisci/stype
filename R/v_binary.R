@@ -95,6 +95,11 @@ vec_ptype2.v_binary.logical <- function(x, y, ...) { x }
 #' @export 
 vec_ptype2.logical.v_binary <- function(x, y, ...) { y }
 
+#' @method vec_ptype2.v_binary character
+#' @export
+vec_ptype2.v_binary.character <- function(x, y, ...) { y } 
+
+
 #' @rdname casting
 #' @method vec_cast v_binary
 #' @export
@@ -119,6 +124,13 @@ vec_cast.v_binary.logical <- function(x, to, ...) v_binary(x)
 #' @method vec_cast.logical v_binary
 #' @export
 vec_cast.logical.v_binary <- function(x, to, ...) vctrs::vec_data(x)
+
+#' @method vec_cast.character v_binary 
+#' @importFrom vctrs vec_cast.character 
+#' @export
+vec_cast.character.v_binary <- function(x, to, ...) {
+  ifelse(vctrs::vec_data(x), "1", "0")
+}
 
 #' Casting function for binary objects
 #' @rdname v_binary 

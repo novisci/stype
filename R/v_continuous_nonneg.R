@@ -121,9 +121,17 @@ vec_ptype2.v_continuous_nonneg.v_continuous_nonneg <- function(x, y, ...) new_co
 vec_ptype2.v_continuous_nonneg.numeric <- function(x, y, ...) x
 
 #' @method vec_ptype2.numeric v_continuous_nonneg
-# @importFrom vctrs vec_ptype2.numeric 
 #' @export 
 vec_ptype2.numeric.v_continuous_nonneg <- function(x, y, ...) y
+
+#' @method vec_ptype2.character v_continuous_nonneg
+#' @export 
+vec_ptype2.character.v_continuous_nonneg <- function(x, y, ...) x
+
+#' @method vec_ptype2.v_continuous_nonneg character
+#' @export
+vec_ptype2.v_continuous_nonneg.character <- function(x, y, ...) y
+
 
 #' @rdname casting
 #' @method vec_cast v_continuous_nonneg
@@ -148,6 +156,13 @@ vec_cast.numeric.v_continuous_nonneg <- function(x, to, ...) vctrs::vec_data(x)
 #' @export
 vec_cast.v_continuous_nonneg.numeric <- function(x, to, ...) v_continuous_nonneg(x)
 vec_cast.numeric.v_continuous_nonneg <- function(x, to, ...) vctrs::vec_data(x)
+
+#' @method vec_cast.character v_continuous_nonneg
+#' @importFrom vctrs vec_cast.character 
+#' @export
+vec_cast.character.v_continuous_nonneg <- function(x, to, ...) {
+  as.character(vctrs::vec_data(x))
+}
 
 #' Casting function for count objects
 #' @rdname v_continuous_nonneg 

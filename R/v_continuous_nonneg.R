@@ -23,12 +23,14 @@ new_continuous_nonneg <- function(x = double(),
                                   .internal_name = character(), 
                                   .data_summary = data_summary(), 
                                   .context = context()){
-  # vctrs::vec_assert(x, ptype = double())
+  
+  # x <- vctrs::vec_cast(x, double())
+  vctrs::vec_assert(vctrs::vec_data(x), ptype = double())
+  
   assertthat::assert_that(
     all(x[!is.na(x)] >= 0),
-    msg = "Count data must be >= 0"
+    msg = "Continuous non-negative data must be >= 0"
   )
-  # vctrs::vec_assert(desc, ptype = description())
   
   vctrs::new_vctr(
     x,
@@ -114,7 +116,10 @@ vec_ptype2.v_continuous_nonneg.vctrs_unspecified <- function(x, y, ...) x
 
 #' @method vec_ptype2.v_continuous_nonneg v_continuous_nonneg
 #' @export
-vec_ptype2.v_continuous_nonneg.v_continuous_nonneg <- function(x, y, ...) new_continuous_nonneg()
+vec_ptype2.v_continuous_nonneg.v_continuous_nonneg <- function(x, y, ...) {
+  compare_contexts(x, y)
+  v_continuous_nonneg(context = get_context(x))
+}
 
 #' @method vec_ptype2.v_continuous_nonneg numeric
 #' @export

@@ -24,8 +24,10 @@ new_continuous <- function(x = double(),
                            .internal_name = character(), 
                            .data_summary = data_summary(), 
                            .context = context()){
+  
   # x <- vctrs::vec_cast(x, double())
-  # vctrs::vec_assert(x, ptype = double())
+  vctrs::vec_assert(vctrs::vec_data(x), ptype = double())
+  
   vctrs::new_vctr(
     x,
     internal_name = .internal_name,
@@ -104,7 +106,11 @@ vec_ptype2.v_continuous.vctrs_unspecified <- function(x, y, ...) x
 
 #' @method vec_ptype2.v_continuous v_continuous
 #' @export
-vec_ptype2.v_continuous.v_continuous <- function(x, y, ...) new_continuous()
+vec_ptype2.v_continuous.v_continuous <- function(x, y, ...) {
+  compare_contexts(x, y)
+  v_continuous(context = get_context(x))
+}
+
 
 #' @method vec_ptype2.v_continuous double
 #' @export

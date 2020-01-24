@@ -42,11 +42,14 @@ methods::setOldClass(c("v_binary", "vctrs_vctr"))
 #' @export
 
 v_binary <- function(x = logical(), internal_name = "", context){
+  
   x <- vctrs::vec_cast(x, logical())
   dsum <- describe(vctrs::vec_data(x))
+  
   if(missing(context)){
     context <- methods::new("context")
   }
+  
   new_binary(
     x, 
    .internal_name = internal_name,

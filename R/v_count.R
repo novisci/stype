@@ -126,6 +126,14 @@ vec_ptype2.v_count.double <- function(x, y, ...) x
 #' @export 
 vec_ptype2.double.v_count <- function(x, y, ...) y
 
+#' @method vec_ptype2.character v_count
+#' @export 
+vec_ptype2.character.v_count <- function(x, y, ...) x
+
+#' @method vec_ptype2.v_count character
+#' @export
+vec_ptype2.v_count.character <- function(x, y, ...) y
+
 
 #' @rdname casting
 #' @inheritParams vctrs::vec_cast
@@ -151,6 +159,14 @@ vec_cast.integer.v_count <- function(x, to, ...) vctrs::vec_data(x)
 #' @export
 vec_cast.v_count.double <- function(x, to, ...) v_count(x)
 vec_cast.double.v_count <- function(x, to, ...) vctrs::vec_data(x)
+
+#' @method vec_cast.character v_count
+#' @importFrom vctrs vec_cast.character 
+#' @export
+vec_cast.character.v_count <- function(x, to, ...) {
+  as.character(vctrs::vec_data(x))
+}
+
 
 #' Casting function for count objects
 #' @rdname v_count 

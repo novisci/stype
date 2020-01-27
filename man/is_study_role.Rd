@@ -38,46 +38,68 @@
 \alias{is_study_role,context,context-method}
 \alias{is_study_role,stype-method}
 \alias{is_study_role,stype,stype-method}
+\alias{is_study_role,ANY-method}
+\alias{is_study_role,ANY,ANY-method}
 \alias{is_identifier,context-method}
 \alias{is_identifier,context,context-method}
 \alias{is_identifier,stype-method}
 \alias{is_identifier,stype,stype-method}
+\alias{is_identifier,ANY-method}
+\alias{is_identifier,ANY,ANY-method}
 \alias{is_index,context-method}
 \alias{is_index,context,context-method}
 \alias{is_index,stype-method}
 \alias{is_index,stype,stype-method}
+\alias{is_index,ANY-method}
+\alias{is_index,ANY,ANY-method}
 \alias{is_outcome,context-method}
 \alias{is_outcome,context,context-method}
 \alias{is_outcome,stype-method}
 \alias{is_outcome,stype,stype-method}
+\alias{is_outcome,ANY-method}
+\alias{is_outcome,ANY,ANY-method}
 \alias{is_censoring,context-method}
 \alias{is_censoring,context,context-method}
 \alias{is_censoring,stype-method}
 \alias{is_censoring,stype,stype-method}
+\alias{is_censoring,ANY-method}
+\alias{is_censoring,ANY,ANY-method}
 \alias{is_competing,context-method}
 \alias{is_competing,context,context-method}
 \alias{is_competing,stype-method}
 \alias{is_competing,stype,stype-method}
+\alias{is_competing,ANY-method}
+\alias{is_competing,ANY,ANY-method}
 \alias{is_exposure,context-method}
 \alias{is_exposure,context,context-method}
 \alias{is_exposure,stype-method}
 \alias{is_exposure,stype,stype-method}
+\alias{is_exposure,ANY-method}
+\alias{is_exposure,ANY,ANY-method}
 \alias{is_covariate,context-method}
 \alias{is_covariate,context,context-method}
 \alias{is_covariate,stype-method}
 \alias{is_covariate,stype,stype-method}
+\alias{is_covariate,ANY-method}
+\alias{is_covariate,ANY,ANY-method}
 \alias{is_weight,context-method}
 \alias{is_weight,context,context-method}
 \alias{is_weight,stype-method}
 \alias{is_weight,stype,stype-method}
+\alias{is_weight,ANY-method}
+\alias{is_weight,ANY,ANY-method}
 \alias{is_intermediate,context-method}
 \alias{is_intermediate,context,context-method}
 \alias{is_intermediate,stype-method}
 \alias{is_intermediate,stype,stype-method}
+\alias{is_intermediate,ANY-method}
+\alias{is_intermediate,ANY,ANY-method}
 \alias{is_other,context-method}
 \alias{is_other,context,context-method}
 \alias{is_other,stype-method}
 \alias{is_other,stype,stype-method}
+\alias{is_other,ANY-method}
+\alias{is_other,ANY,ANY-method}
 \title{Check a study role}
 \usage{
 is_study_role(object, what)
@@ -130,45 +152,67 @@ is_other(object)
 
 \S4method{is_study_role}{stype}(object, what)
 
+\S4method{is_study_role}{ANY}(object, what)
+
 \S4method{is_identifier}{context}(object)
 
 \S4method{is_identifier}{stype}(object)
+
+\S4method{is_identifier}{ANY}(object)
 
 \S4method{is_index}{context}(object)
 
 \S4method{is_index}{stype}(object)
 
+\S4method{is_index}{ANY}(object)
+
 \S4method{is_outcome}{context}(object)
 
 \S4method{is_outcome}{stype}(object)
+
+\S4method{is_outcome}{ANY}(object)
 
 \S4method{is_censoring}{context}(object)
 
 \S4method{is_censoring}{stype}(object)
 
+\S4method{is_censoring}{ANY}(object)
+
 \S4method{is_competing}{context}(object)
 
 \S4method{is_competing}{stype}(object)
+
+\S4method{is_competing}{ANY}(object)
 
 \S4method{is_exposure}{context}(object)
 
 \S4method{is_exposure}{stype}(object)
 
+\S4method{is_exposure}{ANY}(object)
+
 \S4method{is_covariate}{context}(object)
 
 \S4method{is_covariate}{stype}(object)
+
+\S4method{is_covariate}{ANY}(object)
 
 \S4method{is_weight}{context}(object)
 
 \S4method{is_weight}{stype}(object)
 
+\S4method{is_weight}{ANY}(object)
+
 \S4method{is_intermediate}{context}(object)
 
 \S4method{is_intermediate}{stype}(object)
 
+\S4method{is_intermediate}{ANY}(object)
+
 \S4method{is_other}{context}(object)
 
 \S4method{is_other}{stype}(object)
+
+\S4method{is_other}{ANY}(object)
 }
 \arguments{
 \item{object}{an object}

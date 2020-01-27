@@ -31,3 +31,15 @@ test_that("context class has get/set methods for all slots", {
     }
   )
 })
+
+test_that("role predicate functions work on any type", {
+  purrr::walk(
+    .x = valid_roles,
+    .f = function(r){
+      f <- sprintf("is_%s", r)
+      expect_false(
+        do.call(f, args = list(c("x", "z"))),
+        info = sprintf("%s should return FALSE for any thing that is not a stype"))
+    }
+  )
+})

@@ -108,6 +108,8 @@ get_security_type(x)
 
 \S4method{get_security_type}{stype}(x)
 
+\S4method{get_purpose}{stype}(x)
+
 set_context(x, to)
 
 \S4method{set_context}{stype,context}(x, to)

@@ -19,7 +19,7 @@ stype_tester(
 
 test_that("v_rcensored class descriptions update appropriately", {
   x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
-  x2 <- v_rcensored(outcomes = otimes[1], censors = ctimes, end_time = 15)
+  x2 <- v_rcensored(outcomes = otimes[[1]], end_time = 15)
   
   pcens1  <- get_data_summary(vctrs::field(x1, "censored"), "proportion")
   expect_equivalent(as.numeric(pcens1), 0.2857143)
@@ -28,15 +28,18 @@ test_that("v_rcensored class descriptions update appropriately", {
   expect_equivalent(as.numeric(pcens2), 0.4)
   
   pcens3  <- get_data_summary(vctrs::field(c(x1, x2), "censored"), "proportion")
-  expect_equivalent(as.numeric(pcens3), 0.3571429, tolerance = 1e-6)
+  expect_equivalent(as.numeric(pcens3), 0.1428571, tolerance = 1e-6)
   
   # TODO: add more thorough tests
   
   # TODO: check that the overal data summaries are working.
-  # I know the c()x1, x2) vector is not working
+  # I know the c(x1, x2) vector is not working
+  z <- c(x1, x2)
+  expect_equal(get_data_summary(z, "n"), 14L)
   # get_data_summary(x1)
   # get_data_summary(x2)
   # get_data_summary(c(x1, x2))
+  
 
   
 })
@@ -65,4 +68,18 @@ test_that("v_rcensored sets levels and labels correctly", {
   expect_equal(levels(vctrs::field(x1, "censor_reason")), c("cA", "cB"))
   expect_equal(levels(vctrs::field(x2, "censor_reason")), c("1", "2"))
   
+})
+
+test_that("v_rcensored fails as expected", {
+  # Different end times
+  x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
+  x2 <- v_rcensored(outcomes = otimes[1], censors = ctimes, end_time = 16)
+  expect_error(c(x1, x2))
+})
+
+test_that("v_rcensored can be cast to a Surv", {
+  # Different end times
+  x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
+
+  expect_is(as_Surv(x1), "Surv")
 })

@@ -8,7 +8,7 @@
 \usage{
 v_rcensored(
   outcomes = list(),
-  censors = list(),
+  censors,
   end_time = Inf,
   internal_name = "",
   context

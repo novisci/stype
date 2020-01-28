@@ -420,7 +420,6 @@ type_sum.v_rcensored <- function(x) {
 as_Surv <- function(x){
   hold <- as.integer(as_canonical(vctrs::field(x, "outcome_reason")))
   hold[is.na(hold)] <- 0L
-  hold
   
   survival::Surv(
     time  = as_canonical(vctrs::field(x, "time")),

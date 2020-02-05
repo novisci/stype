@@ -4,6 +4,7 @@
 \alias{v_continuous}
 \alias{is_continuous}
 \alias{as_continuous}
+\alias{as.character.v_continuous}
 \alias{as_canonical.v_continuous}
 \title{Continuous vectors}
 \usage{
@@ -13,6 +14,8 @@ is_continuous(x)
 
 as_continuous(x)
 
+\method{as.character}{v_continuous}(x, ...)
+
 \method{as_canonical}{v_continuous}(x)
 }
 \arguments{
@@ -21,6 +24,8 @@ as_continuous(x)
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
+
+\item{...}{passed to other methods such as \code{as.character}}
 }
 \description{
 {

@@ -3,6 +3,7 @@
 \name{v_rcensored}
 \alias{v_rcensored}
 \alias{is_rcensored}
+\alias{as.character.v_rcensored}
 \alias{as_canonical.v_rcensored}
 \title{Right censored vectors}
 \usage{
@@ -15,6 +16,8 @@ v_rcensored(
 )
 
 is_rcensored(x)
+
+\method{as.character}{v_rcensored}(x, ...)
 
 \method{as_canonical}{v_rcensored}(x)
 }
@@ -36,6 +39,8 @@ censor is the reason for the censoring}
 \item{context}{a \code{\link{context}}}
 
 \item{x}{a \code{integer} vector}
+
+\item{...}{passed to other methods such as \code{as.character}}
 }
 \description{
 TODO: add a description

@@ -41,6 +41,8 @@ setValidity(
 setGeneric("is_study_role", function(object, what) standardGeneric("is_study_role"))
 
 #' @rdname is_study_role
+#' @param object an object
+#' @param what what to role to look for
 #' @aliases is_study_role,purpose,purpose-method
 #' @export
 
@@ -63,7 +65,6 @@ setMethod(
 setMethod("is_study_role", "NULL", function(object, what){ FALSE } )
 
 #' @rdname is_study_role
-#' @inheritParams is_study_role
 #' @export
 setGeneric("is_identifier", function(object) standardGeneric("is_identifier"))
 
@@ -73,7 +74,6 @@ setGeneric("is_identifier", function(object) standardGeneric("is_identifier"))
 setMethod("is_identifier", "purpose", function(object){ is_study_role(object, "identifier")})
 
 #' @rdname is_study_role
-#' @inheritParams is_study_role
 #' @export
 setGeneric("is_index", function(object) standardGeneric("is_index"))
 
@@ -83,7 +83,6 @@ setGeneric("is_index", function(object) standardGeneric("is_index"))
 setMethod("is_index", "purpose", function(object){ is_study_role(object, "index")})
 
 #' @rdname is_study_role
-#' @inheritParams is_study_role
 #' @export
 setGeneric("is_outcome", function(object) standardGeneric("is_outcome"))
 
@@ -93,7 +92,6 @@ setGeneric("is_outcome", function(object) standardGeneric("is_outcome"))
 setMethod("is_outcome", "purpose", function(object){ is_study_role(object, "outcome")})
 
 #' @rdname is_study_role
-#' @inheritParams is_study_role
 #' @export
 setGeneric("is_censoring", function(object) standardGeneric("is_censoring"))
 
@@ -103,7 +101,6 @@ setGeneric("is_censoring", function(object) standardGeneric("is_censoring"))
 setMethod("is_censoring", "purpose", function(object){ is_study_role(object, "censoring")})
 
 #' @rdname is_study_role
-#' @inheritParams is_study_role
 #' @export
 setGeneric("is_competing", function(object) standardGeneric("is_competing"))
 
@@ -113,7 +110,6 @@ setGeneric("is_competing", function(object) standardGeneric("is_competing"))
 setMethod("is_competing", "purpose", function(object){ is_study_role(object, "competing")})
 
 #' @rdname is_study_role
-#' @inheritParams is_study_role
 #' @export
 setGeneric("is_exposure", function(object) standardGeneric("is_exposure"))
 
@@ -123,7 +119,6 @@ setGeneric("is_exposure", function(object) standardGeneric("is_exposure"))
 setMethod("is_exposure", "purpose", function(object){ is_study_role(object, "exposure") })
 
 #' @rdname is_study_role
-#' @inheritParams is_study_role
 #' @export
 setGeneric("is_covariate", function(object) standardGeneric("is_covariate"))
 
@@ -133,7 +128,6 @@ setGeneric("is_covariate", function(object) standardGeneric("is_covariate"))
 setMethod("is_covariate", "purpose", function(object){ is_study_role(object, "covariate") })
 
 #' @rdname is_study_role
-#' @inheritParams is_study_role
 #' @export
 setGeneric("is_weight", function(object) standardGeneric("is_weight"))
 
@@ -143,7 +137,6 @@ setGeneric("is_weight", function(object) standardGeneric("is_weight"))
 setMethod("is_weight", "purpose", function(object){ is_study_role(object, "weight")})
 
 #' @rdname is_study_role
-#' @inheritParams is_study_role
 #' @export
 setGeneric("is_intermediate", function(object) standardGeneric("is_intermediate"))
 
@@ -153,7 +146,6 @@ setGeneric("is_intermediate", function(object) standardGeneric("is_intermediate"
 setMethod("is_intermediate", "purpose", function(object){ is_study_role(object, "intermediate")})
 
 #' @rdname is_study_role
-#' @inheritParams is_study_role
 #' @export
 setGeneric("is_other", function(object) standardGeneric("is_other"))
 

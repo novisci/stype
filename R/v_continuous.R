@@ -120,15 +120,6 @@ vec_ptype2.double.v_continuous<- function(x, y, ...) y
 #' @export
 vec_ptype2.v_continuous.double <- function(x, y, ...) x
 
-#' @method vec_ptype2.character v_continuous
-#' @export 
-vec_ptype2.character.v_continuous <- function(x, y, ...) x
-
-#' @method vec_ptype2.v_continuous character
-#' @export
-vec_ptype2.v_continuous.character <- function(x, y, ...) y 
-
-
 #' @rdname casting
 #' @method vec_cast v_continuous
 #' @export
@@ -148,18 +139,17 @@ vec_cast.v_continuous.default  <- function(x, to, ...) vctrs::vec_default_cast(x
 vec_cast.v_continuous.double <- function(x, to, ...) v_continuous(x)
 vec_cast.double.v_continuous <- function(x, to, ...) vctrs::vec_data(x)
 
-#' @method vec_cast.character v_continuous
-#' @importFrom vctrs vec_cast.character 
-#' @export
-vec_cast.character.v_continuous <- function(x, to, ...) {
-  as.character(vctrs::vec_data(x))
-}
-
 #' Casting function for continuous objects
 #' @rdname v_continuous 
 #' @export
 as_continuous <- function(x) {
   vctrs::vec_cast(x, new_continuous())
+}
+
+#' @rdname v_continuous 
+#' @export
+as.character.v_continuous <- function(x, ...) {
+  as.character(as_canonical(x))
 }
 
 #' @rdname v_continuous

@@ -12,7 +12,7 @@
 
 <meta name="author" content="B. Saul" />
 
-<meta name="date" content="2019-12-12" />
+<meta name="date" content="2020-01-24" />
 
 <title>stype Design</title>
 
@@ -20,26 +20,27 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -48,9 +49,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -303,7 +304,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">stype Design</h1>
 <h4 class="author">B. Saul</h4>
-<h4 class="date">2019-12-12</h4>
+<h4 class="date">2020-01-24</h4>
 
 
 
@@ -314,7 +315,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h1>Design Goals</h1>
 <p><code>stype</code> provides an extensible set of data types that in themselves extend certain <code>R</code> vector classes to be useful in a variety of analytic applications by providing vectors with:</p>
 <ul>
-<li>data types that align with common statistical data types (e.g. “binary”, “continous”, “count”, “time to event”, etc);</li>
+<li>data types that align with common statistical data types (e.g. “binary”, “continous”, “count”, “time to event”, etc);</li>
 <li>a <code>context</code> object with information about how the variable relates to a study design;</li>
 <li>a <code>data_summary</code> with relevant summary statistics of the variable;</li>
 <li>methods that update the <code>data_summary</code> when a vector is subset or modified in certain ways;</li>
@@ -332,78 +333,78 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="a-quick-example" class="section level2">
 <h2>A quick example</h2>
 <p>Each data type provided by <code>stype</code> (described in more detail below) have constructor functions that begin with <code>v_&lt;type&gt;</code>. For example, <code>v_binary</code> creates binary (<span class="math inline">\(\{0, 1\}\)</span>) data from R’s <code>logical</code> type.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(stype)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">x &lt;-<span class="st"> </span><span class="kw">v_binary</span>(<span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>))</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">str</span>(x)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co">#&gt;  bnry [1:4] 1, 1, 1, 0</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#&gt;  @ internal_name: chr &quot;&quot;</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt;  @ data_summary :Formal class 'data_summary' [package &quot;stype&quot;] with 2 slots</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt;   .. ..@ .Data:List of 9</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt;   .. .. ..$ : int 4</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt;   .. .. ..$ : logi FALSE</span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt;   .. .. ..$ : int 4</span></a>
-<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co">#&gt;   .. .. ..$ : int 0</span></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co">#&gt;   .. .. ..$ : num 0</span></a>
-<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="co">#&gt;   .. .. ..$ : logi FALSE</span></a>
-<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="co">#&gt;   .. .. ..$ : int 1</span></a>
-<a class="sourceLine" id="cb1-17" data-line-number="17"><span class="co">#&gt;   .. .. ..$ : int 3</span></a>
-<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="co">#&gt;   .. .. ..$ : num 0.75</span></a>
-<a class="sourceLine" id="cb1-19" data-line-number="19"><span class="co">#&gt;   .. ..@ names: chr [1:9] &quot;n&quot; &quot;has_missing&quot; &quot;n_nonmissing&quot; &quot;n_missing&quot; ...</span></a>
-<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="co">#&gt;  @ context      :Formal class 'context' [package &quot;stype&quot;] with 6 slots</span></a>
-<a class="sourceLine" id="cb1-21" data-line-number="21"><span class="co">#&gt;   .. ..@ short_label  : chr &quot;&quot;</span></a>
-<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="co">#&gt;   .. ..@ long_label   : chr &quot;&quot;</span></a>
-<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="co">#&gt;   .. ..@ description  : chr &quot;&quot;</span></a>
-<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="co">#&gt;   .. ..@ derivation   : chr &quot;&quot;</span></a>
-<a class="sourceLine" id="cb1-25" data-line-number="25"><span class="co">#&gt;   .. ..@ purpose      :Formal class 'purpose' [package &quot;stype&quot;] with 1 slot</span></a>
-<a class="sourceLine" id="cb1-26" data-line-number="26"><span class="co">#&gt;   .. .. .. ..@ study_role: chr &quot;&quot;</span></a>
-<a class="sourceLine" id="cb1-27" data-line-number="27"><span class="co">#&gt;   .. ..@ security_type: chr &quot;&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(stype)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a>x &lt;-<span class="st"> </span><span class="kw">v_binary</span>(<span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>))</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">str</span>(x)</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#&gt;  bnry [1:4] 1, 1, 1, 0</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#&gt;  @ internal_name: chr &quot;&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">#&gt;  @ data_summary :Formal class &#39;data_summary&#39; [package &quot;stype&quot;] with 2 slots</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt;   .. ..@ .Data:List of 9</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">#&gt;   .. .. ..$ : int 4</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">#&gt;   .. .. ..$ : logi FALSE</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co">#&gt;   .. .. ..$ : int 4</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co">#&gt;   .. .. ..$ : int 0</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co">#&gt;   .. .. ..$ : num 0</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="co">#&gt;   .. .. ..$ : logi FALSE</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="co">#&gt;   .. .. ..$ : int 1</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="co">#&gt;   .. .. ..$ : int 3</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="co">#&gt;   .. .. ..$ : num 0.75</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="co">#&gt;   .. ..@ names: chr [1:9] &quot;n&quot; &quot;has_missing&quot; &quot;n_nonmissing&quot; &quot;n_missing&quot; ...</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="co">#&gt;  @ context      :Formal class &#39;context&#39; [package &quot;stype&quot;] with 6 slots</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="co">#&gt;   .. ..@ short_label  : chr &quot;&quot;</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="co">#&gt;   .. ..@ long_label   : chr &quot;&quot;</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="co">#&gt;   .. ..@ description  : chr &quot;&quot;</span></span>
+<span id="cb1-24"><a href="#cb1-24"></a><span class="co">#&gt;   .. ..@ derivation   : chr &quot;&quot;</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="co">#&gt;   .. ..@ purpose      :Formal class &#39;purpose&#39; [package &quot;stype&quot;] with 1 slot</span></span>
+<span id="cb1-26"><a href="#cb1-26"></a><span class="co">#&gt;   .. .. .. ..@ study_role: chr &quot;&quot;</span></span>
+<span id="cb1-27"><a href="#cb1-27"></a><span class="co">#&gt;   .. ..@ security_type: chr &quot;&quot;</span></span></code></pre></div>
 <p>The <code>v_binary</code> data type prints <code>0</code>s and <code>1</code>s but the underlying data is <code>logical</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">x</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; &lt;binary[4]&gt;</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; [1] 1 1 1 0</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; Proportion = 0.750</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">vctrs<span class="op">::</span><span class="kw">vec_data</span>(x)</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; [1]  TRUE  TRUE  TRUE FALSE</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>x</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; &lt;binary[4]&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; [1] 1 1 1 0</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt; Proportion = 0.750</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>vctrs<span class="op">::</span><span class="kw">vec_data</span>(x)</span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; [1]  TRUE  TRUE  TRUE FALSE</span></span></code></pre></div>
 <p>The data type includes some useful utilities such as prettying certain parts of the <code>description</code> (here the proportion) and a predicate function.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">is_binary</span>(x)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">is_binary</span>(x)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 <p>Certain math operations work and pull directly from the <code>description</code> where appropriate (rather than recomputing). Note these operations are still under development and should be used with caution:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">mean</span>(x)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; [1] 0.75</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">sum</span>(x)</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; [1] 3</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co"># sum(x, x) # See? very experimental</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">mean</span>(x)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; [1] 0.75</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">sum</span>(x)</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; [1] 3</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co"># sum(x, x) # See? very experimental</span></span></code></pre></div>
 <p>Other math/arithmetic operations don’t work:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># What do you mean you want to add binary and integer?</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">x <span class="op">+</span><span class="st"> </span>2L </a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; Error: &lt;binary&gt; + &lt;integer&gt; is not permitted</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co"># R's base types are not so safe</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">vctrs<span class="op">::</span><span class="kw">vec_data</span>(x) <span class="op">+</span><span class="st"> </span>2L</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; [1] 3 3 3 2</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># What do you mean you want to add binary and integer?</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>x <span class="op">+</span><span class="st"> </span>2L </span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; Error: &lt;binary&gt; + &lt;integer&gt; is not permitted</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># R&#39;s base types are not so safe</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>vctrs<span class="op">::</span><span class="kw">vec_data</span>(x) <span class="op">+</span><span class="st"> </span>2L</span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt; [1] 3 3 3 2</span></span></code></pre></div>
 <p>Logical operators work as one might expect:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="op">!</span>x</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; &lt;binary[4]&gt;</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; [1] 0 0 0 1</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; Proportion = 0.250</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="kw">all</span>(x)</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; [1] FALSE</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="kw">any</span>(x)</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">!</span>x</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; &lt;binary[4]&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; [1] 0 0 0 1</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; Proportion = 0.250</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="kw">all</span>(x)</span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="kw">any</span>(x)</span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 <p>Here’s where the real magic is.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># vectors can be combined and ...</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co"># subsetting maintains and updates attributes</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">c</span>(x, <span class="op">!</span>x[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; &lt;binary[7]&gt;</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; [1] 1 1 1 0 0 0 0</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; Proportion = 0.429</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co"># But ...</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="kw">c</span>(x, <span class="kw">v_binary</span>(<span class="dt">context =</span> <span class="kw">context</span>(<span class="dt">purpose =</span> <span class="kw">purpose</span>(<span class="dt">study_role =</span> <span class="st">&quot;other&quot;</span>))))</a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; Error: All purpose elements must equal in order to combine</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># vectors can be combined and ...</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co"># subsetting maintains and updates attributes</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="kw">c</span>(x, <span class="op">!</span>x[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; &lt;binary[7]&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; [1] 1 1 1 0 0 0 0</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt; Proportion = 0.429</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co"># But ...</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="kw">c</span>(x, <span class="kw">v_binary</span>(<span class="dt">context =</span> <span class="kw">context</span>(<span class="dt">purpose =</span> <span class="kw">purpose</span>(<span class="dt">study_role =</span> <span class="st">&quot;other&quot;</span>))))</span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">#&gt; Error: All purpose elements must be equal in order to combine stypes.</span></span></code></pre></div>
 </div>
 </div>
 <div id="data-types" class="section level1">
@@ -434,12 +435,12 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <td><span class="math inline">\(\mathcal{R}\)</span></td>
 </tr>
 <tr class="even">
-<td>–<code>v_continuous_nonneg</code></td>
+<td><code>v_continuous_nonneg</code></td>
 <td><code>double</code></td>
 <td><span class="math inline">\(\mathcal{R}^+\)</span></td>
 </tr>
 <tr class="odd">
-<td>–<code>v_event_time</code></td>
+<td><code>v_event_time</code></td>
 <td><code>double</code></td>
 <td><span class="math inline">\(\mathcal{R}^+\)</span></td>
 </tr>
@@ -468,83 +469,83 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 <div id="usage-in-tibble" class="section level1">
 <h1>Usage in <code>tibble</code></h1>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; Attaching package: 'dplyr'</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; The following objects are masked from 'package:stats':</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt;     filter, lag</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; The following objects are masked from 'package:base':</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt;     intersect, setdiff, setequal, union</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="kw">library</span>(tibble)</a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">n &lt;-<span class="st"> </span><span class="dv">100</span> </a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13">make_context &lt;-<span class="st"> </span><span class="cf">function</span>(role){</a>
-<a class="sourceLine" id="cb8-14" data-line-number="14">  <span class="kw">context</span>(<span class="dt">purpose =</span> <span class="kw">purpose</span>(<span class="dt">study_role =</span> role))</a>
-<a class="sourceLine" id="cb8-15" data-line-number="15">}</a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17">covariates &lt;-</a>
-<a class="sourceLine" id="cb8-18" data-line-number="18">purrr<span class="op">::</span><span class="kw">map</span>(</a>
-<a class="sourceLine" id="cb8-19" data-line-number="19">    <span class="dt">.x  =</span> purrr<span class="op">::</span><span class="kw">set_names</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="kw">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)), </a>
-<a class="sourceLine" id="cb8-20" data-line-number="20">    <span class="dt">.f =</span> <span class="op">~</span><span class="st"> </span><span class="kw">v_binary</span>(<span class="kw">as.logical</span>(<span class="kw">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.25</span>)), </a>
-<a class="sourceLine" id="cb8-21" data-line-number="21">                    <span class="dt">context =</span> <span class="kw">make_context</span>(<span class="st">&quot;covariate&quot;</span>))</a>
-<a class="sourceLine" id="cb8-22" data-line-number="22">)</a>
-<a class="sourceLine" id="cb8-23" data-line-number="23"></a>
-<a class="sourceLine" id="cb8-24" data-line-number="24">dt &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
-<a class="sourceLine" id="cb8-25" data-line-number="25">  <span class="dt">y1 =</span> <span class="kw">v_binary</span>(<span class="kw">as.logical</span>(<span class="kw">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.25</span>)), <span class="dt">context =</span> <span class="kw">make_context</span>(<span class="st">&quot;outcome&quot;</span>)),</a>
-<a class="sourceLine" id="cb8-26" data-line-number="26">  <span class="dt">y2 =</span> <span class="kw">v_event_time</span>(<span class="kw">runif</span>(n, <span class="dv">1</span>, <span class="dv">100</span>), <span class="dt">context =</span> <span class="kw">make_context</span>(<span class="st">&quot;outcome&quot;</span>)),</a>
-<a class="sourceLine" id="cb8-27" data-line-number="27">  <span class="dt">y3 =</span> <span class="kw">v_continuous</span>(<span class="kw">rnorm</span>(n), <span class="dt">context =</span> <span class="kw">make_context</span>(<span class="st">&quot;outcome&quot;</span>)),</a>
-<a class="sourceLine" id="cb8-28" data-line-number="28">  <span class="op">!!!</span><span class="st"> </span>covariates</a>
-<a class="sourceLine" id="cb8-29" data-line-number="29">)</a>
-<a class="sourceLine" id="cb8-30" data-line-number="30"></a>
-<a class="sourceLine" id="cb8-31" data-line-number="31">dt</a>
-<a class="sourceLine" id="cb8-32" data-line-number="32"><span class="co">#&gt; # A tibble: 100 x 13</span></a>
-<a class="sourceLine" id="cb8-33" data-line-number="33"><span class="co">#&gt;       y1    y2     y3    x1    x2    x3    x4    x5    x6    x7    x8    x9</span></a>
-<a class="sourceLine" id="cb8-34" data-line-number="34"><span class="co">#&gt;    &lt;bnr&gt; &lt;tme&gt; &lt;cont&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt;</span></a>
-<a class="sourceLine" id="cb8-35" data-line-number="35"><span class="co">#&gt;  1     0  73.4  0.375     0     0     0     0     0     0     0     0     0</span></a>
-<a class="sourceLine" id="cb8-36" data-line-number="36"><span class="co">#&gt;  2     0  12.1   1.35     0     0     1     0     0     0     0     0     0</span></a>
-<a class="sourceLine" id="cb8-37" data-line-number="37"><span class="co">#&gt;  3     0  8.28  -1.94     0     0     1     0     0     0     1     0     1</span></a>
-<a class="sourceLine" id="cb8-38" data-line-number="38"><span class="co">#&gt;  4     0  41.1  0.809     1     0     0     1     0     0     0     0     0</span></a>
-<a class="sourceLine" id="cb8-39" data-line-number="39"><span class="co">#&gt;  5     0  22.8  0.658     1     1     0     0     0     0     0     0     0</span></a>
-<a class="sourceLine" id="cb8-40" data-line-number="40"><span class="co">#&gt;  6     0  51.9  0.359     0     1     0     0     1     0     0     0     1</span></a>
-<a class="sourceLine" id="cb8-41" data-line-number="41"><span class="co">#&gt;  7     1  48.4 -0.934     0     1     0     0     0     1     1     1     0</span></a>
-<a class="sourceLine" id="cb8-42" data-line-number="42"><span class="co">#&gt;  8     0  78.7  0.195     0     0     0     1     0     0     0     0     1</span></a>
-<a class="sourceLine" id="cb8-43" data-line-number="43"><span class="co">#&gt;  9     1  23.3  -1.27     0     1     0     0     0     1     0     0     1</span></a>
-<a class="sourceLine" id="cb8-44" data-line-number="44"><span class="co">#&gt; 10     1  75.3 0.0822     0     0     0     1     0     0     1     0     0</span></a>
-<a class="sourceLine" id="cb8-45" data-line-number="45"><span class="co">#&gt; # … with 90 more rows, and 1 more variable: x10 &lt;bnry&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">#&gt; </span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt; Attaching package: &#39;dplyr&#39;</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt; The following objects are masked from &#39;package:stats&#39;:</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt; </span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt;     filter, lag</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; </span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="kw">library</span>(tibble)</span>
+<span id="cb8-11"><a href="#cb8-11"></a>n &lt;-<span class="st"> </span><span class="dv">100</span> </span>
+<span id="cb8-12"><a href="#cb8-12"></a></span>
+<span id="cb8-13"><a href="#cb8-13"></a>make_context &lt;-<span class="st"> </span><span class="cf">function</span>(role){</span>
+<span id="cb8-14"><a href="#cb8-14"></a>  <span class="kw">context</span>(<span class="dt">purpose =</span> <span class="kw">purpose</span>(<span class="dt">study_role =</span> role))</span>
+<span id="cb8-15"><a href="#cb8-15"></a>}</span>
+<span id="cb8-16"><a href="#cb8-16"></a></span>
+<span id="cb8-17"><a href="#cb8-17"></a>covariates &lt;-</span>
+<span id="cb8-18"><a href="#cb8-18"></a>purrr<span class="op">::</span><span class="kw">map</span>(</span>
+<span id="cb8-19"><a href="#cb8-19"></a>    <span class="dt">.x  =</span> purrr<span class="op">::</span><span class="kw">set_names</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="kw">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)), </span>
+<span id="cb8-20"><a href="#cb8-20"></a>    <span class="dt">.f =</span> <span class="op">~</span><span class="st"> </span><span class="kw">v_binary</span>(<span class="kw">as.logical</span>(<span class="kw">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.25</span>)), </span>
+<span id="cb8-21"><a href="#cb8-21"></a>                    <span class="dt">context =</span> <span class="kw">make_context</span>(<span class="st">&quot;covariate&quot;</span>))</span>
+<span id="cb8-22"><a href="#cb8-22"></a>)</span>
+<span id="cb8-23"><a href="#cb8-23"></a></span>
+<span id="cb8-24"><a href="#cb8-24"></a>dt &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb8-25"><a href="#cb8-25"></a>  <span class="dt">y1 =</span> <span class="kw">v_binary</span>(<span class="kw">as.logical</span>(<span class="kw">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.25</span>)), <span class="dt">context =</span> <span class="kw">make_context</span>(<span class="st">&quot;outcome&quot;</span>)),</span>
+<span id="cb8-26"><a href="#cb8-26"></a>  <span class="dt">y2 =</span> <span class="kw">v_event_time</span>(<span class="kw">runif</span>(n, <span class="dv">1</span>, <span class="dv">100</span>), <span class="dt">context =</span> <span class="kw">make_context</span>(<span class="st">&quot;outcome&quot;</span>)),</span>
+<span id="cb8-27"><a href="#cb8-27"></a>  <span class="dt">y3 =</span> <span class="kw">v_continuous</span>(<span class="kw">rnorm</span>(n), <span class="dt">context =</span> <span class="kw">make_context</span>(<span class="st">&quot;outcome&quot;</span>)),</span>
+<span id="cb8-28"><a href="#cb8-28"></a>  <span class="op">!!!</span><span class="st"> </span>covariates</span>
+<span id="cb8-29"><a href="#cb8-29"></a>)</span>
+<span id="cb8-30"><a href="#cb8-30"></a></span>
+<span id="cb8-31"><a href="#cb8-31"></a>dt</span>
+<span id="cb8-32"><a href="#cb8-32"></a><span class="co">#&gt; # A tibble: 100 x 13</span></span>
+<span id="cb8-33"><a href="#cb8-33"></a><span class="co">#&gt;       y1    y2     y3    x1    x2    x3    x4    x5    x6    x7    x8    x9</span></span>
+<span id="cb8-34"><a href="#cb8-34"></a><span class="co">#&gt;    &lt;bnr&gt; &lt;tme&gt; &lt;cont&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt; &lt;bnr&gt;</span></span>
+<span id="cb8-35"><a href="#cb8-35"></a><span class="co">#&gt;  1     0  56.1  0.933     0     0     1     0     1     0     0     1     0</span></span>
+<span id="cb8-36"><a href="#cb8-36"></a><span class="co">#&gt;  2     1  54.1 -0.714     0     0     0     0     0     0     0     0     0</span></span>
+<span id="cb8-37"><a href="#cb8-37"></a><span class="co">#&gt;  3     0  83.4 -0.492     0     0     0     0     0     0     0     0     0</span></span>
+<span id="cb8-38"><a href="#cb8-38"></a><span class="co">#&gt;  4     0  86.1  -0.98     1     1     0     0     0     0     0     1     1</span></span>
+<span id="cb8-39"><a href="#cb8-39"></a><span class="co">#&gt;  5     0    83   3.28     0     0     0     0     1     0     0     0     0</span></span>
+<span id="cb8-40"><a href="#cb8-40"></a><span class="co">#&gt;  6     0  83.9  -1.13     0     0     0     0     0     0     0     0     0</span></span>
+<span id="cb8-41"><a href="#cb8-41"></a><span class="co">#&gt;  7     0  80.2  0.963     0     0     1     0     1     0     0     0     0</span></span>
+<span id="cb8-42"><a href="#cb8-42"></a><span class="co">#&gt;  8     0  53.6  -0.74     0     0     0     0     0     0     0     0     1</span></span>
+<span id="cb8-43"><a href="#cb8-43"></a><span class="co">#&gt;  9     0  49.9  0.255     1     1     1     0     1     0     0     0     1</span></span>
+<span id="cb8-44"><a href="#cb8-44"></a><span class="co">#&gt; 10     1  74.3 -0.526     0     0     1     0     0     0     1     0     0</span></span>
+<span id="cb8-45"><a href="#cb8-45"></a><span class="co">#&gt; # … with 90 more rows, and 1 more variable: x10 &lt;bnry&gt;</span></span></code></pre></div>
 <p>Selecting columns based on data type:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">dt <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select_if</span>(is_binary)</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; # A tibble: 100 x 11</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt;        y1     x1     x2     x3     x4     x5     x6     x7     x8     x9    x10</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt;    &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt;</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt;  1      0      0      0      0      0      0      0      0      0      0      0</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt;  2      0      0      0      1      0      0      0      0      0      0      0</span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt;  3      0      0      0      1      0      0      0      1      0      1      1</span></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt;  4      0      1      0      0      1      0      0      0      0      0      0</span></a>
-<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt;  5      0      1      1      0      0      0      0      0      0      0      0</span></a>
-<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt;  6      0      0      1      0      0      1      0      0      0      1      0</span></a>
-<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt;  7      1      0      1      0      0      0      1      1      1      0      1</span></a>
-<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt;  8      0      0      0      0      1      0      0      0      0      1      0</span></a>
-<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt;  9      1      0      1      0      0      0      1      0      0      1      1</span></a>
-<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt; 10      1      0      0      0      1      0      0      1      0      0      0</span></a>
-<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt; # … with 90 more rows</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>dt <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select_if</span>(is_binary)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt; # A tibble: 100 x 11</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt;        y1     x1     x2     x3     x4     x5     x6     x7     x8     x9    x10</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt;    &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt; &lt;bnry&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt;  1      0      0      0      1      0      1      0      0      1      0      0</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt;  2      1      0      0      0      0      0      0      0      0      0      0</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt;  3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt;  4      0      1      1      0      0      0      0      0      1      1      0</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt;  5      0      0      0      0      0      1      0      0      0      0      1</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt;  6      0      0      0      0      0      0      0      0      0      0      1</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt;  7      0      0      0      1      0      1      0      0      0      0      0</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt;  8      0      0      0      0      0      0      0      0      0      1      0</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt;  9      0      1      1      1      0      1      0      0      0      1      0</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt; 10      1      0      0      1      0      0      0      1      0      0      0</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt; # … with 90 more rows</span></span></code></pre></div>
 <p>Selecting columns based on context:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">dt <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select_if</span>(is_outcome)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; # A tibble: 100 x 3</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt;        y1     y2     y3</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt;    &lt;bnry&gt; &lt;tmev&gt; &lt;cont&gt;</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;  1      0   73.4  0.375</span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  2      0   12.1   1.35</span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;  3      0   8.28  -1.94</span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;  4      0   41.1  0.809</span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;  5      0   22.8  0.658</span></a>
-<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt;  6      0   51.9  0.359</span></a>
-<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt;  7      1   48.4 -0.934</span></a>
-<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;  8      0   78.7  0.195</span></a>
-<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt;  9      1   23.3  -1.27</span></a>
-<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt; 10      1   75.3 0.0822</span></a>
-<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt; # … with 90 more rows</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>dt <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select_if</span>(is_outcome)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; # A tibble: 100 x 3</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt;        y1     y2     y3</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt;    &lt;bnry&gt; &lt;tmev&gt; &lt;cont&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt;  1      0   56.1  0.933</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt;  2      1   54.1 -0.714</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt;  3      0   83.4 -0.492</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt;  4      0   86.1  -0.98</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt;  5      0     83   3.28</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt;  6      0   83.9  -1.13</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt;  7      0   80.2  0.963</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt;  8      0   53.6  -0.74</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="co">#&gt;  9      0   49.9  0.255</span></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co">#&gt; 10      1   74.3 -0.526</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="co">#&gt; # … with 90 more rows</span></span></code></pre></div>
 </div>
 
 

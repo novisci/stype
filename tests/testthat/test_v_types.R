@@ -7,16 +7,19 @@ library(pillar)
 v_types <- names(methods::getClass("stype")@subclasses)
 
 test_that("testing that described types at least have all common methods", {
-  desired_methods <- c("obj_print_footer", "format",
-                       "vec_ptype_full", "vec_ptype_abbr", "type_sum",
-                       "vec_cast", "vec_ptype2", 
-                       # "vec_restore", 
-                       # commenting this out as it's not clear that v_rcensored needs it
-                       "as_canonical")
+  desired_methods <- 
+    c("obj_print_footer", "format",
+       "vec_ptype_full", "vec_ptype_abbr", "type_sum",
+       "vec_cast", "vec_ptype2", 
+       # "vec_restore", 
+       # commenting this out as it's not clear that v_rcensored needs it
+       "as_canonical")
+  
   purrr::walk(
     .x = v_types,
     .f = ~ {
-      mthds <- gsub(paste0("\\.", .x, "$"), "", as.character(utils::methods(class = .x)))
+      mthds <- gsub(paste0("\\.", .x, "$"), "", 
+                    as.character(utils::methods(class = .x)))
       # browser()
       wh_mthds <- desired_methods %in% mthds
       expect_true(

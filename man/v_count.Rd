@@ -4,6 +4,7 @@
 \alias{v_count}
 \alias{is_count}
 \alias{as_count}
+\alias{as.character.v_count}
 \alias{as_canonical}
 \alias{as_canonical.v_count}
 \title{Count vectors}
@@ -13,6 +14,8 @@ v_count(x = integer(), internal_name = "", context)
 is_count(x)
 
 as_count(x)
+
+\method{as.character}{v_count}(x, ...)
 
 as_canonical(x)
 
@@ -24,6 +27,8 @@ as_canonical(x)
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
+
+\item{...}{passed to other methods such as \code{as.character}}
 }
 \description{
 {

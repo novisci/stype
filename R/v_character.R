@@ -110,23 +110,17 @@ vec_cast.v_character.v_character <- function(x, to, ...) {
 #' @export
 vec_cast.v_character.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
-#' @method vec_cast.v_character character
-#' @export
-vec_cast.v_character.character <- function(x, to, ...) { 
-  v_character(vctrs::vec_data(x)) 
-}
-
-#' @method vec_cast.character v_character
-#' @importFrom vctrs vec_cast.character 
-#' @export
-vec_cast.character.v_character<- function(x, to, ...) { vctrs::vec_data(x) }
-
-
 #' Casting function for character objects
 #' @rdname v_character 
 #' @export
 as_character <- function(x) {
   vctrs::vec_cast(x, new_character())
+}
+
+#' @rdname v_character 
+#' @export
+as.character.v_character <- function(x, ...) {
+  as.character(as_canonical(x))
 }
 
 #' @rdname v_character

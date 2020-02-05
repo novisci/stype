@@ -4,6 +4,7 @@
 \alias{v_binary}
 \alias{is_binary}
 \alias{as_binary}
+\alias{as.character.v_binary}
 \alias{as_canonical.v_binary}
 \title{Binary vectors}
 \usage{
@@ -13,6 +14,8 @@ is_binary(x)
 
 as_binary(x)
 
+\method{as.character}{v_binary}(x, ...)
+
 \method{as_canonical}{v_binary}(x)
 }
 \arguments{
@@ -21,6 +24,8 @@ as_binary(x)
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
+
+\item{...}{passed to other methods such as \code{as.character}}
 }
 \description{
 {

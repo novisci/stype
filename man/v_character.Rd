@@ -4,6 +4,7 @@
 \alias{v_character}
 \alias{is_character}
 \alias{as_character}
+\alias{as.character.v_character}
 \alias{as_canonical.v_character}
 \title{Character vectors}
 \usage{
@@ -13,6 +14,8 @@ is_character(x)
 
 as_character(x)
 
+\method{as.character}{v_character}(x, ...)
+
 \method{as_canonical}{v_character}(x)
 }
 \arguments{
@@ -21,6 +24,8 @@ as_character(x)
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
+
+\item{...}{passed to other methods such as \code{as.character}}
 }
 \description{
 {

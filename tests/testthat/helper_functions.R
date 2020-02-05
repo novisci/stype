@@ -88,9 +88,9 @@ stype_tester <- function(v_type, canonical_type, generator, error_generators){
   )
  
   test_that(
-    sprintf("%s can be coerced to a character", v_type),
+    sprintf("%s can be cast to a character", v_type),
     {  
-      expect_is(vctrs::vec_cast(x1, character()), "character")
+      expect_is(as.character(x1), "character")
     }
   ) 
   

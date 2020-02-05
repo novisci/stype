@@ -69,17 +69,24 @@ methods::setOldClass(c("v_rcensored", "v_censored", "vctrs_vctr"))
 #' if the first censor and second censor occur at the same time, the first 
 #' censor is the reason for the censoring
 #' @param end_time A \code{numeric} scalar defining the end of follow-up.
+#' @importFrom vctrs vec_recycle vec_size
 #' @rdname v_rcensored 
 #' @export
 
 v_rcensored <- function(outcomes = list(), 
-                        censors = list(),
+                        censors,
                         end_time = Inf,
                         internal_name = "", 
                         context){
   
   if(is_event_time(outcomes)){
     outcomes <- list(outcomes)
+  }
+  
+  if(missing(censors)){
+    censors <- vctrs::vec_recycle(
+      v_event_time(NA_real_),
+      if (vctrs::vec_size(outcomes) == 0L) 0L else vctrs::vec_size(outcomes[[1]]))
   }
   
   if(is_event_time(censors)){
@@ -145,8 +152,9 @@ gather_times_reasons <- function(times, levs){
   
   list(
     times   = v_event_time(purrr::map_dbl(hold, "time")),
+    # reasons = factor(levs[purrr::map_dbl(hold, "reason") + 1], levels = levs)
     reasons = v_nominal(factor(levs[purrr::map_dbl(hold, "reason") + 1], 
-                               levels = levs))
+                                levels = levs))
   )
 }
 
@@ -215,6 +223,39 @@ get_levels_labels <- function(x){
   )
 }
 
+#' The invers-ish of .v_rcensored
+#' @importFrom vctrs field
+#' @importFrom purrr set_names
+#' @noRd
+.v_rcensored_unpack <- function(x){
+  
+  time  <- vctrs::field(x, "time")
+  
+  oreas <- vctrs::field(x, "outcome_reason")
+  ocomes <- purrr::map(
+    .x = purrr::set_names(levels(oreas)),
+    .f = ~ {
+      hold <- time
+      idx  <- oreas == .x
+      hold[!ifelse(is.na(idx), FALSE, idx)] <- NA_real_
+      hold
+    }
+  )
+  
+  creas <- vctrs::field(x, "censor_reason")
+  censr <-  purrr::map(
+    .x = purrr::set_names(levels(creas)),
+    .f = ~ {
+      hold <- time
+      idx  <- creas == .x
+      hold[!ifelse(is.na(idx), FALSE, idx)] <- NA_real_
+      hold
+    }
+  )
+  
+  etime <- attr(x, "end_time")
+  list(outcomes = ocomes, censors = censr, end_time = etime)
+}
 
 # Formatting ####
 #' @method format v_rcensored
@@ -263,8 +304,23 @@ vec_ptype2.v_rcensored.vctrs_unspecified <- function(x, y, ...) x
 #' @method vec_ptype2.v_rcensored v_rcensored
 #' @export
 vec_ptype2.v_rcensored.v_rcensored <- function(x, y, ...) {
+  
   compare_contexts(x, y)
-  v_rcensored(context = get_context(x))
+  assertthat::assert_that(
+    attr(x, "end_time") == attr(y, "end_time"),
+    msg = "x and y must have the same end time."
+  )
+ 
+  oreasx <- vctrs::field(x, "outcome_reason") 
+  oreasy <- vctrs::field(y, "outcome_reason") 
+  creasx <- vctrs::field(x, "censor_reason") 
+  creasy <- vctrs::field(y, "censor_reason") 
+   
+  new_rcensored(
+    outcome_reason = new_nominal(.levels = union(levels(oreasx), levels(oreasy))),
+    censor_reason  = new_nominal(.levels = union(levels(creasx), levels(creasy))),
+    .context = get_context(x)
+  )
 }
 
 
@@ -287,6 +343,36 @@ vec_cast.v_rcensored.default  <- function(x, to, ...) vctrs::vec_default_cast(x,
 #' @export
 as.character.v_rcensored <- function(x, ...) {
   as.character(format(x))
+}
+
+#' @export
+#' @method vec_restore v_rcensored
+vec_restore.v_rcensored <- function(x, to, ...) {
+  
+  # Maintain metainfo
+  iname <- attr(to, "internal_name")
+  etime <- attr(to, "end_time")
+  ctxt  <- get_context(to)
+  hold  <- as.list(x)
+
+  # browser()
+
+  out <- 
+  new_rcensored(
+    time           = hold[["time"]], 
+    censored       = hold[["censored"]],
+    outcome        = hold[["outcome"]],
+    outcome_reason = hold[["outcome_reason"]],
+    censor_reason  = hold[["censor_reason"]], 
+    .internal_name = iname,
+    .data_summary  = data_summary(),
+    .context       = ctxt,
+    .end_time      = etime
+  )
+
+  # Update data summary
+  attr(out, "data_summary") <- describe(out)
+  out
 }
 
 #' @rdname v_rcensored 
@@ -328,3 +414,22 @@ vec_ptype_abbr.v_rcensored <- function(x) {
 type_sum.v_rcensored <- function(x) {
   "rcen"
 }
+
+
+#' Cast a v_rcensored type to a Surv object
+#' 
+#' Supports (hopefully obviously) \code{type = "right"} in \code{survival::Surv}
+#' @param x a \code{\link{v_rcensored}} object
+#' @export
+
+as_Surv <- function(x){
+  hold <- as.integer(as_canonical(vctrs::field(x, "outcome_reason")))
+  hold[is.na(hold)] <- 0L
+  
+  survival::Surv(
+    time  = as_canonical(vctrs::field(x, "time")),
+    event = as.factor(hold),
+    type  = "right"
+  )
+}
+

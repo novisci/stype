@@ -119,6 +119,7 @@ vec_cast.v_nominal.v_nominal <- function(x, to, ..., x_arg = "", to_arg = "") {
 #' @export
 #' @method vec_cast.v_nominal character
 vec_cast.v_nominal.character <- vec_cast.v_nominal.v_nominal
+
 #' @export
 #' @method vec_cast.character v_nominal
 vec_cast.character.v_nominal <- function(x, to, ...) {
@@ -138,13 +139,13 @@ vec_cast.v_nominal.default <- function(x, to, ..., x_arg = "", to_arg = "") {
 #' @export
 #' @method vec_restore v_nominal 
 vec_restore.v_nominal <- function(x, to, ..., x_arg = "", to_arg = "") {
-  
-  iname   <- attr(to, "internal_name")
-  x   <- levels(to)[x]
-  out <- factor(x, levels = levels(to))
-
+  # browser()
   # Maintain context
   ctxt <- get_context(to)
+  iname <- attr(to, "internal_name")
+  
+  x   <- levels(to)[x]
+  out <- factor(x, levels = levels(to))
   
   v_nominal(out, internal_name = iname, context = ctxt)
 }

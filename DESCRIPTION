@@ -20,7 +20,8 @@ Suggests:
    knitr,
    testthat,
    dplyr,
-   tibble
+   tibble,
+   survival
 License: GPL-3 + file LICENSE
 URL: https://gitlab.novisci.com/nsStat/stype
 BugReports: https://gitlab.novisci.com/nsStat/stype/issues

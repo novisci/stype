@@ -323,6 +323,7 @@ vec_ptype2.v_rcensored.v_rcensored <- function(x, y, ...) {
   )
 }
 
+
 #' @rdname casting
 #' @inheritParams vctrs::vec_cast
 #' @method vec_cast v_rcensored
@@ -338,6 +339,11 @@ vec_cast.v_rcensored.v_rcensored <- function(x, to, ...) x
 #' @export
 vec_cast.v_rcensored.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
+#' @rdname v_rcensored 
+#' @export
+as.character.v_rcensored <- function(x, ...) {
+  as.character(format(x))
+}
 
 #' @export
 #' @method vec_restore v_rcensored
@@ -371,7 +377,6 @@ vec_restore.v_rcensored <- function(x, to, ...) {
 
 #' @rdname v_rcensored 
 #' @export
-# TODO: Is the canonical acutally a Surv object
 as_canonical.v_rcensored <- function(x){
   as.list(vctrs::vec_data(x))
 }

@@ -45,6 +45,7 @@ v_character <- function(x = character(), internal_name = "", context){
   if(missing(context)){
     context <- methods::new("context")
   }
+  
   new_character(
     x, 
     .internal_name = internal_name,
@@ -84,6 +85,15 @@ vec_ptype2.v_character.v_character <- function(x, y, ...){
   v_character(context = get_context(x))
 }
 
+#' @method vec_ptype2.v_character character
+#' @export
+vec_ptype2.v_character.character <- function(x, y, ...) { x } 
+
+#' @method vec_ptype2.character v_character
+#' @importFrom vctrs vec_ptype2.character
+#' @export 
+vec_ptype2.character.v_character <- function(x, y, ...) { x }
+
 #' @rdname casting
 #' @method vec_cast v_character
 #' @export
@@ -105,6 +115,12 @@ vec_cast.v_character.default  <- function(x, to, ...) vctrs::vec_default_cast(x,
 #' @export
 as_character <- function(x) {
   vctrs::vec_cast(x, new_character())
+}
+
+#' @rdname v_character 
+#' @export
+as.character.v_character <- function(x, ...) {
+  as.character(as_canonical(x))
 }
 
 #' @rdname v_character

@@ -126,7 +126,6 @@ vec_ptype2.v_continuous_nonneg.v_continuous_nonneg <- function(x, y, ...) {
 vec_ptype2.v_continuous_nonneg.numeric <- function(x, y, ...) x
 
 #' @method vec_ptype2.numeric v_continuous_nonneg
-# @importFrom vctrs vec_ptype2.numeric 
 #' @export 
 vec_ptype2.numeric.v_continuous_nonneg <- function(x, y, ...) y
 
@@ -143,11 +142,6 @@ vec_cast.v_continuous_nonneg.v_continuous_nonneg <- function(x, to, ...) x
 #' @method vec_cast.v_continuous_nonneg default
 #' @export
 vec_cast.v_continuous_nonneg.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
-
-#' @method vec_cast.v_continuous_nonneg numeric
-#' @export
-vec_cast.v_continuous_nonneg.numeric <- function(x, to, ...) v_continuous_nonneg(x)
-vec_cast.numeric.v_continuous_nonneg <- function(x, to, ...) vctrs::vec_data(x)
 
 #' @method vec_cast.v_continuous_nonneg numeric
 #' @export

@@ -150,6 +150,7 @@ vec_restore.v_nominal <- function(x, to, ..., x_arg = "", to_arg = "") {
   v_nominal(out, internal_name = iname, context = ctxt)
 }
 
+
 #' @rdname v_nominal
 #' @export
 as_canonical.v_nominal <- function(x){

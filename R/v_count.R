@@ -12,6 +12,7 @@
 #' @param x a \code{integer} vector
 #' @param internal_name the internal name of the variable
 #' @param context a \code{\link{context}}
+#' @param ... passed to other methods such as \code{as.character}
 #' @family stype types
 NULL
 
@@ -126,7 +127,6 @@ vec_ptype2.v_count.double <- function(x, y, ...) x
 #' @export 
 vec_ptype2.double.v_count <- function(x, y, ...) y
 
-
 #' @rdname casting
 #' @inheritParams vctrs::vec_cast
 #' @method vec_cast v_count
@@ -152,6 +152,7 @@ vec_cast.integer.v_count <- function(x, to, ...) vctrs::vec_data(x)
 vec_cast.v_count.double <- function(x, to, ...) v_count(x)
 vec_cast.double.v_count <- function(x, to, ...) vctrs::vec_data(x)
 
+
 #' Casting function for count objects
 #' @rdname v_count 
 #' @export
@@ -161,7 +162,12 @@ as_count <- function(x) {
 
 #' @rdname v_count 
 #' @export
+as.character.v_count <- function(x, ...){
+  as.character(as_canonical(x))
+}
 
+#' @rdname v_count 
+#' @export
 as_canonical <- function(x){
   UseMethod("as_canonical")
 }

@@ -132,6 +132,12 @@ as_binary <- function(x) {
 
 #' @rdname v_binary 
 #' @export
+as.character.v_binary <- function(x, ...) {
+  ifelse(vctrs::vec_data(x), "1", "0")
+}
+
+#' @rdname v_binary 
+#' @export
 as_canonical.v_binary <- function(x){
   as.logical(vctrs::vec_data(x))
 }

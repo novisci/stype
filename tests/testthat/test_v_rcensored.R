@@ -89,8 +89,8 @@ test_that("v_rcensored get_data_summary works", {
     n = 7L,
     has_missing = FALSE,
     person_time = 55,
-    ncensored   = 2,
-    nevents     = 3,
+    n_censored   = 2,
+    n_events     = 3,
     censor_reasons = table(c("cA", "cB", NA, NA, NA, NA, NA), useNA = "always"),
     outcome_reasons = table(c("oA", "oB", "oB", NA, NA, NA, NA), useNA = "always")
   )

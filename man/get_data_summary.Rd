@@ -3,12 +3,15 @@
 \name{get_data_summary}
 \alias{get_data_summary}
 \alias{get_data_summary,stype,ANY-method}
+\alias{get_data_summary,v_rcensored,ANY-method}
 \alias{get_data_summary,stype,character-method}
 \title{Get the summary from a stype variable}
 \usage{
 get_data_summary(x, element)
 
 \S4method{get_data_summary}{stype,ANY}(x, element)
+
+\S4method{get_data_summary}{v_rcensored,ANY}(x, element)
 
 \S4method{get_data_summary}{stype,character}(x, element)
 }

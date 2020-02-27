@@ -87,11 +87,11 @@ setMethod(
   definition = function(x){
     append(
       standardDescriptors,
-        list(
-          n_unique = function(x, ...) length(unique(x)),
-          max_char = function(x, ...) if(length(x) == 0) 0 else max(nchar(x)),
-          min_char = function(x, ...) if(length(x) == 0) 0 else min(nchar(x))
-        )
+      list(
+        n_unique = function(x, ...) length(unique(x)),
+        max_char = function(x, ...) if(length(x) == 0) 0 else max(nchar(x)),
+        min_char = function(x, ...) if(length(x) == 0) 0 else min(nchar(x))
+      )
     )
   }
 )
@@ -107,17 +107,17 @@ setMethod(
     qprobs = c(0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99)
     append(
       standardDescriptors,
-        list(
-          sum    = function(x, ...) sum(x, na.rm = TRUE),
-          mean   = function(x, ...) mean(x, na.rm = TRUE),
-          sd     = function(x, ...) sd(x, na.rm = TRUE),
-          median = function(x, ...) median(x, na.rm = TRUE),
-          iqr    = function(x, ...) IQR(x, na.rm = TRUE),
-          min    = function(x, ...) { if (length(x) == 0 || all(is.na(x))) NA_real_ else min(x, na.rm = TRUE) },
-          max    = function(x, ...) { if (length(x) == 0 || all(is.na(x))) NA_real_ else max(x, na.rm = TRUE) },
-          qtiles = function(x, ...) quantile(x, probs = qprobs, na.rm = TRUE)
-          # hist   = function(x, ...) list(ggplot2::qplot(x, geom = "histogram", ...))
-        )
+      list(
+        sum    = function(x, ...) sum(x, na.rm = TRUE),
+        mean   = function(x, ...) mean(x, na.rm = TRUE),
+        sd     = function(x, ...) sd(x, na.rm = TRUE),
+        median = function(x, ...) median(x, na.rm = TRUE),
+        iqr    = function(x, ...) IQR(x, na.rm = TRUE),
+        min    = function(x, ...) { if (length(x) == 0 || all(is.na(x))) NA_real_ else min(x, na.rm = TRUE) },
+        max    = function(x, ...) { if (length(x) == 0 || all(is.na(x))) NA_real_ else max(x, na.rm = TRUE) },
+        qtiles = function(x, ...) quantile(x, probs = qprobs, na.rm = TRUE)
+        # hist   = function(x, ...) list(ggplot2::qplot(x, geom = "histogram", ...))
+      )
     )
   }
 )
@@ -245,7 +245,7 @@ setMethod(
       purrr::map(
         .x = standardDescriptors,
         .f = function(f) .describe(f, x = as_canonical(vctrs::field(x, "time")), ...)
-        )
+      )
     )
   }
 )
@@ -267,6 +267,24 @@ setMethod(
 )
 
 
+#' Create a function to get data from a field in a stype record type vector
+#' 
+#' @param field_name the name of \code{field} from which extract data
+#' @param what an indexing vector (\code{character} or \code{integer}) identifying
+#' elements in the \code{data_summary} to extract
+#' @param new_names a \code{character} vector of names with which to label the 
+#' elements of result calling the returned function
+#' @param .after an optional function applied to the result
+#' @noRd
+get_from_field <- function(field_name, what, new_names = what, .after = identity){
+  
+  stopifnot(length(what) == length(new_names))
+  function(x){
+    out <- get_data_summary(vctrs::field(x, field_name))[what]
+    .after(setNames(out, new_names))
+  }
+}
+
 #' Get the summary from a stype variable
 #' 
 #' @param x the object from which to get the \code{data_summary}
@@ -286,6 +304,28 @@ setMethod(
   f          = "get_data_summary",
   signature  = c("stype", NULL),
   definition = function(x, element){ attr(x, "data_summary") }
+)
+
+#' @rdname get_data_summary
+#' @export
+
+setMethod(
+  f          = "get_data_summary",
+  signature  = c("v_rcensored", NULL),
+  definition = function(x, element){ 
+    c(
+       get_from_field("time", 
+                       c("n", "has_missing", "sum"), 
+                       c("n", "has_missing", "person_time"))(x),
+        get_from_field("censored", "num_1", "n_censored")(x),
+        get_from_field("outcome", "num_1", "n_events")(x),
+        get_from_field("censor_reason", "table", 
+                       .after = function(z) { list(censor_reasons = z[[1]]) } )(x),
+        get_from_field("outcome_reason", "table", 
+                       .after = function(z) list(outcome_reasons = z[[1]]) )(x)
+    )
+    
+  }
 )
 
 #' @rdname get_data_summary

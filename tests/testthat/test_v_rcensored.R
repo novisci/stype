@@ -40,8 +40,6 @@ test_that("v_rcensored class descriptions update appropriately", {
   # get_data_summary(x2)
   # get_data_summary(c(x1, x2))
   
-
-  
 })
 
 
@@ -82,4 +80,20 @@ test_that("v_rcensored can be cast to a Surv", {
   x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
 
   expect_is(as_Surv(x1), "Surv")
+})
+
+test_that("v_rcensored get_data_summary works", {
+  x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
+  
+  z <- list(
+    n = 7L,
+    has_missing = FALSE,
+    person_time = 55,
+    n_censored   = 2,
+    n_events     = 3,
+    censor_reasons = table(c("cA", "cB", NA, NA, NA, NA, NA), useNA = "always"),
+    outcome_reasons = table(c("oA", "oB", "oB", NA, NA, NA, NA), useNA = "always")
+  )
+  
+  expect_equivalent(get_data_summary(x1), z)
 })

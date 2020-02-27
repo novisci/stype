@@ -313,10 +313,8 @@ setMethod(
   f          = "get_data_summary",
   signature  = c("v_rcensored", NULL),
   definition = function(x, element){ 
-    Reduce(
-      append,
-      list(
-        get_from_field("time", 
+    c(
+       get_from_field("time", 
                        c("n", "has_missing", "sum"), 
                        c("n", "has_missing", "person_time"))(x),
         get_from_field("censored", "num_1", "n_censored")(x),
@@ -325,7 +323,6 @@ setMethod(
                        .after = function(z) { list(censor_reasons = z[[1]]) } )(x),
         get_from_field("outcome_reason", "table", 
                        .after = function(z) list(outcome_reasons = z[[1]]) )(x)
-      )
     )
     
   }

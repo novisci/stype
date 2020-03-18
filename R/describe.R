@@ -344,7 +344,7 @@ setMethod(
 
 setGeneric(
   name = "get_internal_name", 
-  def  = function(x, element) standardGeneric("get_internal_name")
+  def  = function(x) standardGeneric("get_internal_name")
 )
 
 #' @rdname get_internal_name
@@ -353,7 +353,7 @@ setGeneric(
 setMethod(
   f          = "get_internal_name",
   signature  = c("stype"),
-  definition = function(x, element){ attr(x, "internal_name") }
+  definition = function(x){ attr(x, "internal_name") }
 )
 
 #' Check that an object is a stype vector

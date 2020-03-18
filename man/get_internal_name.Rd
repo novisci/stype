@@ -5,9 +5,9 @@
 \alias{get_internal_name,stype-method}
 \title{Get the internal name from a stype variable}
 \usage{
-get_internal_name(x, element)
+get_internal_name(x)
 
-\S4method{get_internal_name}{stype}(x, element)
+\S4method{get_internal_name}{stype}(x)
 }
 \arguments{
 \item{x}{the object from which to get the \code{internal_name} attribute}

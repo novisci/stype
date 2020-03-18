@@ -97,3 +97,27 @@ test_that("v_rcensored get_data_summary works", {
   
   expect_equivalent(get_data_summary(x1), z)
 })
+
+
+test_that("row binding works for v_rcensored", {
+  x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
+  x2 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
+  x3 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
+
+  z1 <- tibble::tibble(x = x1, y = x2)
+  z2 <- tibble::tibble(x = x2, y = x3)
+  z3 <- tibble::tibble(x = x3, y = x1)
+  
+  expect_is(vctrs::vec_rbind(z1, z2), "data.frame")
+  expect_is(vctrs::vec_rbind(z1, z3), "data.frame")
+  expect_is(vctrs::vec_rbind(z2, z3), "data.frame")
+  expect_is(vctrs::vec_rbind(z1, z2, z3), "data.frame")
+
+  # TODO: once dplyr with vctrs the hood is stable add tests for:
+  # bind_rows(z1, z2)
+  # bind_rows(z1, z2, z3)
+  
+  # TODO: this doesn't work (I don't know how to begin to fix)
+  # rbind(z1, z2)
+  # rbind(z1, z2, z3)
+})

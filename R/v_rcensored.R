@@ -26,7 +26,7 @@ new_rcensored <- function(time           = v_event_time(),
                           .internal_name = character(), 
                           .data_summary  = data_summary(), 
                           .context       = context()){
-  
+  # browser()
   vctrs::vec_assert(time, ptype = v_event_time())
   vctrs::vec_assert(censored, ptype = v_binary())
   vctrs::vec_assert(outcome, ptype = v_binary())
@@ -78,6 +78,7 @@ v_rcensored <- function(outcomes = list(),
                         end_time = Inf,
                         internal_name = "", 
                         context){
+  
   
   if(is_event_time(outcomes)){
     outcomes <- list(outcomes)
@@ -306,8 +307,13 @@ vec_ptype2.v_rcensored.vctrs_unspecified <- function(x, y, ...) x
 vec_ptype2.v_rcensored.v_rcensored <- function(x, y, ...) {
   
   compare_contexts(x, y)
+  
   assertthat::assert_that(
-    attr(x, "end_time") == attr(y, "end_time"),
+    attr(x, "end_time") == attr(y, "end_time") || 
+      # Handle case where either end_time is missing
+      # (which can happen on vec_restore)
+      length(attr(x, "end_time")) == 0 || 
+      length(attr(y, "end_time")) == 0,
     msg = "x and y must have the same end time."
   )
  
@@ -354,8 +360,6 @@ vec_restore.v_rcensored <- function(x, to, ...) {
   etime <- attr(to, "end_time")
   ctxt  <- get_context(to)
   hold  <- as.list(x)
-
-  # browser()
 
   out <- 
   new_rcensored(

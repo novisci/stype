@@ -93,11 +93,11 @@ vec_ptype2.v_continuous.default <- function(x, y, ..., x_arg = "", y_arg = "") {
 # @export vec_ptype2.double
 #vec_ptype2.double <- function(x, y, ...) UseMethod("vec_ptype2.double", y)
 
-#' @method vec_ptype2.double default
-#' @export
-vec_ptype2.double.default <- function(x, y, ..., x_arg = "", y_arg = "") {
-  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
-}
+#@method vec_ptype2.double default
+# @export
+# vec_ptype2.double.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+#   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
+# }
 
 
 #' @method vec_ptype2.v_continuous vctrs_unspecified

@@ -17,8 +17,10 @@ stype_tester <- function(v_type, canonical_type, generator, error_generators){
   
   ctxt1 <- context(short_label = "test label", long_label = "test label")
   ctxt2 <- context(short_label = "diff label", long_label = "diff label")
-  x1c <- do.call(v_type, args = append(g1, list(context = ctxt1)))
-  x2c <- do.call(v_type, args = append(g2, list(context = ctxt2)))
+  x1c <- do.call(v_type, args = append(g1, list(internal_name = "test", 
+                                                context = ctxt1)))
+  x2c <- do.call(v_type, args = append(g2, list(internal_name = "test", 
+                                                context = ctxt2)))
   
   test_that(
     sprintf("%s inheritance is correct", v_type),
@@ -91,6 +93,12 @@ stype_tester <- function(v_type, canonical_type, generator, error_generators){
     sprintf("%s can be cast to a character", v_type),
     {  
       expect_is(as.character(x1), "character")
+    }
+  ) 
+  
+  test_that("get_internal_name should work",
+    {  
+      expect_equal(get_internal_name(x1c), "test")
     }
   ) 
   

@@ -337,6 +337,25 @@ setMethod(
   definition = function(x, element){ attr(x, "data_summary")[[element]] }
 )
 
+#' Get the internal name from a stype variable
+#' 
+#' @param x the object from which to get the \code{internal_name} attribute
+#' @export
+
+setGeneric(
+  name = "get_internal_name", 
+  def  = function(x) standardGeneric("get_internal_name")
+)
+
+#' @rdname get_internal_name
+#' @export
+
+setMethod(
+  f          = "get_internal_name",
+  signature  = c("stype"),
+  definition = function(x){ attr(x, "internal_name") }
+)
+
 #' Check that an object is a stype vector
 #' 
 #' @param object any \code{R} object

@@ -28,7 +28,7 @@ setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
 #' A function that returns a list of functions to be applied to a variable
 #' 
 #' @param x a vector
-#' @importFrom stats IQR median sd quantile
+#' @importFrom stats IQR median sd quantile var cov
 #' @export
 
 setGeneric("getDescriptors", function(x) standardGeneric("getDescriptors"))
@@ -55,7 +55,8 @@ setMethod(
       list(
         num_0      = function(x, ...) sum(!x, na.rm = TRUE),
         num_1      = function(x, ...) sum(x, na.rm = TRUE),
-        proportion = function(x, ...) mean(x, na.rm = TRUE)
+        proportion = function(x, ...) mean(x, na.rm = TRUE),
+        variance   = function(x, ...) var(x, na.rm = TRUE)
       ))
   }
 )
@@ -110,7 +111,7 @@ setMethod(
       list(
         sum    = function(x, ...) sum(x, na.rm = TRUE),
         mean   = function(x, ...) mean(x, na.rm = TRUE),
-        sd     = function(x, ...) sd(x, na.rm = TRUE),
+        variance = function(x, ...) var(x, na.rm = TRUE),
         median = function(x, ...) median(x, na.rm = TRUE),
         iqr    = function(x, ...) IQR(x, na.rm = TRUE),
         min    = function(x, ...) { if (length(x) == 0 || all(is.na(x))) NA_real_ else min(x, na.rm = TRUE) },
@@ -312,17 +313,51 @@ setMethod(
 setMethod(
   f          = "get_data_summary",
   signature  = c("v_rcensored", NULL),
-  definition = function(x, element){ 
-    c(
-       get_from_field("time", 
-                       c("n", "has_missing", "sum"), 
-                       c("n", "has_missing", "person_time"))(x),
-        get_from_field("censored", "num_1", "n_censored")(x),
-        get_from_field("outcome", "num_1", "n_events")(x),
-        get_from_field("censor_reason", "table", 
-                       .after = function(z) { list(censor_reasons = z[[1]]) } )(x),
-        get_from_field("outcome_reason", "table", 
-                       .after = function(z) list(outcome_reasons = z[[1]]) )(x)
+  definition = function(x, element){
+    
+    time_data <-  get_from_field(
+      "time", 
+       c("n", "has_missing", "sum"), 
+       c("n", "has_missing", "person_time"))(x)
+    
+    event_data <- get_from_field("outcome", "num_1", "n_events")(x)
+    
+    # exposure adjusted incidence rate
+    # - eair: exposure adjusted incidence rate
+    # - eair_var: variance of eair using formula (2) in He 2015 
+    #             (doi:10.4172/2155-6180.1000238)
+    
+    outc <- vctrs::field(x, "outcome")
+    time <- vctrs::field(x, "time")
+    
+    # proportion of subjects that have event prior to censor or end of followup
+    a_hat   <- get_data_summary(outc, "proportion")
+    a_sigma <- get_data_summary(outc, "variance")
+    
+    # mean followup time
+    b_hat   <- get_data_summary(time, "mean")
+    b_sigma <- get_data_summary(time, "variance")
+    
+    cov_ab <- cov(outc, time)
+    
+    sigma <- matrix(c(a_sigma, cov_ab, cov_ab, b_sigma), ncol = 2, byrow = TRUE)
+    L <- c(1 , -a_hat/b_hat)
+    
+    incidence_data <- 
+    list(
+      eair          = event_data[["n_events"]]/time_data[["person_time"]],
+      eair_variance = drop((1/(b_hat^2)) * t(L) %*% sigma %*% L)
+    )
+    
+    
+    c(time_data,
+      event_data,
+      get_from_field("censored", "num_1", "n_censored")(x),
+      get_from_field("censor_reason", "table", 
+                     .after = function(z) { list(censor_reasons = z[[1]]) } )(x),
+      get_from_field("outcome_reason", "table", 
+                     .after = function(z) list(outcome_reasons = z[[1]]) )(x),
+      incidence_data
     )
     
   }

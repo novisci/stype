@@ -19,8 +19,9 @@ site:
   stage: package
   script:
      - R -e 'pkgdown::build_site()'
-     - mv $CI_PROJECT_DIR/docs/* public
-     - aws s3 sync public/ s3://docs.novisci.com/stype/ --delete --acl public-read
+     - aws s3 sync $CI_PROJECT_DIR/docs/ s3://docs.novisci.com/stype/ --delete --acl public-read
+#     - mv $CI_PROJECT_DIR/docs/* public
+#     - aws s3 sync public/ s3://docs.novisci.com/stype/ --delete --acl public-read
 
 minicran:
   stage: package

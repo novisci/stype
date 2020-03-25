@@ -89,13 +89,15 @@ test_that("v_rcensored get_data_summary works", {
     n = 7L,
     has_missing = FALSE,
     person_time = 55,
-    n_censored   = 2,
     n_events     = 3,
+    n_censored   = 2,
     censor_reasons = table(c("cA", "cB", NA, NA, NA, NA, NA), useNA = "always"),
-    outcome_reasons = table(c("oA", "oB", "oB", NA, NA, NA, NA), useNA = "always")
+    outcome_reasons = table(c("oA", "oB", "oB", NA, NA, NA, NA), useNA = "always"),
+    eair = 0.54545454,
+    eair_variance = 0.006923789
   )
   
-  expect_equivalent(get_data_summary(x1), z)
+  expect_equivalent(get_data_summary(x1), z, tolerance = 8)
 })
 
 

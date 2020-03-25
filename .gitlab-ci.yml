@@ -1,63 +1,31 @@
-#image: registry.novisci.com/infrastructure/r-build-dock:master
-image: rocker/verse
-#variables:
-#  R_LIBS_USER: "$CI_PROJECT_DIR/ci/lib"
+image: registry.novisci.com/nsstat/statocker/r/pkgdev:latest
 
 stages:
   - testing
   - package
 
-before_script:
-  - Rscript -e "print(getOption('repos'))"
-
 testing:
   stage: testing
   script:
-#    - R -e 'devtools::install_github("r-lib/rlang@v0.4.0")'
-    - R -e 'install.packages(c("rlang", "purrr", "pillar", "ellipsis", "vctrs"))'
-#    - R -e 'devtools::install_github("r-lib/vctrs")'
     - R -e 'devtools::check(manual = FALSE)'
 
-# create a coverage report and push it to the public folder (for a future website)
-#coverage:
-#  stage: testing
-#  script:
-#    - R -e '.libPaths(Sys.getenv("R_LIBS_USER")); cc <- covr::package_coverage(Sys.getenv("CI_PROJECT_DIR")); covr::gitlab(coverage = cc); cat("Code coverage:", paste0(format(covr::percent_coverage(cc), nsmall = 1),"%"))'
-#  artifacts:
-#    paths:
-#      - public
-  #only:
-  #  - master
-
-
-# Store an artifact in gitlab that is the result of R CMD build
-#   Keep it for a week by default. Any longer requires manual intervention
-#   through the UI or API.
 package:
   stage: package
   script:
- #   - R -e 'devtools::install_github("r-lib/rlang@v0.4.0")'
-#    - R -e 'install.packages(c("purrr", "pillar"))'
-#    - R -e 'devtools::install_github("r-lib/vctrs")'
-    - R -e 'install.packages(c("rlang"))'
-    - R -e 'install.packages(c("purrr", "pillar", "ellipsis", "vctrs"))'
     - rm -rf .git
     - R CMD build .
-  artifacts:
-    name: "${CI_PROJECT_NAME}-${SAFE_REF_NAME}"
-    paths:
-      - ./${CI_PROJECT_NAME}_*
-    expire_in: 1 week
+
+site: 
+  stage: package
+  only:
+     - master
+  script:
+     - R -e 'pkgdown::build_site()'
+     - aws s3 sync $CI_PROJECT_DIR/docs/ s3://docs.novisci.com/stype/ --delete --acl public-read
 
 minicran:
   stage: package
   only:
     - master
   script:
-    - R -e 'install.packages(c("miniCRAN"))'
-    #- R -e 'devtools::install_github("r-lib/rlang@v0.4.0")'
-    #- R -e 'install.packages(c("purrr", "pillar"))'
-    #- R -e 'devtools::install_github("r-lib/vctrs")'
-    - R -e 'install.packages(c("rlang"))'
-    - R -e 'install.packages(c("purrr", "pillar", "ellipsis", "vctrs"))'
     - Rscript -e "library(miniCRAN); addLocalPackage('${CI_PROJECT_NAME}', pkgPath='..', path='/mnt/cran.novisci.com', type='source', build=TRUE)"

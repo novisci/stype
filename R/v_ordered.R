@@ -84,8 +84,12 @@ vec_ptype2.v_ordered.character <- function(x, y, ...) character()
 #' @export
 vec_ptype2.v_ordered.v_ordered <- function(x, y, ...) {
   compare_contexts(x, y)
-  new_ordered(.levels =  union(levels(x),levels(y)),
-              .context = get_context(x))
+  check_internal_names(x, y)
+  
+  new_ordered(
+    .levels =  union(levels(x),levels(y)),
+    .internal_name = get_internal_name(x),
+    .context = get_context(x))
 }
 
 # Cast --------------------------------------------------------------------
@@ -118,6 +122,7 @@ vec_cast.v_ordered.v_ordered <- function(x, to, ..., x_arg = "", to_arg = "") {
 #' @export
 #' @method vec_cast.v_ordered character
 vec_cast.v_ordered.character <- vec_cast.v_ordered.v_ordered
+
 #' @export
 #' @method vec_cast.character v_ordered
 vec_cast.character.v_ordered <- function(x, to, ...) {

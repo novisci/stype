@@ -82,7 +82,11 @@ vec_ptype2.v_character.vctrs_unspecified <- function(x, y, ...) x
 #' @export
 vec_ptype2.v_character.v_character <- function(x, y, ...){
   compare_contexts(x, y)
-  v_character(context = get_context(x))
+  check_internal_names(x, y)
+  
+  v_character(
+    internal_name = get_internal_name(x),
+    context = get_context(x))
 }
 
 #' @method vec_ptype2.v_character character
@@ -103,7 +107,9 @@ vec_cast.v_character <- function(x, to, ...) UseMethod("vec_cast.v_character")
 #' @method vec_cast.v_character v_character
 #' @export
 vec_cast.v_character.v_character <- function(x, to, ...) {
-  v_character(vctrs::vec_data(x), context = get_context(to))
+  v_character(vctrs::vec_data(x), 
+              internal_name = get_internal_name(to),
+              context = get_context(to))
 }
 
 #' @method vec_cast.v_character default

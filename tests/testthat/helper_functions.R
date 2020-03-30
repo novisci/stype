@@ -78,9 +78,7 @@ stype_tester <- function(v_type, canonical_type, generator, error_generators){
       
       expect_equal(get_internal_name(x1c[1:2]), "test")
       expect_equal(get_internal_name(vctrs::vec_c(x1c, x1c)), "test")
-
-                  # expect_equal(get_internal_name(c(x1c, x1c)), "test")
-      
+      expect_equal(get_internal_name(c(x1c, x1c)), "test")
     }
   )
   

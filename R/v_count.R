@@ -105,7 +105,10 @@ vec_ptype2.v_count.vctrs_unspecified <- function(x, y, ...) x
 #' @export
 vec_ptype2.v_count.v_count <- function(x, y, ...) {
   compare_contexts(x, y)
-  v_count(context = get_context(x))
+  check_internal_names(x, y)
+  
+  v_count(internal_name = get_internal_name(x), 
+          context = get_context(x))
 } 
 
 #' @method vec_ptype2.v_count integer
@@ -136,7 +139,7 @@ vec_cast.v_count <- function(x, to, ...) UseMethod("vec_cast.v_count")
 
 #' @method vec_cast.v_count v_count
 #' @export
-vec_cast.v_count.v_count <- function(x, to, ...) x
+vec_cast.v_count.v_count <- function(x, to, ...) x 
 
 #' @method vec_cast.v_count default
 #' @export

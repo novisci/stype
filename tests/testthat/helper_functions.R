@@ -73,6 +73,16 @@ stype_tester <- function(v_type, canonical_type, generator, error_generators){
   )
   
   test_that(
+    sprintf("internal_names are retained in %s", v_type),
+    {  
+      
+      expect_equal(get_internal_name(x1c[1:2]), "test")
+      expect_equal(get_internal_name(vctrs::vec_c(x1c, x1c)), "test")
+      expect_equal(get_internal_name(c(x1c, x1c)), "test")
+    }
+  )
+  
+  test_that(
     sprintf("contexts are retained in %s", v_type),
     {  
       # Check context is there

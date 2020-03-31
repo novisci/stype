@@ -108,7 +108,11 @@ vec_ptype2.v_continuous.vctrs_unspecified <- function(x, y, ...) x
 #' @export
 vec_ptype2.v_continuous.v_continuous <- function(x, y, ...) {
   compare_contexts(x, y)
-  v_continuous(context = get_context(x))
+  check_internal_names(x, y)
+  
+  v_continuous(
+    internal_name = get_internal_name(x),
+    context = get_context(x))
 }
 
 
@@ -128,7 +132,7 @@ vec_cast.v_continuous <- function(x, to, ...) UseMethod("vec_cast.v_continuous")
 
 #' @method vec_cast.v_continuous v_continuous
 #' @export
-vec_cast.v_continuous.v_continuous <- function(x, to, ...) x
+vec_cast.v_continuous.v_continuous <- function(x, to, ...) x 
 
 #' @method vec_cast.v_continuous default
 #' @export
@@ -136,7 +140,8 @@ vec_cast.v_continuous.default  <- function(x, to, ...) vctrs::vec_default_cast(x
 
 #' @method vec_cast.v_continuous double
 #' @export
-vec_cast.v_continuous.double <- function(x, to, ...) v_continuous(x)
+vec_cast.v_continuous.double <- function(x, to, ...) x
+
 vec_cast.double.v_continuous <- function(x, to, ...) vctrs::vec_data(x)
 
 #' Casting function for continuous objects

@@ -74,3 +74,15 @@ print_footer <- function(x, stats){
       cxtp,
       sep = "")
 }
+
+#' Check that internal names are equal
+#' @param x a stype vector
+#' @param y another stype vector
+#' @keywords internal
+
+check_internal_names <- function(x, y){
+  assertthat::assert_that(
+    get_internal_name(x) == get_internal_name(y),
+    msg = "internal names of x and y must match"
+  )
+}

@@ -307,6 +307,7 @@ vec_ptype2.v_rcensored.vctrs_unspecified <- function(x, y, ...) x
 vec_ptype2.v_rcensored.v_rcensored <- function(x, y, ...) {
   
   compare_contexts(x, y)
+  check_internal_names(x, y)
   
   assertthat::assert_that(
     attr(x, "end_time") == attr(y, "end_time") || 
@@ -325,6 +326,7 @@ vec_ptype2.v_rcensored.v_rcensored <- function(x, y, ...) {
   new_rcensored(
     outcome_reason = new_nominal(.levels = union(levels(oreasx), levels(oreasy))),
     censor_reason  = new_nominal(.levels = union(levels(creasx), levels(creasy))),
+    .internal_name = get_internal_name(x),
     .context = get_context(x)
   )
 }

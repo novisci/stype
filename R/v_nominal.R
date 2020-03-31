@@ -85,8 +85,12 @@ vec_ptype2.v_nominal.character <- function(x, y, ...) character()
 #' @export
 vec_ptype2.v_nominal.v_nominal <- function(x, y, ...) {
   compare_contexts(x, y)
-  new_nominal(.levels =  union(levels(x),levels(y)),
-              .context = get_context(x))
+  check_internal_names(x, y)
+  
+  new_nominal(
+    .levels =  union(levels(x),levels(y)),
+    .internal_name = get_internal_name(x),
+    .context = get_context(x))
 }
 
 # Cast --------------------------------------------------------------------

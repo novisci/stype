@@ -1,4 +1,4 @@
-image: registry.novisci.com/nsstat/statocker/r/pkgdev:latest
+image: registry.novisci.com/nsstat/statocker/r/pkgdev:4.0.1
 
 stages:
   - testing
@@ -7,12 +7,11 @@ stages:
 testing:
   stage: testing
   script:
-    - R -e 'detach("vctrs"); install.packages("vctrs"); devtools::check(manual = FALSE)'
+    - R -e 'devtools::check(manual = FALSE)'
 
 package:
   stage: package
   script:
-    - R -e 'install.packages("vctrs")'
     - rm -rf .git
     - R CMD build .
 

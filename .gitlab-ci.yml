@@ -7,11 +7,13 @@ stages:
 testing:
   stage: testing
   script:
+    - R -e 'install.packages("vctrs")'
     - R -e 'devtools::check(manual = FALSE)'
 
 package:
   stage: package
   script:
+    - R -e 'install.packages("vctrs")'
     - rm -rf .git
     - R CMD build .
 

@@ -7,7 +7,7 @@ stages:
 testing:
   stage: testing
   script:
-    - R -e 'install.packages("vctrs"); devtools::check(manual = FALSE)'
+    - R -e 'detach("vctrs"); install.packages("vctrs"); devtools::check(manual = FALSE)'
 
 package:
   stage: package

@@ -1,4 +1,4 @@
-image: registry.novisci.com/nsstat/statocker/r/pkgdev:4.0.1
+image: registry.novisci.com/nsstat/statocker/r/pkgdev:3.6.3
 
 stages:
   - testing
@@ -29,3 +29,4 @@ minicran:
     - master
   script:
     - Rscript -e "library(miniCRAN); addLocalPackage('${CI_PROJECT_NAME}', pkgPath='..', path='/mnt/cran.novisci.com', type='source', build=TRUE)"
+    - R -e "drat::archivePackages(repopath='/mnt/cran.novisci.com', pkg = '${CI_PROJECT_NAME}')"

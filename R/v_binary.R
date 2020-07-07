@@ -60,7 +60,6 @@ v_binary <- function(x = logical(), internal_name = "", context){
 #' Predicate function for binary objects
 #' @rdname v_binary 
 #' @export
-
 is_binary <- function(x){
   inherits(x, "v_binary")
 }
@@ -71,16 +70,6 @@ is_binary <- function(x){
 #' @export
 #' @export vec_ptype2.v_binary
 vec_ptype2.v_binary <- function(x, y, ...) UseMethod("vec_ptype2.v_binary", y)
-
-#' @method vec_ptype2.v_binary default
-#' @export
-vec_ptype2.v_binary.default <- function(x, y, ..., x_arg = "", y_arg = "") {
-  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
-}
-
-#' @method vec_ptype2.v_binary vctrs_unspecified
-#' @export
-vec_ptype2.v_binary.vctrs_unspecified <- function(x, y, ...) x
 
 #' @method vec_ptype2.v_binary v_binary
 #' @export
@@ -94,12 +83,7 @@ vec_ptype2.v_binary.v_binary <- function(x, y, ...){
 
 #' @method vec_ptype2.v_binary logical
 #' @export
-vec_ptype2.v_binary.logical <- function(x, y, ...) { x } 
-
-#' @method vec_ptype2.logical v_binary
-#' @importFrom vctrs vec_ptype2.logical
-#' @export 
-vec_ptype2.logical.v_binary <- function(x, y, ...) { y }
+vec_ptype2.v_binary.logical <- function(x, y, ...)  x  
 
 #' @rdname casting
 #' @method vec_cast v_binary
@@ -110,10 +94,6 @@ vec_cast.v_binary <- function(x, to, ...) UseMethod("vec_cast.v_binary")
 #' @method vec_cast.v_binary v_binary
 #' @export
 vec_cast.v_binary.v_binary <- function(x, to, ...) x 
-
-#' @method vec_cast.v_binary default
-#' @export
-vec_cast.v_binary.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
 #' @method vec_cast.v_binary logical
 #' @export

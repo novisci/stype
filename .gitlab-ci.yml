@@ -1,4 +1,4 @@
-image: registry.novisci.com/nsstat/statocker/r/pkgdev:latest
+image: registry.novisci.com/nsstat/statocker/r/pkgdev:4.0.1
 
 stages:
   - testing

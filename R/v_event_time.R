@@ -83,28 +83,6 @@ format.v_event_time <- function(x, ...) {
 #' @export vec_ptype2.v_event_time
 vec_ptype2.v_event_time <- function(x, y, ...) UseMethod("vec_ptype2.v_event_time", y)
 
-#' @method vec_ptype2.v_event_time default
-#' @export
-vec_ptype2.v_event_time.default <- function(x, y, ..., x_arg = "", y_arg = "") {
-  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
-}
-
-#' @method vec_ptype2 numeric
-#' @export
-#' @export vec_ptype2.numeric
-vec_ptype2.numeric <- function(x, y, ...) UseMethod("vec_ptype2.numeric", y)
-
-#' @method vec_ptype2.numeric default
-#' @export
-vec_ptype2.numeric.default <- function(x, y, ..., x_arg = "", y_arg = "") {
-  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
-}
-
-
-#' @method vec_ptype2.v_event_time vctrs_unspecified
-#' @export
-vec_ptype2.v_event_time.vctrs_unspecified <- function(x, y, ...) x
-
 #' @method vec_ptype2.v_event_time v_event_time
 #' @export
 vec_ptype2.v_event_time.v_event_time <- function(x, y, ...) {
@@ -116,14 +94,17 @@ vec_ptype2.v_event_time.v_event_time <- function(x, y, ...) {
     context = get_context(x))
 }
 
-#' @method vec_ptype2.v_event_time numeric
+#' @method vec_ptype2.v_event_time double
 #' @export
-vec_ptype2.v_event_time.numeric <- function(x, y, ...) x
+vec_ptype2.v_event_time.double <- function(x, y, ...) x
 
-#' @method vec_ptype2.numeric v_event_time
-# @importFrom vctrs vec_ptype2.numeric 
-#' @export 
-vec_ptype2.numeric.v_event_time <- function(x, y, ...) y
+#' @method vec_ptype2.v_event_time v_continuous
+#' @export
+vec_ptype2.v_event_time.v_continuous <- function(x, y, ...) x
+
+#' @method vec_ptype2.v_event_time v_continuous_nonneg
+#' @export
+vec_ptype2.v_event_time.v_continuous_nonneg <- function(x, y, ...) x
 
 #' @rdname casting
 #' @method vec_cast v_event_time
@@ -134,10 +115,6 @@ vec_cast.v_event_time <- function(x, to, ...) UseMethod("vec_cast.v_event_time")
 #' @method vec_cast.v_event_time v_event_time
 #' @export
 vec_cast.v_event_time.v_event_time <- function(x, to, ...) x
-
-#' @method vec_cast.v_event_time default
-#' @export
-vec_cast.v_event_time.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
 #' @method vec_cast.v_event_time numeric
 #' @export

@@ -11,10 +11,11 @@
 # arguments.
 
 setClassUnion("groupVar",        c("character", "factor"))
+setClassUnion("weightVar",       c("numeric"))
 setClassUnion("categorical",     c("factor", "ordered"))
 setClassUnion("Missing",         c("missing", "NULL"))
 setClassUnion("maybeGroup",      c("Missing", "groupVar"))
-setClassUnion("maybeWeight",     c("Missing", "numeric"))
+setClassUnion("maybeWeight",     c("Missing", "weightVar"))
 setClassUnion("maybeDescriptor", c("missing", "NULL", "list"))
 setClassUnion("describable",     c("integer", "logical", "numeric", "factor",
                                    "ordered", "character", "v_rcensored"))
@@ -33,7 +34,6 @@ setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
 setGeneric("getDescriptors", function(x, g, w) standardGeneric("getDescriptors"))
 
 standardDescriptors <-  list(
-  # TODO insert useful summary stats that apply across all variables here
   n            = function(x, ...) length(x),
   has_missing  = function(x, ...) anyNA(x),
   n_nonmissing = function(x, ...) sum(!is.na(x)),
@@ -126,7 +126,7 @@ setMethod(
 #' @export
 setMethod(
   f          = "getDescriptors",
-  signature  = c("numeric", "Missing", "numeric"),
+  signature  = c("numeric", "Missing", "weightVar"),
   definition = function(x, g, w){
     
     vctrs::vec_c(

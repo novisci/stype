@@ -28,7 +28,9 @@ setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
 #'
 #' A function that returns a list of functions to be applied to a variable
 #' 
-#' @param x a vector
+#' @param x a vector of data
+#' @param g a vector of groupings
+#' @param w a vector of weights
 #' @importFrom stats IQR median sd quantile var cov
 #' @export
 setGeneric("getDescriptors", function(x, g, w) standardGeneric("getDescriptors"))

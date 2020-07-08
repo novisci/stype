@@ -2,27 +2,34 @@
 % Please edit documentation in R/describe.R
 \name{getDescriptors}
 \alias{getDescriptors}
-\alias{getDescriptors,logical-method}
-\alias{getDescriptors,categorical-method}
-\alias{getDescriptors,character-method}
-\alias{getDescriptors,numeric-method}
-\alias{getDescriptors,NULL-method}
+\alias{getDescriptors,logical,maybeGroup,maybeWeight-method}
+\alias{getDescriptors,categorical,maybeGroup,maybeWeight-method}
+\alias{getDescriptors,character,maybeGroup,maybeWeight-method}
+\alias{getDescriptors,numeric,maybeGroup,maybeWeight-method}
+\alias{getDescriptors,numeric,Missing,weightVar-method}
+\alias{getDescriptors,NULL,ANY,ANY-method}
 \title{Descriptor}
 \usage{
-getDescriptors(x)
+getDescriptors(x, g, w)
 
-\S4method{getDescriptors}{logical}(x)
+\S4method{getDescriptors}{logical,maybeGroup,maybeWeight}(x, g, w)
 
-\S4method{getDescriptors}{categorical}(x)
+\S4method{getDescriptors}{categorical,maybeGroup,maybeWeight}(x, g, w)
 
-\S4method{getDescriptors}{character}(x)
+\S4method{getDescriptors}{character,maybeGroup,maybeWeight}(x, g, w)
 
-\S4method{getDescriptors}{numeric}(x)
+\S4method{getDescriptors}{numeric,maybeGroup,maybeWeight}(x, g, w)
 
-\S4method{getDescriptors}{`NULL`}(x)
+\S4method{getDescriptors}{numeric,Missing,weightVar}(x, g, w)
+
+\S4method{getDescriptors}{`NULL`,ANY,ANY}(x)
 }
 \arguments{
-\item{x}{a vector}
+\item{x}{a vector of data}
+
+\item{g}{a vector of groupings}
+
+\item{w}{a vector of weights}
 }
 \description{
 A function that returns a list of functions to be applied to a variable

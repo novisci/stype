@@ -5,12 +5,10 @@
 \name{casting}
 \alias{casting}
 \alias{vec_ptype2.v_count}
-\alias{vec_ptype2.integer.v_count}
 \alias{vec_cast.v_count}
 \alias{vec_ptype2.v_continuous}
 \alias{vec_cast.v_continuous}
 \alias{vec_ptype2.v_continuous_nonneg}
-\alias{vec_ptype2.numeric}
 \alias{vec_cast.v_continuous_nonneg}
 \alias{vec_ptype2.v_event_time}
 \alias{vec_cast.v_event_time}
@@ -28,8 +26,6 @@
 \usage{
 \method{vec_ptype2}{v_count}(x, y, ...)
 
-\method{vec_ptype2.integer}{v_count}(x, y, ...)
-
 \method{vec_cast}{v_count}(x, to, ...)
 
 \method{vec_ptype2}{v_continuous}(x, y, ...)
@@ -37,8 +33,6 @@
 \method{vec_cast}{v_continuous}(x, to, ...)
 
 \method{vec_ptype2}{v_continuous_nonneg}(x, y, ...)
-
-\method{vec_ptype2}{numeric}(x, y, ...)
 
 \method{vec_cast}{v_continuous_nonneg}(x, to, ...)
 

@@ -292,16 +292,6 @@ is_rcensored <- function(x){
 #' @export vec_ptype2.v_rcensored
 vec_ptype2.v_rcensored <- function(x, y, ...) UseMethod("vec_ptype2.v_rcensored", y)
 
-#' @method vec_ptype2.v_rcensored default
-#' @export
-vec_ptype2.v_rcensored.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
-}
-
-#' @method vec_ptype2.v_rcensored vctrs_unspecified
-#' @export
-vec_ptype2.v_rcensored.vctrs_unspecified <- function(x, y, ...) x
-
 #' @method vec_ptype2.v_rcensored v_rcensored
 #' @export
 vec_ptype2.v_rcensored.v_rcensored <- function(x, y, ...) {
@@ -331,7 +321,6 @@ vec_ptype2.v_rcensored.v_rcensored <- function(x, y, ...) {
   )
 }
 
-
 #' @rdname casting
 #' @inheritParams vctrs::vec_cast
 #' @method vec_cast v_rcensored
@@ -342,10 +331,6 @@ vec_cast.v_rcensored <- function(x, to, ...) UseMethod("vec_cast.v_rcensored")
 #' @method vec_cast.v_rcensored v_rcensored
 #' @export
 vec_cast.v_rcensored.v_rcensored <- function(x, to, ...) x
-
-#' @method vec_cast.v_rcensored default
-#' @export
-vec_cast.v_rcensored.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
 #' @rdname v_rcensored 
 #' @export

@@ -81,29 +81,6 @@ format.v_continuous <- function(x, ...) {
 #' @export vec_ptype2.v_continuous
 vec_ptype2.v_continuous <- function(x, y, ...) UseMethod("vec_ptype2.v_continuous", y)
 
-#' @method vec_ptype2.v_continuous default
-#' @export
-vec_ptype2.v_continuous.default <- function(x, y, ..., x_arg = "", y_arg = "") {
-  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
-}
-
-# @rdname casting
-# @method vec_ptype2 double
-# @export
-# @export vec_ptype2.double
-#vec_ptype2.double <- function(x, y, ...) UseMethod("vec_ptype2.double", y)
-
-#@method vec_ptype2.double default
-# @export
-# vec_ptype2.double.default <- function(x, y, ..., x_arg = "", y_arg = "") {
-#   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
-# }
-
-
-#' @method vec_ptype2.v_continuous vctrs_unspecified
-#' @export
-vec_ptype2.v_continuous.vctrs_unspecified <- function(x, y, ...) x
-
 #' @method vec_ptype2.v_continuous v_continuous
 #' @export
 vec_ptype2.v_continuous.v_continuous <- function(x, y, ...) {
@@ -115,14 +92,9 @@ vec_ptype2.v_continuous.v_continuous <- function(x, y, ...) {
     context = get_context(x))
 }
 
-
 #' @method vec_ptype2.double v_continuous
 #' @export
-vec_ptype2.double.v_continuous<- function(x, y, ...) y
-
-#' @method vec_ptype2.v_continuous double
-#' @export
-vec_ptype2.v_continuous.double <- function(x, y, ...) x
+vec_ptype2.double.v_continuous <- function(x, y, ...) new_continuous()
 
 #' @rdname casting
 #' @method vec_cast v_continuous

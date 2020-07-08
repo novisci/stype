@@ -70,11 +70,6 @@ is_nominal <- function(x){
 #' @export
 vec_ptype2.v_nominal <- function(x, y, ...) UseMethod("vec_ptype2.v_nominal", y)
 
-#' @method vec_ptype2.v_nominal default
-#' @export
-vec_ptype2.v_nominal.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
-}
 #' @method vec_ptype2.character v_nominal
 #' @export
 vec_ptype2.character.v_nominal <- function(x, y, ...) character()
@@ -133,11 +128,6 @@ vec_cast.character.v_nominal <- function(x, to, ...) {
 #' @method vec_cast.v_nominal list
 vec_cast.v_nominal.list <- function(x, to, ..., x_arg = "", to_arg = "") {
   vctrs::vec_list_cast(x, to, x_arg = x_arg, to_arg = to_arg)
-}
-#' @export
-#' @method vec_cast.v_nominal default
-vec_cast.v_nominal.default <- function(x, to, ..., x_arg = "", to_arg = "") {
-  vctrs::vec_default_cast(x, to, x_arg = x_arg, to_arg = to_arg)
 }
 
 #' @export

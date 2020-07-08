@@ -1,8 +1,8 @@
 Package: stype
 Type: Package
 Title: Statistical types
-Version: 0.1.24
-Date: 2020-03-30
+Version: 0.2.0
+Date: 2020-07-01
 Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
                             email = "bsaul@novisci.com"),
                      person("David", "Pritchard", role = c("aut"),
@@ -14,7 +14,7 @@ Description: Provides S3 classes aligned with statistical language such as binar
     applications. Automatically generates summary statistics to the variable metadata.
 Imports:
    methods (>= 3.5),
-   vctrs (>= 0.2.0),
+   vctrs (>= 0.3.0),
    assertthat (>= 0.2.0),
    purrr (>= 0.2.5),
    pillar (>= 1.3.1),

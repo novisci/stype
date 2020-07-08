@@ -69,11 +69,6 @@ is_ordered <- function(x){
 #' @export
 vec_ptype2.v_ordered <- function(x, y, ...) UseMethod("vec_ptype2.v_ordered", y)
 
-#' @method vec_ptype2.v_ordered default
-#' @export
-vec_ptype2.v_ordered.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
-}
 #' @method vec_ptype2.character v_ordered
 #' @export
 vec_ptype2.character.v_ordered <- function(x, y, ...) character()
@@ -132,11 +127,6 @@ vec_cast.character.v_ordered <- function(x, to, ...) {
 #' @method vec_cast.v_ordered list
 vec_cast.v_ordered.list <- function(x, to, ..., x_arg = "", to_arg = "") {
   vctrs::vec_list_cast(x, to, x_arg = x_arg, to_arg = to_arg)
-}
-#' @export
-#' @method vec_cast.v_ordered default
-vec_cast.v_ordered.default <- function(x, to, ..., x_arg = "", to_arg = "") {
-  vctrs::vec_default_cast(x, to, x_arg = x_arg, to_arg = to_arg)
 }
 
 #' @export

@@ -69,7 +69,6 @@ is_continuous_nonneg <- function(x){
   inherits(x, "v_continuous_nonneg")
 }
 
-
 #' @rdname v_continuous_nonneg 
 #' @export
 
@@ -78,7 +77,6 @@ is_nonneg <- function(x){
 }
 
 # Formatting of example vectors
-
 format.v_continuous_nonneg <- function(x, ...) {
   ## TODO
   x
@@ -91,29 +89,6 @@ format.v_continuous_nonneg <- function(x, ...) {
 #' @export vec_ptype2.v_continuous_nonneg
 vec_ptype2.v_continuous_nonneg <- function(x, y, ...) UseMethod("vec_ptype2.v_continuous_nonneg", y)
 
-#' @method vec_ptype2.v_continuous_nonneg default
-#' @export
-vec_ptype2.v_continuous_nonneg.default <- function(x, y, ..., x_arg = "", y_arg = "") {
-  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
-}
-
-#' @rdname casting
-#' @method vec_ptype2 numeric
-#' @export
-#' @export vec_ptype2.numeric
-vec_ptype2.numeric <- function(x, y, ...) UseMethod("vec_ptype2.numeric", y)
-
-#' @method vec_ptype2.numeric default
-#' @export
-vec_ptype2.numeric.default <- function(x, y, ..., x_arg = "", y_arg = "") {
-  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
-}
-
-
-#' @method vec_ptype2.v_continuous_nonneg vctrs_unspecified
-#' @export
-vec_ptype2.v_continuous_nonneg.vctrs_unspecified <- function(x, y, ...) x
-
 #' @method vec_ptype2.v_continuous_nonneg v_continuous_nonneg
 #' @export
 vec_ptype2.v_continuous_nonneg.v_continuous_nonneg <- function(x, y, ...) {
@@ -125,13 +100,13 @@ vec_ptype2.v_continuous_nonneg.v_continuous_nonneg <- function(x, y, ...) {
     context = get_context(x))
 }
 
-#' @method vec_ptype2.v_continuous_nonneg numeric
+#' @method vec_ptype2.v_continuous_nonneg double
 #' @export
-vec_ptype2.v_continuous_nonneg.numeric <- function(x, y, ...) x
+vec_ptype2.v_continuous_nonneg.double <- function(x, y, ...) x
 
-#' @method vec_ptype2.numeric v_continuous_nonneg
-#' @export 
-vec_ptype2.numeric.v_continuous_nonneg <- function(x, y, ...) y
+#' @method vec_ptype2.v_continuous_nonneg v_continuous
+#' @export
+vec_ptype2.v_continuous_nonneg.v_continuous <- function(x, y, ...) x
 
 #' @rdname casting
 #' @method vec_cast v_continuous_nonneg
@@ -143,14 +118,10 @@ vec_cast.v_continuous_nonneg <- function(x, to, ...) UseMethod("vec_cast.v_conti
 #' @export
 vec_cast.v_continuous_nonneg.v_continuous_nonneg <- function(x, to, ...) x
 
-#' @method vec_cast.v_continuous_nonneg default
+#' @method vec_cast.v_continuous_nonneg double
 #' @export
-vec_cast.v_continuous_nonneg.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
-
-#' @method vec_cast.v_continuous_nonneg numeric
-#' @export
-vec_cast.v_continuous_nonneg.numeric <- function(x, to, ...) v_continuous_nonneg(x)
-vec_cast.numeric.v_continuous_nonneg <- function(x, to, ...) vctrs::vec_data(x)
+vec_cast.v_continuous_nonneg.double<- function(x, to, ...) v_continuous_nonneg(x)
+vec_cast.double.v_continuous_nonneg <- function(x, to, ...) vctrs::vec_data(x)
 
 #' Casting function for count objects
 #' @rdname v_continuous_nonneg 

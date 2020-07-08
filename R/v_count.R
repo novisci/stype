@@ -91,16 +91,6 @@ format.v_count <- function(x, ...) {
 #' @export vec_ptype2.v_count
 vec_ptype2.v_count <- function(x, y, ...) UseMethod("vec_ptype2.v_count", y)
 
-#' @method vec_ptype2.v_count default
-#' @export
-vec_ptype2.v_count.default <- function(x, y, ..., x_arg = "", y_arg = "") {
-  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
-}
-
-#' @method vec_ptype2.v_count vctrs_unspecified
-#' @export
-vec_ptype2.v_count.vctrs_unspecified <- function(x, y, ...) x
-
 #' @method vec_ptype2.v_count v_count
 #' @export
 vec_ptype2.v_count.v_count <- function(x, y, ...) {
@@ -115,20 +105,9 @@ vec_ptype2.v_count.v_count <- function(x, y, ...) {
 #' @export
 vec_ptype2.v_count.integer <- function(x, y, ...) x
 
-#' @rdname casting
-#' @method vec_ptype2.integer v_count
-#' @importFrom vctrs vec_ptype2.integer 
-#' @export 
-vec_ptype2.integer.v_count <- function(x, y, ...) y
-
 #' @method vec_ptype2.v_count double
 #' @export
 vec_ptype2.v_count.double <- function(x, y, ...) x
-
-#' @method vec_ptype2.double v_count
-#' @importFrom vctrs vec_ptype2.double 
-#' @export 
-vec_ptype2.double.v_count <- function(x, y, ...) y
 
 #' @rdname casting
 #' @inheritParams vctrs::vec_cast
@@ -140,10 +119,6 @@ vec_cast.v_count <- function(x, to, ...) UseMethod("vec_cast.v_count")
 #' @method vec_cast.v_count v_count
 #' @export
 vec_cast.v_count.v_count <- function(x, to, ...) x 
-
-#' @method vec_cast.v_count default
-#' @export
-vec_cast.v_count.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
 #' @method vec_cast.v_count integer
 #' @export

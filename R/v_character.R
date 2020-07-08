@@ -68,16 +68,6 @@ is_character <- function(x){
 #' @export vec_ptype2.v_character
 vec_ptype2.v_character <- function(x, y, ...) UseMethod("vec_ptype2.v_character", y)
 
-#' @method vec_ptype2.v_character default
-#' @export
-vec_ptype2.v_character.default <- function(x, y, ..., x_arg = "", y_arg = "") {
-  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
-}
-
-#' @method vec_ptype2.v_character vctrs_unspecified
-#' @export
-vec_ptype2.v_character.vctrs_unspecified <- function(x, y, ...) x
-
 #' @method vec_ptype2.v_character v_character
 #' @export
 vec_ptype2.v_character.v_character <- function(x, y, ...){
@@ -93,11 +83,6 @@ vec_ptype2.v_character.v_character <- function(x, y, ...){
 #' @export
 vec_ptype2.v_character.character <- function(x, y, ...) { x } 
 
-#' @method vec_ptype2.character v_character
-#' @importFrom vctrs vec_ptype2.character
-#' @export 
-vec_ptype2.character.v_character <- function(x, y, ...) { x }
-
 #' @rdname casting
 #' @method vec_cast v_character
 #' @export
@@ -111,10 +96,6 @@ vec_cast.v_character.v_character <- function(x, to, ...) {
               internal_name = get_internal_name(to),
               context = get_context(to))
 }
-
-#' @method vec_cast.v_character default
-#' @export
-vec_cast.v_character.default  <- function(x, to, ...) vctrs::vec_default_cast(x, to)
 
 #' Casting function for character objects
 #' @rdname v_character 

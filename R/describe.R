@@ -12,9 +12,9 @@
 
 setClassUnion("groupVar",        c("character", "factor"))
 setClassUnion("categorical",     c("factor", "ordered"))
-setClassUnion("maybeMissing",    c("missing", "NULL"))
-setClassUnion("maybeGroup",      c("maybeMissing", "groupVar"))
-setClassUnion("maybeWeight",     c("maybeMissing", "numeric"))
+setClassUnion("Missing",         c("missing", "NULL"))
+setClassUnion("maybeGroup",      c("Missing", "groupVar"))
+setClassUnion("maybeWeight",     c("Missing", "numeric"))
 setClassUnion("maybeDescriptor", c("missing", "NULL", "list"))
 setClassUnion("describable",     c("integer", "logical", "numeric", "factor",
                                    "ordered", "character", "v_rcensored"))
@@ -30,8 +30,7 @@ setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
 #' @param x a vector
 #' @importFrom stats IQR median sd quantile var cov
 #' @export
-
-setGeneric("getDescriptors", function(x) standardGeneric("getDescriptors"))
+setGeneric("getDescriptors", function(x, g, w) standardGeneric("getDescriptors"))
 
 standardDescriptors <-  list(
   # TODO insert useful summary stats that apply across all variables here
@@ -48,8 +47,8 @@ standardDescriptors <-  list(
 
 setMethod(
   f          = "getDescriptors",
-  signature  = "logical",
-  definition = function(x){
+  signature  = c("logical", "maybeGroup", "maybeWeight"),
+  definition = function(x, g, w){
     append(
       standardDescriptors,
       list(
@@ -66,8 +65,8 @@ setMethod(
 
 setMethod(
   f          = "getDescriptors",
-  signature  = "categorical",
-  definition = function(x){
+  signature  = c("categorical", "maybeGroup", "maybeWeight"),
+  definition = function(x, g, w){
     append(
       standardDescriptors,
       list(
@@ -84,8 +83,8 @@ setMethod(
 
 setMethod(
   f          = "getDescriptors",
-  signature  = "character",
-  definition = function(x){
+  signature  = c("character", "maybeGroup", "maybeWeight"),
+  definition = function(x, g, w){
     append(
       standardDescriptors,
       list(
@@ -102,8 +101,8 @@ setMethod(
 
 setMethod(
   f          = "getDescriptors",
-  signature  = "numeric",
-  definition = function(x){
+  signature  = c("numeric", "maybeGroup", "maybeWeight"),
+  definition = function(x, g, w){
     
     qprobs = c(0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99)
     append(
@@ -123,7 +122,23 @@ setMethod(
   }
 )
 
+#' @rdname getDescriptors
+#' @export
+setMethod(
+  f          = "getDescriptors",
+  signature  = c("numeric", "Missing", "numeric"),
+  definition = function(x, g, w){
+    
+    vctrs::vec_c(
+      standardDescriptors,
+      getDescriptors(x),
+      list(
+        weighted_mean = function(x, w, ...){ stats::weighted.mean(x = x, w = w, ...) }
+      )
+    )
 
+  }
+)
 
 # @rdname getDescriptors
 # @export
@@ -158,15 +173,15 @@ setGeneric(".describe", function(f, x, g, w, ...) standardGeneric(".describe"))
 
 .describeMethods <- list(
   list(
-    sig = c("function", "describable", "maybeMissing", "maybeMissing"),
+    sig = c("function", "describable", "Missing", "Missing"),
     bod = quote(f(x, ...))
   ),
   list(
-    sig = c("function", "describable", "groupVar", "maybeMissing"),
+    sig = c("function", "describable", "groupVar", "Missing"),
     bod = quote(f(x = x, g = g, ...))
   ),
   list(
-    sig = c("function", "describable", "maybeMissing", "numeric"),
+    sig = c("function", "describable", "Missing", "numeric"),
     bod = quote(f(x = x, w = w, ...))
   ),
   list(
@@ -215,18 +230,25 @@ setMethod(
     # previously styped()d using the same arguments. If it has, then simply
     # return the description slot rather than carrying out computations.
     
-    desc <- if (missing(.descriptors) || methods::is(.descriptors, "maybeMissing")){
-      purrr::reduce(
-        .x = list(x, g, w),
-        .f = ~ append(.x, getDescriptors(.y)),
-        .init = NULL) 
-    } else {
+    descriptors <- `if`(
+      missing(.descriptors) || methods::is(.descriptors, "Missing"),
+      getDescriptors(x, g, w),
       .descriptors
-    }
+    )
+    
+    #   if (missing(.descriptors) || methods::is(.descriptors, "Missing")){
+    #   getDescriptors(x, g, w)
+    #   # purrr::reduce(
+    #   #   .x = list(x, g, w),
+    #   #   .f = ~ {browser(); append(.x, getDescriptors(.y))},
+    #   #   .init = NULL) 
+    # } else {
+    #   .descriptors
+    # }
     
     data_summary(
       purrr::map(
-        .x = desc,
+        .x = descriptors,
         .f = function(f) .describe(f, x = x, g = g, w = w, ...))
     )
   }

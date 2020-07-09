@@ -31,7 +31,7 @@ wnumericDescriptors
 groupedDescriptors
 }
 \description{
-
+Lists of functions to used to create a \code{\link{data_summary}} object.
 }
 \keyword{datasets}
 \keyword{internal}

@@ -26,7 +26,8 @@ setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
 
 #' Descriptors
 #' 
-#' list of functions to used to create a \code\link{data_summary}} object.
+#' Lists of functions to used to create a \code{\link{data_summary}} object.
+#' 
 #' @importFrom stats IQR median sd quantile var cov weighted.mean
 #' @name descriptors
 #' @keywords internal

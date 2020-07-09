@@ -24,18 +24,13 @@ setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
                                    "v_nominal", "v_ordered", "v_character",
                                    "v_rcensored"))
 
-#' Descriptor
-#'
-#' A function that returns a list of functions to be applied to a variable
+#' Descriptors
 #' 
-#' @param x a vector of data
-#' @param g a vector of groupings
-#' @param w a vector of weights
-#' @importFrom stats IQR median sd quantile var cov
-#' @export
-setGeneric("getDescriptors", function(x, g, w) standardGeneric("getDescriptors"))
-
-standardDescriptors <-  list(
+#' list of functions to used to create a \code\link{data_summary}} object.
+#' @importFrom stats IQR median sd quantile var cov weighted.mean
+#' @name descriptors
+#' @keywords internal
+standardDescriptors <- list(
   n            = function(x, ...) length(x),
   has_missing  = function(x, ...) anyNA(x),
   n_nonmissing = function(x, ...) sum(!is.na(x)),
@@ -44,125 +39,131 @@ standardDescriptors <-  list(
   is_constant  = function(x, ...) all(x[1] == x)
 )
 
+#' @rdname descriptors
+logicalDescriptors <- list(
+  num_0      = function(x, ...) sum(!x, na.rm = TRUE),
+  num_1      = function(x, ...) sum(x, na.rm = TRUE),
+  proportion = function(x, ...) mean(x, na.rm = TRUE),
+  variance   = function(x, ...) var(x, na.rm = TRUE)
+)
+
+#' @rdname descriptors
+wlogicalDescriptors <- list(
+  weighted_proportion = function(x, w, ...){ stats::weighted.mean(x = x, w = w, ...) }
+)
+
+#' @rdname descriptors
+categoricalDescriptors <- list(
+  table  = function(x, ...) table(x, useNA = "always"),
+  ptable = function(x, ...) prop.table(table(x, useNA = "always")),
+  levels = function(x, ...) levels(x)
+)
+
+#' @rdname descriptors
+characterDescriptors <- list(
+  n_unique = function(x, ...) length(unique(x)),
+  max_char = function(x, ...) if(length(x) == 0) 0 else max(nchar(x)),
+  min_char = function(x, ...) if(length(x) == 0) 0 else min(nchar(x))
+)
+
+#' @rdname descriptors
+numericDescriptors <- list(
+  sum    = function(x, ...) sum(x, na.rm = TRUE),
+  mean   = function(x, ...) mean(x, na.rm = TRUE),
+  variance = function(x, ...) var(x, na.rm = TRUE),
+  median = function(x, ...) median(x, na.rm = TRUE),
+  iqr    = function(x, ...) IQR(x, na.rm = TRUE),
+  min    = function(x, ...) { 
+    if (length(x) == 0 || all(is.na(x))) NA_real_ else min(x, na.rm = TRUE) 
+  },
+  max    = function(x, ...) { 
+    if (length(x) == 0 || all(is.na(x))) NA_real_ else max(x, na.rm = TRUE) 
+  },
+  qtiles = function(x, ...) { 
+    quantile(
+      x, 
+      probs = c(0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99), 
+      na.rm = TRUE)
+  }
+)
+
+#' @rdname descriptors
+wnumericDescriptors <- list(
+  weighted_mean = function(x, w, ...){ stats::weighted.mean(x = x, w = w, ...) }
+)
+
+#' @rdname descriptors
+groupedDescriptors <- list(
+  smd = function(x, g, w = NULL, ...) smd::smd(x, g, w, na.rm = TRUE)
+)
+
+#' getDescriptors
+#'
+#' Returns a list of functions to be applied to a variable.
+#' 
+#' @param x a vector of data
+#' @param g a vector of groupings
+#' @param w a vector of weights
+# @export
+#' @keywords internal
+setGeneric("getDescriptors", function(x, g, w) standardGeneric("getDescriptors"))
+
 #' @rdname getDescriptors
 #' @export
-
 setMethod(
   f          = "getDescriptors",
   signature  = c("logical", "maybeGroup", "maybeWeight"),
   definition = function(x, g, w){
-    append(
+    vctrs::vec_c(
       standardDescriptors,
-      list(
-        num_0      = function(x, ...) sum(!x, na.rm = TRUE),
-        num_1      = function(x, ...) sum(x, na.rm = TRUE),
-        proportion = function(x, ...) mean(x, na.rm = TRUE),
-        variance   = function(x, ...) var(x, na.rm = TRUE)
-      ))
+      logicalDescriptors,
+      `if`(is(g, "groupVar"), groupedDescriptors, NULL),
+      `if`(is(g, "weightVar"), wlogicalDescriptors, NULL)
+    )
   }
 )
 
 #' @rdname getDescriptors
 #' @export
-
 setMethod(
   f          = "getDescriptors",
   signature  = c("categorical", "maybeGroup", "maybeWeight"),
   definition = function(x, g, w){
-    append(
+    vctrs::vec_c(
       standardDescriptors,
-      list(
-        table  = function(x, ...) table(x, useNA = "always"),
-        ptable = function(x, ...) prop.table(table(x, useNA = "always")),
-        levels = function(x, ...) levels(x)
-      )
+      categoricalDescriptors,
+      `if`(is(g, "groupVar"), groupedDescriptors, NULL)
     )
   }
 )
 
 #' @rdname getDescriptors
 #' @export
-
 setMethod(
   f          = "getDescriptors",
   signature  = c("character", "maybeGroup", "maybeWeight"),
   definition = function(x, g, w){
-    append(
+    vctrs::vec_c(
       standardDescriptors,
-      list(
-        n_unique = function(x, ...) length(unique(x)),
-        max_char = function(x, ...) if(length(x) == 0) 0 else max(nchar(x)),
-        min_char = function(x, ...) if(length(x) == 0) 0 else min(nchar(x))
-      )
+      characterDescriptors,
+      `if`(is(g, "groupVar"), groupedDescriptors, NULL)
     )
   }
 )
 
 #' @rdname getDescriptors
 #' @export
-
 setMethod(
   f          = "getDescriptors",
   signature  = c("numeric", "maybeGroup", "maybeWeight"),
   definition = function(x, g, w){
-    
-    qprobs = c(0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99)
-    append(
-      standardDescriptors,
-      list(
-        sum    = function(x, ...) sum(x, na.rm = TRUE),
-        mean   = function(x, ...) mean(x, na.rm = TRUE),
-        variance = function(x, ...) var(x, na.rm = TRUE),
-        median = function(x, ...) median(x, na.rm = TRUE),
-        iqr    = function(x, ...) IQR(x, na.rm = TRUE),
-        min    = function(x, ...) { if (length(x) == 0 || all(is.na(x))) NA_real_ else min(x, na.rm = TRUE) },
-        max    = function(x, ...) { if (length(x) == 0 || all(is.na(x))) NA_real_ else max(x, na.rm = TRUE) },
-        qtiles = function(x, ...) quantile(x, probs = qprobs, na.rm = TRUE)
-        # hist   = function(x, ...) list(ggplot2::qplot(x, geom = "histogram", ...))
-      )
-    )
-  }
-)
-
-#' @rdname getDescriptors
-#' @export
-setMethod(
-  f          = "getDescriptors",
-  signature  = c("numeric", "Missing", "weightVar"),
-  definition = function(x, g, w){
-    
     vctrs::vec_c(
       standardDescriptors,
-      getDescriptors(x),
-      list(
-        weighted_mean = function(x, w, ...){ stats::weighted.mean(x = x, w = w, ...) }
-      )
+      numericDescriptors,
+      `if`(is(g, "groupVar"), groupedDescriptors, NULL),
+      `if`(is(w, "weightVar"), wnumericDescriptors, NULL)
     )
-
   }
-)
-
-# @rdname getDescriptors
-# @export
-# setMethod(
-#   f          = "getDescriptors",
-#   signature  = "groupVar",
-#   definition = function(x){
-#     list(
-#       smd = function(x, g, w = NULL) SugarMaryDenver::smd(x, g, w, na.rm = TRUE)
-#     )
-#   }
-# )
-
-
-
-#' @rdname getDescriptors
-#' @export
-
-setMethod(
-  f          = "getDescriptors",
-  signature  = "NULL",
-  definition = function(x){ NULL }
 )
 
 # Describe a variable (internal method)
@@ -231,22 +232,11 @@ setMethod(
     # TODO: add styped() method which detects whether a variable has been 
     # previously styped()d using the same arguments. If it has, then simply
     # return the description slot rather than carrying out computations.
-    
     descriptors <- `if`(
       missing(.descriptors) || methods::is(.descriptors, "Missing"),
       getDescriptors(x, g, w),
       .descriptors
     )
-    
-    #   if (missing(.descriptors) || methods::is(.descriptors, "Missing")){
-    #   getDescriptors(x, g, w)
-    #   # purrr::reduce(
-    #   #   .x = list(x, g, w),
-    #   #   .f = ~ {browser(); append(.x, getDescriptors(.y))},
-    #   #   .init = NULL) 
-    # } else {
-    #   .descriptors
-    # }
     
     data_summary(
       purrr::map(
@@ -264,7 +254,6 @@ setMethod(
   f          = "describe",
   signature  = c("v_rcensored", "maybeGroup", "maybeWeight", "maybeDescriptor"),
   definition = function(x, g, w, .descriptors, ...){
-    
     
     data_summary(
       purrr::map(
@@ -374,7 +363,7 @@ setMethod(
     )
     
     
-    c(time_data,
+    vctrs::vec_c(time_data,
       event_data,
       get_from_field("censored", "num_1", "n_censored")(x),
       get_from_field("censor_reason", "table", 

@@ -6,9 +6,7 @@
 \alias{getDescriptors,categorical,maybeGroup,maybeWeight-method}
 \alias{getDescriptors,character,maybeGroup,maybeWeight-method}
 \alias{getDescriptors,numeric,maybeGroup,maybeWeight-method}
-\alias{getDescriptors,numeric,Missing,weightVar-method}
-\alias{getDescriptors,NULL,ANY,ANY-method}
-\title{Descriptor}
+\title{getDescriptors}
 \usage{
 getDescriptors(x, g, w)
 
@@ -19,10 +17,6 @@ getDescriptors(x, g, w)
 \S4method{getDescriptors}{character,maybeGroup,maybeWeight}(x, g, w)
 
 \S4method{getDescriptors}{numeric,maybeGroup,maybeWeight}(x, g, w)
-
-\S4method{getDescriptors}{numeric,Missing,weightVar}(x, g, w)
-
-\S4method{getDescriptors}{`NULL`,ANY,ANY}(x)
 }
 \arguments{
 \item{x}{a vector of data}
@@ -32,5 +26,6 @@ getDescriptors(x, g, w)
 \item{w}{a vector of weights}
 }
 \description{
-A function that returns a list of functions to be applied to a variable
+Returns a list of functions to be applied to a variable.
 }
+\keyword{internal}

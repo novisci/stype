@@ -364,7 +364,8 @@ setMethod(
     )
     
     
-    vctrs::vec_c(time_data,
+    vctrs::vec_c(
+      time_data,
       event_data,
       get_from_field("censored", "num_1", "n_censored")(x),
       get_from_field("censor_reason", "table", 

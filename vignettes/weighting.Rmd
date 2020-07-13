@@ -38,7 +38,7 @@ make_describer <- function(x){
 x <- v_binary(c(TRUE, TRUE, TRUE, FALSE))
 w <- c(10, 10, 1, 1)
 x <- set(x, describe_l, make_describer(x))
-view(x, update_l)
+view(x, describe_l)
 
 x <- view(x, describe_l)(w = w)
 view(x, data_summmary_l)
@@ -59,7 +59,7 @@ w <- c(10, 10, 1, 1)
 weight(x, w)
 ```
 
-# Comparison of options
+# Comparison of options for basic stypes
 
 ```{r}
 stype_dt_l <- function(predicate){
@@ -112,5 +112,35 @@ dt2 <- over_map(dt, outcomes_l, function(x){
 
 tail(view(dt2[[1]], data_summmary_l), 2)
 tail(view(dt2[[3]], data_summmary_l), 2)
+```
+
+# Comparison of options for `r_censored` stype
+
+
+
+```{r}
+ctimes <- list(
+   v_event_time(c(5, 6, 10, NA_integer_, 1, NA_integer_, 19), internal_name = "cA"),
+   v_event_time(c(4, 1, 15, NA_integer_, NA_integer_, NA_integer_, 21), internal_name = "cB")
+)
+
+otimes <- list(
+  v_event_time(c(2, 6, 11, 12, NA_integer_, NA_integer_, 25), internal_name = "oA"),
+  v_event_time(c(1, NA_integer_, 10, NA_integer_, NA_integer_, NA_integer_, 23), internal_name = "oB")
+)
+
+dt <- tibble(
+  x1 = v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15),
+  x2 = v_rcensored(outcomes = otimes[[1]], end_time = 15),
+  x3 = v_binary(c(TRUE, FALSE, TRUE), context  = context(purpose = purpose(study_role = "covariate"))),
+)
+
+# The goal is to:
+# * fit a coxph? using the covariate
+# * pull out the weights
+# * describe() the r_censored by these weights (accounting for censoring)
+
 
 ```
+
+

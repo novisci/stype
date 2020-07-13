@@ -119,7 +119,7 @@ setMethod(
       standardDescriptors,
       logicalDescriptors,
       `if`(is(g, "groupVar"), groupedDescriptors, NULL),
-      `if`(is(g, "weightVar"), wlogicalDescriptors, NULL)
+      `if`(is(w, "weightVar"), wlogicalDescriptors, NULL)
     )
   }
 )
@@ -230,6 +230,7 @@ setMethod(
   signature  = c("describable", "maybeGroup", "maybeWeight", "maybeDescriptor"),
   definition = function(x, g, w, .descriptors, ...){
     
+    # browser()
     # TODO: add styped() method which detects whether a variable has been 
     # previously styped()d using the same arguments. If it has, then simply
     # return the description slot rather than carrying out computations.

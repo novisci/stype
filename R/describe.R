@@ -98,6 +98,84 @@ groupedDescriptors <- list(
   smd = function(x, g, w = NULL, ...) smd::smd(x, g, w, na.rm = TRUE)
 )
 
+#' @rdname descriptors
+rcensoredDescriptors <- list(
+  time_info = function(x, ...) get_persontime(x),
+  outcome_info = function(x, ...) get_outcomeinfo(x),
+  censor_info  = function(x, ...) get_censorinfo(x),
+  eair = function(x, ...) eair(x)
+)
+
+#' Get person-time info for a data_summary
+#' @param x a \code{\link{v_rcensored}} vector
+#' @keywords internal
+get_persontime <- function(x, ...){
+  get_from_field("time", "sum", "person_time")(x)
+}
+
+#' Get outcome info for a data_summary
+#' @param x a \code{\link{v_rcensored}} vector
+#' @keywords internal
+get_outcomeinfo <- function(x, ...){
+  vctrs::vec_c(
+    get_from_field("outcome", "num_1", "n_events")(x),
+    get_from_field("outcome_reason", "table", 
+                   .after = function(z) list(outcome_reasons = z[[1]]) )(x)
+  )
+}
+
+#' Get censoring info for a data_summary
+#' @param x a \code{\link{v_rcensored}} vector
+#' @keywords internal
+get_censorinfo <- function(x, ...){
+  vctrs::vec_c(
+    get_from_field("censored", "num_1", "n_censored")(x),
+    get_from_field("censor_reason", "table", 
+                   .after = function(z) { list(censor_reasons = z[[1]]) } )(x)
+  )
+}
+#' Exposure-Adjusted Incidence Rate
+#' 
+#' Computes the exposure-adjusted incidence rate and variance using He et al. 
+#' (2015).
+#' 
+#' @param x a \code{\link{v_rcensored}} vector
+#' @references 
+#'    He X, Chen L, Lei L, Xia HA, Lee MLT (2015) A Simple Method for
+#'     Estimating Confidence Intervals for Exposure Adjusted Incidence Rate and
+#'     Its Applications to Clinical Trials. J Biom Biostat 6: 238.
+#'     doi:10.4172/2155-6180.1000238
+#' @return a \code{list} containing:
+#'    \itemize{
+#'      \item eair the point estimate
+#'      \item eair_variance the variance estimate
+#'    }
+#' @export
+eair <- function(x){
+  outc <- vctrs::field(x, "outcome")
+  time <- vctrs::field(x, "time")
+  
+  nevents <- get_data_summary(outc, "num_1")
+  pt <- get_data_summary(time, "sum")
+  # proportion of subjects that have event prior to censor or end of followup
+  a_hat   <- get_data_summary(outc, "proportion")
+  a_sigma <- get_data_summary(outc, "variance")
+  
+  # mean followup time
+  b_hat   <- get_data_summary(time, "mean")
+  b_sigma <- get_data_summary(time, "variance")
+  
+  cov_ab <- cov(outc, time)
+  
+  sigma <- matrix(c(a_sigma, cov_ab, cov_ab, b_sigma), ncol = 2, byrow = TRUE)
+  L <- c(1 , -a_hat/b_hat)
+  
+  list(
+    eair          = nevents/pt,
+    eair_variance = drop((1/(b_hat^2)) * t(L) %*% sigma %*% L)
+  )
+}
+
 #' getDescriptors
 #'
 #' Returns a list of functions to be applied to a variable.
@@ -167,6 +245,19 @@ setMethod(
   }
 )
 
+#' @rdname getDescriptors
+#' @export
+setMethod(
+  f          = "getDescriptors",
+  signature  = c("v_rcensored", "maybeGroup", "maybeWeight"),
+  definition = function(x, g, w){
+    vctrs::vec_c(
+      standardDescriptors,
+      rcensoredDescriptors
+    )
+  }
+)
+
 # Describe a variable (internal method)
 # 
 # The internal method for applying a descriptive function on x and, optionally, 
@@ -229,15 +320,11 @@ setMethod(
   f          = "describe",
   signature  = c("describable", "maybeGroup", "maybeWeight", "maybeDescriptor"),
   definition = function(x, g, w, .descriptors, ...){
-    
-    # browser()
-    # TODO: add styped() method which detects whether a variable has been 
-    # previously styped()d using the same arguments. If it has, then simply
-    # return the description slot rather than carrying out computations.
+
     descriptors <- `if`(
       missing(.descriptors) || methods::is(.descriptors, "Missing"),
       getDescriptors(x, g, w),
-      .descriptors
+      vctrs::vec_c(getDescriptors(x, g, w), .descriptors)
     )
     
     data_summary(
@@ -250,17 +337,35 @@ setMethod(
 
 #' @rdname describe
 #' @importFrom vctrs field
+#' @importFrom purrr flatten
 #' @export
-
 setMethod(
   f          = "describe",
   signature  = c("v_rcensored", "maybeGroup", "maybeWeight", "maybeDescriptor"),
   definition = function(x, g, w, .descriptors, ...){
-    
-    data_summary(
+
+    standdesc <- 
       purrr::map(
         .x = standardDescriptors,
         .f = function(f) .describe(f, x = as_canonical(vctrs::field(x, "time")), ...)
+      )
+    
+    rcensoredDescriptors <- `if`(
+      missing(.descriptors) || methods::is(.descriptors, "Missing"),
+      rcensoredDescriptors,
+      vctrs::vec_c(rcensoredDescriptors, .descriptors)
+    )
+    
+    rcensdesc <-
+      purrr::flatten(purrr::map(
+      .x = rcensoredDescriptors,
+      .f = function(f) .describe(f, x = x, g = g, w = w, ...)
+    ))
+    
+    data_summary(
+      vctrs::vec_c(
+        standdesc,
+        rcensdesc
       )
     )
   }
@@ -322,62 +427,60 @@ setMethod(
   definition = function(x, element){ attr(x, "data_summary") }
 )
 
-#' @rdname get_data_summary
-#' @export
-
-setMethod(
-  f          = "get_data_summary",
-  signature  = c("v_rcensored", NULL),
-  definition = function(x, element){
-    
-    time_data <-  get_from_field(
-      "time", 
-       c("n", "has_missing", "sum"), 
-       c("n", "has_missing", "person_time"))(x)
-    
-    event_data <- get_from_field("outcome", "num_1", "n_events")(x)
-    
-    # exposure adjusted incidence rate
-    # - eair: exposure adjusted incidence rate
-    # - eair_var: variance of eair using formula (2) in He 2015 
-    #             (doi:10.4172/2155-6180.1000238)
-    
-    outc <- vctrs::field(x, "outcome")
-    time <- vctrs::field(x, "time")
-    
-    # proportion of subjects that have event prior to censor or end of followup
-    a_hat   <- get_data_summary(outc, "proportion")
-    a_sigma <- get_data_summary(outc, "variance")
-    
-    # mean followup time
-    b_hat   <- get_data_summary(time, "mean")
-    b_sigma <- get_data_summary(time, "variance")
-    
-    cov_ab <- cov(outc, time)
-    
-    sigma <- matrix(c(a_sigma, cov_ab, cov_ab, b_sigma), ncol = 2, byrow = TRUE)
-    L <- c(1 , -a_hat/b_hat)
-    
-    incidence_data <- 
-    list(
-      eair          = event_data[["n_events"]]/time_data[["person_time"]],
-      eair_variance = drop((1/(b_hat^2)) * t(L) %*% sigma %*% L)
-    )
-    
-    
-    vctrs::vec_c(
-      time_data,
-      event_data,
-      get_from_field("censored", "num_1", "n_censored")(x),
-      get_from_field("censor_reason", "table", 
-                     .after = function(z) { list(censor_reasons = z[[1]]) } )(x),
-      get_from_field("outcome_reason", "table", 
-                     .after = function(z) list(outcome_reasons = z[[1]]) )(x),
-      incidence_data
-    )
-    
-  }
-)
+# @rdname get_data_summary
+# @export
+# setMethod(
+#   f          = "get_data_summary",
+#   signature  = c("v_rcensored", NULL),
+#   definition = function(x, element){
+#     
+#     time_data <-  get_from_field(
+#       "time", 
+#        c("n", "has_missing", "sum"), 
+#        c("n", "has_missing", "person_time"))(x)
+#     
+#     event_data <- get_from_field("outcome", "num_1", "n_events")(x)
+#     
+#     # exposure adjusted incidence rate
+#     # - eair: exposure adjusted incidence rate
+#     # - eair_var: variance of eair using formula (2) in He 2015 
+#     #             (doi:10.4172/2155-6180.1000238)
+#     
+#     outc <- vctrs::field(x, "outcome")
+#     time <- vctrs::field(x, "time")
+#     
+#     # proportion of subjects that have event prior to censor or end of followup
+#     a_hat   <- get_data_summary(outc, "proportion")
+#     a_sigma <- get_data_summary(outc, "variance")
+#     
+#     # mean followup time
+#     b_hat   <- get_data_summary(time, "mean")
+#     b_sigma <- get_data_summary(time, "variance")
+#     
+#     cov_ab <- cov(outc, time)
+#     
+#     sigma <- matrix(c(a_sigma, cov_ab, cov_ab, b_sigma), ncol = 2, byrow = TRUE)
+#     L <- c(1 , -a_hat/b_hat)
+#     
+#     incidence_data <- 
+#     list(
+#       eair          = event_data[["n_events"]]/time_data[["person_time"]],
+#       eair_variance = drop((1/(b_hat^2)) * t(L) %*% sigma %*% L)
+#     )
+#     
+#     vctrs::vec_c(
+#       time_data,
+#       event_data,
+#       get_from_field("censored", "num_1", "n_censored")(x),
+#       get_from_field("censor_reason", "table", 
+#                      .after = function(z) { list(censor_reasons = z[[1]]) } )(x),
+#       get_from_field("outcome_reason", "table", 
+#                      .after = function(z) list(outcome_reasons = z[[1]]) )(x),
+#       incidence_data
+#     )
+#     
+#   }
+# )
 
 #' @rdname get_data_summary
 #' @export

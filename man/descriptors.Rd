@@ -11,6 +11,7 @@
 \alias{numericDescriptors}
 \alias{wnumericDescriptors}
 \alias{groupedDescriptors}
+\alias{rcensoredDescriptors}
 \title{Descriptors}
 \format{An object of class \code{list} of length 6.}
 \usage{
@@ -29,6 +30,8 @@ numericDescriptors
 wnumericDescriptors
 
 groupedDescriptors
+
+rcensoredDescriptors
 }
 \description{
 Lists of functions to used to create a \code{\link{data_summary}} object.

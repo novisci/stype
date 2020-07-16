@@ -88,11 +88,15 @@ test_that("v_rcensored get_data_summary works", {
   z <- list(
     n = 7L,
     has_missing = FALSE,
+    n_nonmissing = 7,
+    n_missing = 0,
+    proportion_missing = 0,
+    is_constant = FALSE,
     person_time = 55,
     n_events     = 3,
+    outcome_reasons = table(c("oA", "oB", "oB", NA, NA, NA, NA), useNA = "always"),
     n_censored   = 2,
     censor_reasons = table(c("cA", "cB", NA, NA, NA, NA, NA), useNA = "always"),
-    outcome_reasons = table(c("oA", "oB", "oB", NA, NA, NA, NA), useNA = "always"),
     eair = 0.54545454,
     eair_variance = 0.006923789
   )

@@ -6,6 +6,7 @@
 \alias{getDescriptors,categorical,maybeGroup,maybeWeight-method}
 \alias{getDescriptors,character,maybeGroup,maybeWeight-method}
 \alias{getDescriptors,numeric,maybeGroup,maybeWeight-method}
+\alias{getDescriptors,v_rcensored,maybeGroup,maybeWeight-method}
 \title{getDescriptors}
 \usage{
 getDescriptors(x, g, w)
@@ -17,6 +18,8 @@ getDescriptors(x, g, w)
 \S4method{getDescriptors}{character,maybeGroup,maybeWeight}(x, g, w)
 
 \S4method{getDescriptors}{numeric,maybeGroup,maybeWeight}(x, g, w)
+
+\S4method{getDescriptors}{v_rcensored,maybeGroup,maybeWeight}(x, g, w)
 }
 \arguments{
 \item{x}{a vector of data}

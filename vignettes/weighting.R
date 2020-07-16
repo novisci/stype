@@ -7,9 +7,87 @@ knitr::opts_chunk$set(
 ## -----------------------------------------------------------------------------
 library(stype)
 library(lenses)
+library(dplyr)
 
 ## -----------------------------------------------------------------------------
-x <- v_binary(c(TRUE, FALSE, TRUE, FALSE))
+data_summmary_l <- attr_l("data_summary")
+describe_l <- attr_l("describe")
+
+make_describer <- function(x){
+  function(g = NULL, w = NULL){
+    set(x, data_summmary_l, describe(vctrs::vec_data(x), g, w))
+  }
+}
+
+x <- v_binary(c(TRUE, TRUE, TRUE, FALSE))
 w <- c(10, 10, 1, 1)
-describe(vctrs::vec_data(x), w = w)
+x <- set(x, describe_l, make_describer(x))
+view(x, describe_l)
+
+x <- view(x, describe_l)(w = w)
+view(x, data_summmary_l)
+
+## -----------------------------------------------------------------------------
+weight <- function(x, w){
+  dsum <- describe(vctrs::vec_data(x), w = w)
+  attr(x, "data_summary") <- dsum
+  x
+}
+
+x <- v_binary(c(TRUE, TRUE, TRUE, FALSE))
+w <- c(10, 10, 1, 1)
+
+weight(x, w)
+
+## -----------------------------------------------------------------------------
+stype_dt_l <- function(predicate){
+  lens(
+    view = function(d) select(d, where(predicate)),
+    set  = function(d, x) {
+      where_to_replace <-purrr::map_lgl(d, predicate)
+      stopifnot(sum(where_to_replace) == length(x))
+      d[where_to_replace] <- x 
+      tibble(!!! d) 
+    }
+  )
+}
+
+outcomes_l <- stype_dt_l(is_outcome)
+weights_l <- stype_dt_l(is_weight)
+vec_data_l <- lens(
+  view = function(d) vctrs::vec_data(d),
+  set  = function(d, x) vctrs::vec_c(vctrs::vec_ptype(d), x)
+)
+
+weight_dat_l <- weights_l %.% index_l(1) %.% vec_data_l
+
+
+otcm <- context(purpose = purpose(study_role = "outcome"))
+dt <- tibble::tibble(
+  x1 = v_binary(c(TRUE, FALSE, TRUE), context  = otcm),
+  x2 = v_binary(c(FALSE, TRUE, FALSE), context =otcm),
+  x3 = v_continuous(c(1.5, 1.6, 0.1), context = otcm),
+  x4 = v_continuous(c(1.5, 1.6, 0.1), context = context(purpose = purpose(study_role = "weight"))),
+)
+
+view(dt, outcomes_l)
+view(dt, weight_dat_l)
+
+tail(view(dt[[1]], data_summmary_l), 2)
+
+# Just weight binary variables
+dt1 <- over_map(dt, outcomes_l %.% stype_dt_l(is_binary), function(x){ 
+  weight(x, view(dt, weight_dat_l))
+})
+
+tail(view(dt1[[1]], data_summmary_l), 2)
+tail(view(dt1[[3]], data_summmary_l), 2)
+
+# Weight all outcomes
+dt2 <- over_map(dt, outcomes_l, function(x){ 
+  weight(x, view(dt, weight_dat_l))
+})
+
+tail(view(dt2[[1]], data_summmary_l), 2)
+tail(view(dt2[[3]], data_summmary_l), 2)
 

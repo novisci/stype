@@ -116,9 +116,8 @@ tail(view(dt2[[3]], data_summmary_l), 2)
 
 # Comparison of options for `r_censored` stype
 
-
-
 ```{r}
+library(survival)
 ctimes <- list(
    v_event_time(c(5, 6, 10, NA_integer_, 1, NA_integer_, 19), internal_name = "cA"),
    v_event_time(c(4, 1, 15, NA_integer_, NA_integer_, NA_integer_, 21), internal_name = "cB")
@@ -128,18 +127,65 @@ otimes <- list(
   v_event_time(c(2, 6, 11, 12, NA_integer_, NA_integer_, 25), internal_name = "oA"),
   v_event_time(c(1, NA_integer_, 10, NA_integer_, NA_integer_, NA_integer_, 23), internal_name = "oB")
 )
+surv_fit <- function(x) list(survfit(as_Surv(x) ~ 1))
 
-dt <- tibble(
-  x1 = v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15),
-  x2 = v_rcensored(outcomes = otimes[[1]], end_time = 15),
-  x3 = v_binary(c(TRUE, FALSE, TRUE), context  = context(purpose = purpose(study_role = "covariate"))),
-)
+
+x1 <- v_rcensored(
+  outcomes = otimes, censors = ctimes, end_time = 15,
+  extra_descriptors = list(survival_curve = surv_fit))
+
+get_data_summary(x1, "survival_curve")
+get_data_summary(x1[c(3,5,6)], "survival_curve")
+```
+
+```{r}
 
 # The goal is to:
 # * fit a coxph? using the covariate
 # * pull out the weights
 # * describe() the r_censored by these weights (accounting for censoring)
+library(causalRisk)
 
+dt <- tibble(
+  x1 = v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15),
+  x2 = v_rcensored(outcomes = otimes[[1]], end_time = 15),
+  x3 = v_binary(c(TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, TRUE),
+                context  = context(purpose = purpose(study_role = "covariate"))),
+)
+
+is_constant <- function(x){
+  get_data_summary(x, "is_constant")
+}
+
+is_not_constant <- function(x) !is_constant(x)
+
+rcensored_l <- 
+  stype_dt_l(is_rcensored)
+
+non_constant_covariates_l <- 
+  stype_dt_l(is_covariate) %.%
+  stype_dt_l(is_not_constant)
+
+weight <- function(x, w){
+  dsum <- describe(x, w = w)
+  attr(x, "data_summary") <- dsum
+  x
+}
+
+estimate_weights <- function(covariates){ 1 }
+
+weight_rcensored_outcomes <- function(dt){
+  covariates <- view(dt, non_constant_covariates_l)
+
+  weights <- estimate_weights(covariates)
+  
+  over_map(dt, rcensored_l, function(x){ 
+    weight(x, w = weights)
+  })
+}
+
+dt2 <- weight_rcensored_outcomes(dt)
+dt2
 
 ```
 

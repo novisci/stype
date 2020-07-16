@@ -13,7 +13,7 @@
 \alias{groupedDescriptors}
 \alias{rcensoredDescriptors}
 \title{Descriptors}
-\format{An object of class \code{list} of length 6.}
+\format{}
 \usage{
 standardDescriptors
 
@@ -34,7 +34,13 @@ groupedDescriptors
 rcensoredDescriptors
 }
 \description{
-Lists of functions to used to create a \code{\link{data_summary}} object.
+Lists of functions to used to \code{\link{describe}} a \code{describeable}
+vector to create a \code{\link{data_summary}} object. A \code{descriptor} is
+a function of \code{x} (and optionally \code{g} (a grouping vector and/or 
+\code{w} a numeric weight vector)).
+
+\code{describable} vectors include: integer, logical, numeric, factor, 
+ordered, and v_rcensored.
 }
 \keyword{datasets}
 \keyword{internal}

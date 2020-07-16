@@ -25,13 +25,24 @@ setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
                                    "v_rcensored"))
 
 #' Descriptors
+#' @name descriptors 
+#' @description 
+#' Lists of functions to used to \code{\link{describe}} a \code{describeable}
+#' vector to create a \code{\link{data_summary}} object. A \code{descriptor} is
+#' a function of \code{x} (and optionally \code{g} (a grouping vector and/or 
+#' \code{w} a numeric weight vector)).
 #' 
-#' Lists of functions to used to create a \code{\link{data_summary}} object.
+#' \code{describable} vectors include: integer, logical, numeric, factor, 
+#' ordered, and v_rcensored.
 #' 
 #' @importFrom stats IQR median sd quantile var cov weighted.mean
-#' @name descriptors
+#' @format 
+#' @docType 
 #' @keywords internal
-standardDescriptors <- list(
+NULL
+
+#' @rdname descriptors 
+  standardDescriptors <- list(
   n            = function(x, ...) length(x),
   has_missing  = function(x, ...) anyNA(x),
   n_nonmissing = function(x, ...) sum(!is.na(x)),
@@ -50,7 +61,9 @@ logicalDescriptors <- list(
 
 #' @rdname descriptors
 wlogicalDescriptors <- list(
-  weighted_proportion = function(x, w, ...){ stats::weighted.mean(x = x, w = w, ...) }
+  weighted_proportion = function(x, w, ...) { 
+    stats::weighted.mean(x = x, w = w, ...)
+  }
 )
 
 #' @rdname descriptors
@@ -426,61 +439,6 @@ setMethod(
   signature  = c("stype", NULL),
   definition = function(x, element){ attr(x, "data_summary") }
 )
-
-# @rdname get_data_summary
-# @export
-# setMethod(
-#   f          = "get_data_summary",
-#   signature  = c("v_rcensored", NULL),
-#   definition = function(x, element){
-#     
-#     time_data <-  get_from_field(
-#       "time", 
-#        c("n", "has_missing", "sum"), 
-#        c("n", "has_missing", "person_time"))(x)
-#     
-#     event_data <- get_from_field("outcome", "num_1", "n_events")(x)
-#     
-#     # exposure adjusted incidence rate
-#     # - eair: exposure adjusted incidence rate
-#     # - eair_var: variance of eair using formula (2) in He 2015 
-#     #             (doi:10.4172/2155-6180.1000238)
-#     
-#     outc <- vctrs::field(x, "outcome")
-#     time <- vctrs::field(x, "time")
-#     
-#     # proportion of subjects that have event prior to censor or end of followup
-#     a_hat   <- get_data_summary(outc, "proportion")
-#     a_sigma <- get_data_summary(outc, "variance")
-#     
-#     # mean followup time
-#     b_hat   <- get_data_summary(time, "mean")
-#     b_sigma <- get_data_summary(time, "variance")
-#     
-#     cov_ab <- cov(outc, time)
-#     
-#     sigma <- matrix(c(a_sigma, cov_ab, cov_ab, b_sigma), ncol = 2, byrow = TRUE)
-#     L <- c(1 , -a_hat/b_hat)
-#     
-#     incidence_data <- 
-#     list(
-#       eair          = event_data[["n_events"]]/time_data[["person_time"]],
-#       eair_variance = drop((1/(b_hat^2)) * t(L) %*% sigma %*% L)
-#     )
-#     
-#     vctrs::vec_c(
-#       time_data,
-#       event_data,
-#       get_from_field("censored", "num_1", "n_censored")(x),
-#       get_from_field("censor_reason", "table", 
-#                      .after = function(z) { list(censor_reasons = z[[1]]) } )(x),
-#       get_from_field("outcome_reason", "table", 
-#                      .after = function(z) list(outcome_reasons = z[[1]]) )(x),
-#       incidence_data
-#     )
-#     
-#   }
-# )
 
 #' @rdname get_data_summary
 #' @export

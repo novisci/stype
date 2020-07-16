@@ -12,7 +12,8 @@ v_rcensored(
   censors,
   end_time = Inf,
   internal_name = "",
-  context
+  context,
+  extra_descriptors = list()
 )
 
 is_rcensored(x)

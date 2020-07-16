@@ -105,6 +105,13 @@ test_that("v_rcensored get_data_summary works", {
 })
 
 
+test_that("v_rcensored extra_descriptors works", {
+  x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15,
+                    extra_descriptors = list(length = function(x) length(x)))
+  x2 <- x1[1:5]
+  expect_true("length" %in% names(get_data_summary(x2)))
+})
+
 test_that("row binding works for v_rcensored", {
   x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
   x2 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)

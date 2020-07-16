@@ -25,8 +25,9 @@ new_rcensored <- function(time           = v_event_time(),
                           .end_time      = numeric(),
                           .internal_name = character(), 
                           .data_summary  = data_summary(), 
-                          .context       = context()){
-  # browser()
+                          .context       = context(),
+                          .extra_descriptors = list()){
+ 
   vctrs::vec_assert(time, ptype = v_event_time())
   vctrs::vec_assert(censored, ptype = v_binary())
   vctrs::vec_assert(outcome, ptype = v_binary())
@@ -52,6 +53,7 @@ new_rcensored <- function(time           = v_event_time(),
     data_summary  = .data_summary, 
     context       = .context, 
     end_time      = .end_time,
+    extra_descriptors = .extra_descriptors,
     class         = c("v_rcensored", "censored"))
 }
 
@@ -77,8 +79,8 @@ v_rcensored <- function(outcomes = list(),
                         censors,
                         end_time = Inf,
                         internal_name = "", 
-                        context){
-  
+                        context,
+                        extra_descriptors = list()){
   
   if(is_event_time(outcomes)){
     outcomes <- list(outcomes)
@@ -117,9 +119,10 @@ v_rcensored <- function(outcomes = list(),
     .end_time      = end_time,
     .internal_name = internal_name,
     .data_summary  = data_summary(),
-    .context       = context)
+    .context       = context,
+    .extra_descriptors = extra_descriptors)
   
-  dsum <- describe(out)
+  dsum <- describe(out, .descriptors = extra_descriptors)
   attr(out, "data_summary") <- dsum
   out
 }
@@ -312,12 +315,13 @@ vec_ptype2.v_rcensored.v_rcensored <- function(x, y, ...) {
   oreasy <- vctrs::field(y, "outcome_reason") 
   creasx <- vctrs::field(x, "censor_reason") 
   creasy <- vctrs::field(y, "censor_reason") 
-   
+  
   new_rcensored(
     outcome_reason = new_nominal(.levels = union(levels(oreasx), levels(oreasy))),
     censor_reason  = new_nominal(.levels = union(levels(creasx), levels(creasy))),
     .internal_name = get_internal_name(x),
-    .context = get_context(x)
+    .context = get_context(x),
+    .extra_descriptors = attr(x, "extra_descriptors")
   )
 }
 
@@ -345,6 +349,7 @@ vec_restore.v_rcensored <- function(x, to, ...) {
   # Maintain metainfo
   iname <- attr(to, "internal_name")
   etime <- attr(to, "end_time")
+  edesc <- attr(to, "extra_descriptors")
   ctxt  <- get_context(to)
   hold  <- as.list(x)
 
@@ -358,11 +363,12 @@ vec_restore.v_rcensored <- function(x, to, ...) {
     .internal_name = iname,
     .data_summary  = data_summary(),
     .context       = ctxt,
-    .end_time      = etime
+    .end_time      = etime,
+    .extra_descriptors = edesc
   )
 
   # Update data summary
-  attr(out, "data_summary") <- describe(out)
+  attr(out, "data_summary") <- describe(out, .descriptors = edesc)
   out
 }
 

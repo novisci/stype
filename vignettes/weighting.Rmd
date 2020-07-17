@@ -25,8 +25,8 @@ library(dplyr)
 
 # Option 1: add the `describe` function as an attribute of the vector
 
-```{r}
-data_summmary_l <- attr_l("data_summary")
+```{r, eval=FALSE}
+# data_summmary_l <- attr_l("data_summary")
 describe_l <- attr_l("describe")
 
 make_describer <- function(x){
@@ -47,67 +47,44 @@ view(x, data_summmary_l)
 # Option 2: a weight (or update) function entirely separate from the vector
 
 ```{r}
-weight <- function(x, w){
-  dsum <- describe(vctrs::vec_data(x), w = w)
-  attr(x, "data_summary") <- dsum
-  x
-}
-
 x <- v_binary(c(TRUE, TRUE, TRUE, FALSE))
 w <- c(10, 10, 1, 1)
+get_data_summary(x)
 
-weight(x, w)
+z <- weight(x, w)
+get_data_summary(z)
 ```
 
 # Comparison of options for basic stypes
 
-```{r}
-stype_dt_l <- function(predicate){
-  lens(
-    view = function(d) select(d, where(predicate)),
-    set  = function(d, x) {
-      where_to_replace <-purrr::map_lgl(d, predicate)
-      stopifnot(sum(where_to_replace) == length(x))
-      d[where_to_replace] <- x 
-      tibble(!!! d) 
-    }
-  )
-}
+```{r, eval = FALSE}
 
-outcomes_l <- stype_dt_l(is_outcome)
-weights_l <- stype_dt_l(is_weight)
-vec_data_l <- lens(
-  view = function(d) vctrs::vec_data(d),
-  set  = function(d, x) vctrs::vec_c(vctrs::vec_ptype(d), x)
-)
 
-weight_dat_l <- weights_l %.% index_l(1) %.% vec_data_l
-
+weight_var_l <- weight_l %.% index_l(1) %.% vec_data_l
 
 otcm <- context(purpose = purpose(study_role = "outcome"))
+# note the different ways of setting the context
 dt <- tibble::tibble(
   x1 = v_binary(c(TRUE, FALSE, TRUE), context  = otcm),
-  x2 = v_binary(c(FALSE, TRUE, FALSE), context =otcm),
+  x2 = v_binary(c(FALSE, TRUE, FALSE)) %>% set(context_l, otcm),
   x3 = v_continuous(c(1.5, 1.6, 0.1), context = otcm),
-  x4 = v_continuous(c(1.5, 1.6, 0.1), context = context(purpose = purpose(study_role = "weight"))),
+  x4 = v_continuous(c(1.5, 1.6, 0.1)) %>%
+    set(context_l, context(purpose = purpose(study_role = "weight"))),
 )
-
-view(dt, outcomes_l)
-view(dt, weight_dat_l)
 
 tail(view(dt[[1]], data_summmary_l), 2)
 
 # Just weight binary variables
-dt1 <- over_map(dt, outcomes_l %.% stype_dt_l(is_binary), function(x){ 
-  weight(x, view(dt, weight_dat_l))
+dt1 <- over_map(dt, outcome_l %.% binary_l, function(x){ 
+  weight(x, view(dt, weight_var_l))
 })
-
+dt1
 tail(view(dt1[[1]], data_summmary_l), 2)
 tail(view(dt1[[3]], data_summmary_l), 2)
 
 # Weight all outcomes
-dt2 <- over_map(dt, outcomes_l, function(x){ 
-  weight(x, view(dt, weight_dat_l))
+dt2 <- over_map(dt, outcome_l, function(x){ 
+  weight(x, view(dt, weight_var_l))
 })
 
 tail(view(dt2[[1]], data_summmary_l), 2)
@@ -116,7 +93,7 @@ tail(view(dt2[[3]], data_summmary_l), 2)
 
 # Comparison of options for `r_censored` stype
 
-```{r}
+```{r, eval = FALSE}
 library(survival)
 ctimes <- list(
    v_event_time(c(5, 6, 10, NA_integer_, 1, NA_integer_, 19), internal_name = "cA"),
@@ -127,6 +104,7 @@ otimes <- list(
   v_event_time(c(2, 6, 11, 12, NA_integer_, NA_integer_, 25), internal_name = "oA"),
   v_event_time(c(1, NA_integer_, 10, NA_integer_, NA_integer_, NA_integer_, 23), internal_name = "oB")
 )
+
 surv_fit <- function(x) list(survfit(as_Surv(x) ~ 1))
 
 
@@ -138,14 +116,14 @@ get_data_summary(x1, "survival_curve")
 get_data_summary(x1[c(3,5,6)], "survival_curve")
 ```
 
-```{r}
+```{r, eval= FALSE}
 
 # The goal is to:
 # * fit a coxph? using the covariate
 # * pull out the weights
 # * describe() the r_censored by these weights (accounting for censoring)
-library(causalRisk)
-
+# library(causalRisk)
+library(dplyr)
 dt <- tibble(
   x1 = v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15),
   x2 = v_rcensored(outcomes = otimes[[1]], end_time = 15),
@@ -153,34 +131,23 @@ dt <- tibble(
                 context  = context(purpose = purpose(study_role = "covariate"))),
 )
 
-is_constant <- function(x){
-  get_data_summary(x, "is_constant")
+
+non_constant_covariates_l <- covariate_l %.% not_constant_l
+
+estimate_Pr_uncensored<- function(x){
+  z <- survfit(as_Surv(x, censor_as_event = TRUE) ~ 1)
+  z$surv[match(as_canonical(vctrs::field(x, "time")), z$time)]
 }
 
-is_not_constant <- function(x) !is_constant(x)
-
-rcensored_l <- 
-  stype_dt_l(is_rcensored)
-
-non_constant_covariates_l <- 
-  stype_dt_l(is_covariate) %.%
-  stype_dt_l(is_not_constant)
-
-weight <- function(x, w){
-  dsum <- describe(x, w = w)
-  attr(x, "data_summary") <- dsum
-  x
-}
-
-estimate_weights <- function(covariates){ 1 }
+# zz <- estimate_Pr_uncensored(dt$x1)
+# zz
 
 weight_rcensored_outcomes <- function(dt){
-  covariates <- view(dt, non_constant_covariates_l)
-
-  weights <- estimate_weights(covariates)
-  
-  over_map(dt, rcensored_l, function(x){ 
-    weight(x, w = weights)
+  # covariates <- view(dt, non_constant_covariates_l)
+  # weights <- estimate_weights(covariates)
+  over_map(dt, rcensored_l, function(x) {
+    weights <- estimate_Pr_uncensored(x1)
+    weight(x, w = 1/weights)
   })
 }
 

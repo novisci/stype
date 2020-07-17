@@ -6,7 +6,7 @@
 # - .describe: the internal method for applying a descriptor
 # - describe: applies a descriptor to a variable
 
-
+globalVariables(c("view", "set"))
 # Classes used internally to define methods for signatures with possibly missing
 # arguments.
 
@@ -19,7 +19,12 @@ setClassUnion("maybeWeight",     c("Missing", "weightVar"))
 setClassUnion("maybeDescriptor", c("missing", "NULL", "list"))
 setClassUnion("describable",     c("integer", "logical", "numeric", "factor",
                                    "ordered", "character", "v_rcensored"))
-setClassUnion("stype",           c("v_count", "v_binary", "v_continuous", 
+setClassUnion("simpleStype",     c("v_count", "v_binary", "v_continuous", 
+                                   "v_continuous_nonneg", "v_event_time",
+                                   "v_nominal", "v_ordered", "v_character"))
+setClassUnion("complexStype",    c("v_rcensored"))
+# setClassUnion("stype",           c("simpleStype", "complexStype"))
+setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
                                    "v_continuous_nonneg", "v_event_time",
                                    "v_nominal", "v_ordered", "v_character",
                                    "v_rcensored"))
@@ -36,8 +41,6 @@ setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
 #' ordered, and v_rcensored.
 #' 
 #' @importFrom stats IQR median sd quantile var cov weighted.mean
-#' @format 
-#' @docType 
 #' @keywords internal
 NULL
 
@@ -328,7 +331,6 @@ setGeneric(
 
 #' @rdname describe
 #' @export
-
 setMethod(
   f          = "describe",
   signature  = c("describable", "maybeGroup", "maybeWeight", "maybeDescriptor"),
@@ -349,6 +351,19 @@ setMethod(
 )
 
 #' @rdname describe
+#' @export
+setMethod(
+  f          = "describe",
+  signature  = c("simpleStype", "maybeGroup", "maybeWeight", "maybeDescriptor"),
+  definition = function(x, g, w, .descriptors, ...){
+    cl <- match.call()
+    cl <- lapply(as.list(cl), eval, sys.parent())
+    cl$x <- as_canonical(cl$x)
+    eval(as.call(cl))
+  }
+)
+
+#' @rdname describe
 #' @importFrom vctrs field
 #' @importFrom purrr flatten
 #' @export
@@ -356,7 +371,7 @@ setMethod(
   f          = "describe",
   signature  = c("v_rcensored", "maybeGroup", "maybeWeight", "maybeDescriptor"),
   definition = function(x, g, w, .descriptors, ...){
-
+    
     standdesc <- 
       purrr::map(
         .x = standardDescriptors,
@@ -400,6 +415,24 @@ setMethod(
   }
 )
 
+#' (Re)\code{describe} a \code{stype} by weighting the vector.
+#' @rdname describe
+#' @export
+setGeneric(
+  name = "weight", 
+  def  = function(x, w, .descriptors) standardGeneric("weight")
+)
+
+#' @rdname describe
+#' @export
+setMethod(
+  f          = "weight",
+  signature  = c("stype", "weightVar","maybeDescriptor"),
+  definition = function(x, w, .descriptors){
+    cl <- swap_function(match.call(), describe)
+    set(x, data_summmary_l, eval(cl, sys.parent()))
+  }
+)
 
 #' Create a function to get data from a field in a stype record type vector
 #' 
@@ -425,7 +458,6 @@ get_from_field <- function(field_name, what, new_names = what, .after = identity
 #' @param element either \code{NULL} to get the full \code{data_summary}
 #'  or a length 1 \code{character} to select a particular element of the summary
 #' @export
-
 setGeneric(
   name = "get_data_summary", 
   def  = function(x, element) standardGeneric("get_data_summary")
@@ -433,7 +465,6 @@ setGeneric(
 
 #' @rdname get_data_summary
 #' @export
-
 setMethod(
   f          = "get_data_summary",
   signature  = c("stype", NULL),
@@ -442,7 +473,6 @@ setMethod(
 
 #' @rdname get_data_summary
 #' @export
-
 setMethod(
   f          = "get_data_summary",
   signature  = c("stype", "character"),
@@ -453,7 +483,6 @@ setMethod(
 #' 
 #' @param x the object from which to get the \code{internal_name} attribute
 #' @export
-
 setGeneric(
   name = "get_internal_name", 
   def  = function(x) standardGeneric("get_internal_name")
@@ -461,7 +490,6 @@ setGeneric(
 
 #' @rdname get_internal_name
 #' @export
-
 setMethod(
   f          = "get_internal_name",
   signature  = c("stype"),

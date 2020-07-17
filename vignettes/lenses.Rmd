@@ -1,0 +1,53 @@
+---
+title: "Using stype lenses"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using stype lenses}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+library(stype)
+library(dplyr)
+```
+
+To update a vector: 
+```{r}
+v_binary() %>%
+  set(derivation_l, "some derivation") %>% 
+  set(long_label_l, "a new label") %>% 
+  set(study_role_l, "outcome")
+```
+
+To update vectors within a data.frame:
+
+```{r}
+df <- tibble(
+  x1 = v_binary(),
+  x2 = v_continuous(),
+  x3 = v_continuous(),
+  x4 = v_count()
+)
+
+df <- 
+  df %>%
+  over_map(continuous_l, function(x) set(x, study_role_l, "covariate")) %>%
+  over_map(binary_l, function(x) set(x, study_role_l, "exposure")) %>%
+  over_map(count_l, function(x) set(x, study_role_l, "outcome"))
+
+view(df$x1, study_role_l) == "exposure"
+view(df$x2, study_role_l) == "covariate"
+view(df$x3, study_role_l) == "covariate"
+view(df$x4, study_role_l) == "outcome"
+
+```

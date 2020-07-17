@@ -7,11 +7,13 @@ stages:
 testing:
   stage: testing
   script:
+    - R -e 'install.packages("lenses")'
     - R -e 'devtools::check(manual = FALSE)'
 
 package:
   stage: package
   script:
+    - R -e 'install.packages("lenses")'
     - rm -rf .git
     - R CMD build .
 

@@ -33,29 +33,84 @@ stype_df_l <- function(predicate){
   )
 }
 
+# Type-based lenses ####
 #' @describeIn stype_lenses view/set \code{\link{v_binary}} stype vectors
 #' @export
 binary_l <- stype_df_l(is_binary)
+
+#' @describeIn stype_lenses view/set \code{\link{v_character}} stype vectors
+#' @export
+character_l <- stype_df_l(is_character)
+
+#' @describeIn stype_lenses view/set \code{\link{v_continuous}} stype vectors
+#' @export
+continuous_l <- stype_df_l(is_continuous)
+
+#' @describeIn stype_lenses view/set \code{\link{v_continuous_nonneg}} stype vectors
+#' @export
+continuous_nonneg_l <- stype_df_l(is_continuous_nonneg)
 
 #' @describeIn stype_lenses view/set \code{\link{v_count}} stype vectors
 #' @export
 count_l <- stype_df_l(is_count)
 
+#' @describeIn stype_lenses view/set \code{\link{v_event_time}} stype vectors
+#' @export
+event_time_l <- stype_df_l(is_event_time)
+
+#' @describeIn stype_lenses view/set \code{\link{v_nominal}} stype vectors
+#' @export
+nominal_l <- stype_df_l(is_nominal)
+
+#' @describeIn stype_lenses view/set \code{\link{v_ordered}} stype vectors
+#' @export
+ordered_l <- stype_df_l(is_ordered)
+
 #' @describeIn stype_lenses view/set \code{\link{v_rcensored}} stype vectors
 #' @export
 rcensored_l <- stype_df_l(is_rcensored)
 
-#' @describeIn stype_lenses view/set \code{outcome} stype vectors
-#' @export
-outcome_l <- stype_df_l(is_outcome)
+# Role-based lenses ####
 
-#' @describeIn stype_lenses view/set \code{covariate} stype vectors
+#' @describeIn stype_lenses view/set stype vectors with \code{covariate} role
 #' @export
 covariate_l <- stype_df_l(is_covariate)
 
-#' @describeIn stype_lenses view/set \code{weight} stype vectors
+#' @describeIn stype_lenses view/set stype vectors with \code{censoring} role
+#' @export
+censoring_l <- stype_df_l(is_censoring)
+
+#' @describeIn stype_lenses view/set stype vectors with \code{competing} role
+#' @export
+competing_l <- stype_df_l(is_competing)
+#' @describeIn stype_lenses view/set stype vectors with \code{exposure} role
+#' @export
+exposure_l <- stype_df_l(is_exposure)
+
+#' @describeIn stype_lenses view/set stype vectors with \code{identifier} role
+#' @export
+identifier_l <- stype_df_l(is_identifier)
+
+#' @describeIn stype_lenses view/set stype vectors with \code{index} role
+#' @export
+index_l <- stype_df_l(is_index)
+
+#' @describeIn stype_lenses view/set stype vectors with \code{is_intermediate} role
+#' @export
+intermediate_l <- stype_df_l(is_intermediate)
+
+#' @describeIn stype_lenses view/set stype vectors with \code{other} role
+#' @export
+other_l <- stype_df_l(is_other)
+
+#' @describeIn stype_lenses view/set stype vectors with \code{outcome} role
+#' @export
+outcome_l <- stype_df_l(is_outcome)
+
+#' @describeIn stype_lenses view/set stype vectors with  \code{weight} role
 #' @export
 weight_l <- stype_df_l(is_weight)
+
 
 #' @describeIn stype_lenses view/set constant stype vectors
 #' @export
@@ -86,36 +141,36 @@ context_l <- lenses::attr_l("context")
 internal_name_l <- lenses::attr_l("internal_name")
 
 #' @describeIn stype_lenses view/set the \code{derivation} slot of a \code{stype}
-#'    \code{\link{context}. 
+#'    \code{\link{context}}. 
 #' @export
 derivation_l <- context_l %.% slot_l("derivation")
 
 #' @describeIn stype_lenses view/set the \code{short_label} slot of a \code{stype}
-#'    \code{\link{context}. 
+#'    \code{\link{context}}. 
 #' @export
 short_label_l <- context_l %.% slot_l("short_label") 
 
 #' @describeIn stype_lenses view/set the \code{long_label} slot of a \code{stype}
-#'    \code{\link{context}. 
+#'    \code{\link{context}}. 
 #' @export
 long_label_l <- context_l %.% slot_l("long_label")  
 
 #' @describeIn stype_lenses view/set the \code{description} slot of a \code{stype}
-#'    \code{\link{context}. 
+#'    \code{\link{context}}. 
 #' @export
 description_l <- context_l %.% slot_l("description")  
 
 #' @describeIn stype_lenses view/set the \code{security_type} slot of a \code{stype}
-#'    \code{\link{context}. 
+#'    \code{\link{context}}. 
 #' @export
 security_type_l <- context_l %.% slot_l("security_type") 
 
 #' @describeIn stype_lenses view/set the \code{purpose} slot of a \code{stype}
-#'    \code{\link{context}. 
+#'    \code{\link{context}}. 
 #' @export
 purpose_l <- context_l %.% slot_l("purpose")
 
 #' @describeIn stype_lenses view/set the \code{study_role} slot of a \code{stype}
-#'    \code{\link{context}'s \code{\link{purpose}. 
+#'    \code{\link{context}}'s \code{\link{purpose}}. 
 #' @export
 study_role_l <- context_l %.% slot_l("purpose") %.% slot_l("study_role")  

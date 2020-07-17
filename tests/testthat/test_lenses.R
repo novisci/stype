@@ -1,18 +1,43 @@
 
+stype_lenses <- ls("package:stype")[grepl("_l$", ls("package:stype"))]
+
 testthat::test_that("all context slots have a lens", {
   cslots     <- slotNames(context())
-  stype_lens <- ls("package:stype")[grepl("_l$", ls("package:stype"))]
   
   purrr::walk(
     .x = cslots,
     .f = ~ { 
       expect_true(
-        paste0(.x, "_l") %in% stype_lens,
+        paste0(.x, "_l") %in% stype_lenses,
         info = sprintf("%s does not have a lens", .x)
       )
     }
   )
   
+})
+
+testthat::test_that("all stype types  have a (list-like) lens", {
+  purrr::walk(
+    .x = gsub("^v_", "", names(methods::getClass("stype")@subclasses)),
+    .f = ~ { 
+      expect_true(
+        paste0(.x, "_l") %in% stype_lenses,
+        info = sprintf("%s does not have a lens", .x)
+      )
+    }
+  )
+})
+
+testthat::test_that("all roles slots have a (list-like) lens", {
+  purrr::walk(
+    .x = valid_roles,
+    .f = ~ { 
+      expect_true(
+        paste0(.x, "_l") %in% stype_lenses,
+        info = sprintf("%s does not have a lens", .x)
+      )
+    }
+  )
 })
 
 testthat::test_that("context lens view and set", {

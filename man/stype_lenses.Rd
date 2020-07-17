@@ -7,8 +7,14 @@
 \alias{binary_l}
 \alias{count_l}
 \alias{rcensored_l}
-\alias{outcome_l}
 \alias{covariate_l}
+\alias{censoring_l}
+\alias{competing_l}
+\alias{exposure_l}
+\alias{identifier_l}
+\alias{index_l}
+\alias{other_l}
+\alias{outcome_l}
 \alias{weight_l}
 \alias{constant_l}
 \alias{not_constant_l}
@@ -17,6 +23,12 @@
 \alias{context_l}
 \alias{internal_name_l}
 \alias{derivation_l}
+\alias{short_label_l}
+\alias{long_label_l}
+\alias{description_l}
+\alias{security_type_l}
+\alias{purpose_l}
+\alias{study_role_l}
 \title{Lenses for stype vectors}
 \format{An object of class \code{lens} of length 2.}
 \usage{
@@ -28,9 +40,21 @@ count_l
 
 rcensored_l
 
-outcome_l
-
 covariate_l
+
+censoring_l
+
+competing_l
+
+exposure_l
+
+identifier_l
+
+index_l
+
+other_l
+
+outcome_l
 
 weight_l
 
@@ -47,6 +71,18 @@ context_l
 internal_name_l
 
 derivation_l
+
+short_label_l
+
+long_label_l
+
+description_l
+
+security_type_l
+
+purpose_l
+
+study_role_l
 }
 \arguments{
 \item{predicate}{a predicate function to apply to each element of the list 
@@ -66,11 +102,23 @@ structure
 
 \item \code{rcensored_l}: view/set \code{\link{v_rcensored}} stype vectors
 
-\item \code{outcome_l}: view/set \code{outcome} stype vectors
+\item \code{covariate_l}: view/set stype vectors with \code{covariate} role
 
-\item \code{covariate_l}: view/set \code{covariate} stype vectors
+\item \code{censoring_l}: view/set stype vectors with \code{censoring} role
 
-\item \code{weight_l}: view/set \code{weight} stype vectors
+\item \code{competing_l}: view/set stype vectors with \code{competing} role
+
+\item \code{exposure_l}: view/set stype vectors with \code{exposure} role
+
+\item \code{identifier_l}: view/set stype vectors with \code{identifier} role
+
+\item \code{index_l}: view/set stype vectors with \code{index} role
+
+\item \code{other_l}: view/set stype vectors with \code{other} role
+
+\item \code{outcome_l}: view/set stype vectors with \code{outcome} role
+
+\item \code{weight_l}: view/set stype vectors with  \code{weight} role
 
 \item \code{constant_l}: view/set constant stype vectors
 
@@ -85,7 +133,26 @@ structure
 
 \item \code{internal_name_l}: view/set the \code{internal_name} of a \code{stype}.
 
-\item \code{derivation_l}: view/set the \code{internal_name} of a \code{stype}.
+\item \code{derivation_l}: view/set the \code{derivation} slot of a \code{stype}
+\code{\link{context}}.
+
+\item \code{short_label_l}: view/set the \code{short_label} slot of a \code{stype}
+\code{\link{context}}.
+
+\item \code{long_label_l}: view/set the \code{long_label} slot of a \code{stype}
+\code{\link{context}}.
+
+\item \code{description_l}: view/set the \code{description} slot of a \code{stype}
+\code{\link{context}}.
+
+\item \code{security_type_l}: view/set the \code{security_type} slot of a \code{stype}
+\code{\link{context}}.
+
+\item \code{purpose_l}: view/set the \code{purpose} slot of a \code{stype}
+\code{\link{context}}.
+
+\item \code{study_role_l}: view/set the \code{study_role} slot of a \code{stype}
+\code{\link{context}}'s \code{\link{purpose}}.
 }}
 
 \keyword{datasets}

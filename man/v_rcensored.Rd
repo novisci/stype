@@ -39,6 +39,9 @@ censor is the reason for the censoring}
 
 \item{context}{a \code{\link{context}}}
 
+\item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
+appended to the default \code{\link{descriptors}}.}
+
 \item{x}{a \code{integer} vector}
 
 \item{...}{passed to other methods such as \code{as.character}}

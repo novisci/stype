@@ -13,7 +13,7 @@
 \alias{groupedDescriptors}
 \alias{rcensoredDescriptors}
 \title{Descriptors}
-\format{}
+\format{An object of class \code{list} of length 6.}
 \usage{
 standardDescriptors
 

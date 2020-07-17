@@ -3,17 +3,26 @@
 \name{describe}
 \alias{describe}
 \alias{describe,describable,maybeGroup,maybeWeight,maybeDescriptor-method}
+\alias{describe,simpleStype,maybeGroup,maybeWeight,maybeDescriptor-method}
 \alias{describe,v_rcensored,maybeGroup,maybeWeight,maybeDescriptor-method}
 \alias{describe,data.frame,maybeGroup,maybeWeight,maybeDescriptor-method}
+\alias{weight}
+\alias{weight,stype,weightVar,maybeDescriptor-method}
 \title{Describe a variable}
 \usage{
 describe(x, g = NULL, w = NULL, .descriptors, ...)
 
 \S4method{describe}{describable,maybeGroup,maybeWeight,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
 
+\S4method{describe}{simpleStype,maybeGroup,maybeWeight,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
+
 \S4method{describe}{v_rcensored,maybeGroup,maybeWeight,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
 
 \S4method{describe}{data.frame,maybeGroup,maybeWeight,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
+
+weight(x, w, .descriptors)
+
+\S4method{weight}{stype,weightVar,maybeDescriptor}(x, w, .descriptors)
 }
 \arguments{
 \item{x}{a vector a values}
@@ -28,4 +37,6 @@ describe(x, g = NULL, w = NULL, .descriptors, ...)
 }
 \description{
 Describe a variable
+
+(Re)\code{describe} a \code{stype} by weighting the vector.
 }

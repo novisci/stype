@@ -5,7 +5,13 @@
 \alias{stype_lenses}
 \alias{stype_df_l}
 \alias{binary_l}
+\alias{character_l}
+\alias{continuous_l}
+\alias{continuous_nonneg_l}
 \alias{count_l}
+\alias{event_time_l}
+\alias{nominal_l}
+\alias{ordered_l}
 \alias{rcensored_l}
 \alias{covariate_l}
 \alias{censoring_l}
@@ -13,6 +19,7 @@
 \alias{exposure_l}
 \alias{identifier_l}
 \alias{index_l}
+\alias{intermediate_l}
 \alias{other_l}
 \alias{outcome_l}
 \alias{weight_l}
@@ -36,7 +43,19 @@ stype_df_l(predicate)
 
 binary_l
 
+character_l
+
+continuous_l
+
+continuous_nonneg_l
+
 count_l
+
+event_time_l
+
+nominal_l
+
+ordered_l
 
 rcensored_l
 
@@ -51,6 +70,8 @@ exposure_l
 identifier_l
 
 index_l
+
+intermediate_l
 
 other_l
 
@@ -98,7 +119,19 @@ structure
 
 \item \code{binary_l}: view/set \code{\link{v_binary}} stype vectors
 
+\item \code{character_l}: view/set \code{\link{v_character}} stype vectors
+
+\item \code{continuous_l}: view/set \code{\link{v_continuous}} stype vectors
+
+\item \code{continuous_nonneg_l}: view/set \code{\link{v_continuous_nonneg}} stype vectors
+
 \item \code{count_l}: view/set \code{\link{v_count}} stype vectors
+
+\item \code{event_time_l}: view/set \code{\link{v_event_time}} stype vectors
+
+\item \code{nominal_l}: view/set \code{\link{v_nominal}} stype vectors
+
+\item \code{ordered_l}: view/set \code{\link{v_ordered}} stype vectors
 
 \item \code{rcensored_l}: view/set \code{\link{v_rcensored}} stype vectors
 
@@ -113,6 +146,8 @@ structure
 \item \code{identifier_l}: view/set stype vectors with \code{identifier} role
 
 \item \code{index_l}: view/set stype vectors with \code{index} role
+
+\item \code{intermediate_l}: view/set stype vectors with \code{is_intermediate} role
 
 \item \code{other_l}: view/set stype vectors with \code{other} role
 

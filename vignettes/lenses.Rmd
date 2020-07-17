@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 ```{r}
 library(stype)
 library(dplyr)
+library(lenses)
 ```
 
 To update a vector: 

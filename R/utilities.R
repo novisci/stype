@@ -86,3 +86,12 @@ check_internal_names <- function(x, y){
     msg = "internal names of x and y must match"
   )
 }
+
+#' Swap the called function for a different function
+#' @param cl a call
+#' @param fn the new function
+#' @keywords internal
+swap_function <- function(cl, fn){
+  cl[[1]] <- fn
+  cl
+}

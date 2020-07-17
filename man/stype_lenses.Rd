@@ -16,6 +16,7 @@
 \alias{vec_data_l}
 \alias{context_l}
 \alias{internal_name_l}
+\alias{derivation_l}
 \title{Lenses for stype vectors}
 \format{An object of class \code{lens} of length 2.}
 \usage{
@@ -44,6 +45,8 @@ vec_data_l
 context_l
 
 internal_name_l
+
+derivation_l
 }
 \arguments{
 \item{predicate}{a predicate function to apply to each element of the list 
@@ -81,6 +84,8 @@ structure
 \item \code{context_l}: view/set the \code{\link{context}} of a \code{stype}.
 
 \item \code{internal_name_l}: view/set the \code{internal_name} of a \code{stype}.
+
+\item \code{derivation_l}: view/set the \code{internal_name} of a \code{stype}.
 }}
 
 \keyword{datasets}

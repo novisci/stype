@@ -3,7 +3,7 @@
 #' @name stype_lenses
 #' @param predicate a predicate function to apply to each element of the list 
 #'     (or each column of a \code{data.frame})
-#' @importFrom lenses lens attr_l set view "%.%"
+#' @importFrom lenses lens attr_l set view "%.%" slot_l
 #' @importFrom purrr map_lgl 
 # @export
 NULL
@@ -84,3 +84,38 @@ context_l <- lenses::attr_l("context")
 #' @describeIn stype_lenses view/set the \code{internal_name} of a \code{stype}. 
 #' @export
 internal_name_l <- lenses::attr_l("internal_name")
+
+#' @describeIn stype_lenses view/set the \code{derivation} slot of a \code{stype}
+#'    \code{\link{context}. 
+#' @export
+derivation_l <- context_l %.% slot_l("derivation")
+
+#' @describeIn stype_lenses view/set the \code{short_label} slot of a \code{stype}
+#'    \code{\link{context}. 
+#' @export
+short_label_l <- context_l %.% slot_l("short_label") 
+
+#' @describeIn stype_lenses view/set the \code{long_label} slot of a \code{stype}
+#'    \code{\link{context}. 
+#' @export
+long_label_l <- context_l %.% slot_l("long_label")  
+
+#' @describeIn stype_lenses view/set the \code{description} slot of a \code{stype}
+#'    \code{\link{context}. 
+#' @export
+description_l <- context_l %.% slot_l("description")  
+
+#' @describeIn stype_lenses view/set the \code{security_type} slot of a \code{stype}
+#'    \code{\link{context}. 
+#' @export
+security_type_l <- context_l %.% slot_l("security_type") 
+
+#' @describeIn stype_lenses view/set the \code{purpose} slot of a \code{stype}
+#'    \code{\link{context}. 
+#' @export
+purpose_l <- context_l %.% slot_l("purpose")
+
+#' @describeIn stype_lenses view/set the \code{study_role} slot of a \code{stype}
+#'    \code{\link{context}'s \code{\link{purpose}. 
+#' @export
+study_role_l <- context_l %.% slot_l("purpose") %.% slot_l("study_role")  

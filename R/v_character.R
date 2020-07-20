@@ -20,7 +20,8 @@ NULL
 new_character <- function(x = character(), 
                           .internal_name = character(),
                           .data_summary = data_summary(), 
-                          .context = context()){
+                          .context = context(),
+                          .extra_descriptors = list()){
   # x <- vctrs::vec_cast(x, character())
   # vctrs::vec_assert(x, ptype = character())
   vctrs::new_vctr(
@@ -28,6 +29,7 @@ new_character <- function(x = character(),
     internal_name = .internal_name,
     data_summary  = .data_summary, 
     context       = .context, 
+    extra_descriptors = .extra_descriptors,
     class = "v_character")
 }
 
@@ -38,20 +40,11 @@ methods::setOldClass(c("v_character", "vctrs_vctr"))
 #' @param x a \code{character} vector
 #' @rdname v_character 
 #' @export
-
-v_character <- function(x = character(), internal_name = "", context){
-  # x <- vctrs::vec_cast(x, character())
-  dsum <- describe(vctrs::vec_data(x))
-  if(missing(context)){
-    context <- methods::new("context")
-  }
-  
-  new_character(
-    x, 
-    .internal_name = internal_name,
-    .data_summary  = dsum,
-    .context       = context)
-}
+v_character <- make_stype_constructor(
+  typeFUN = new_character,
+  ptypeFUN = character,
+  dataFUN = vctrs::vec_data
+)
 
 #' Predicate function for count objects
 #' @rdname v_character 

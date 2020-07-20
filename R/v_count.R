@@ -13,6 +13,8 @@
 #' @param internal_name the internal name of the variable
 #' @param context a \code{\link{context}}
 #' @param ... passed to other methods such as \code{as.character}
+#' @param extra_descriptors A \code{list} of \code{\link{descriptors}} functions
+#'        appended to the default \code{\link{descriptors}}.
 #' @family stype types
 NULL
 
@@ -21,12 +23,15 @@ NULL
 #' @param .internal_name the internal name of the variable
 #' @param .data_summary a \code{\link{data_summary}}
 #' @param .context a \code{\link{context}}
+#' @param .extra_descriptors A \code{list} of \code{\link{descriptors}} functions
+#'        appended to the default \code{\link{descriptors}}.
 #' @keywords internal
 
 new_count <- function(x = integer(),
                       .internal_name = character(), 
                       .data_summary = data_summary(), 
-                      .context = context()){
+                      .context = context(),
+                      .extra_descriptors = list()){
   
   # x <- vctrs::vec_cast(x, integer())
   vctrs::vec_assert(vctrs::vec_data(x), ptype = integer())
@@ -41,6 +46,7 @@ new_count <- function(x = integer(),
     internal_name = .internal_name,
     data_summary  = .data_summary, 
     context       = .context, 
+    extra_descriptors = .extra_descriptors,
     class         = "v_count")
 }
 
@@ -50,21 +56,11 @@ methods::setOldClass(c("v_count", "vctrs_vctr"))
 #' Count constructor
 #' @rdname v_count 
 #' @export
-
-v_count <- function(x = integer(), internal_name = "", context){
-  x <- vctrs::vec_cast(x, integer())
-  dsum <- describe(vctrs::vec_data(x))
-  
-  if(missing(context)){
-    context <- methods::new("context")
-  }
-  
-  new_count(
-    x, 
-    .internal_name = internal_name,
-    .data_summary = dsum,
-    .context = context)
-}
+v_count <- make_stype_constructor(
+  typeFUN  = new_count, 
+  ptypeFUN = integer, 
+  castFUN  = integer, 
+  dataFUN  = vctrs::vec_data)
 
 #' Predicate function for count objects
 #' @rdname v_count 

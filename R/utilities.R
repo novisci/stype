@@ -1,3 +1,39 @@
+#' Create a constructor function for stype vectors
+#' 
+#' @param typeFUN the \code{new_} function that creates vdctors of the type
+#' @param ptypeFUN the prototype of the vector
+#' @param castFUN optionally cast the data by \code{\link[vctrs]{vec_cast}}
+#' @param dataFUN a function to apply to the data before \code{describe}ing the
+#'     the data. Defaults to \code{identity}.
+#' @keywords internal
+make_stype_constructor <- function(typeFUN, 
+                                   ptypeFUN, 
+                                   castFUN = ptypeFUN, 
+                                   dataFUN = identity){
+  function(x = ptypeFUN(), internal_name = "", context, 
+           extra_descriptors = list()){
+
+      x <- vctrs::vec_cast(x, castFUN())
+      
+      dsum <- describe(
+        dataFUN(x),
+        .descriptors = extra_descriptors
+      )
+
+      if(missing(context)){
+        context <- methods::new("context")
+      }
+
+      typeFUN(
+        x,
+        .internal_name = internal_name,
+        .data_summary = dsum,
+        .context = context,
+        .extra_descriptors = extra_descriptors
+      )
+  }
+}
+
 #' String Representation of the Statistical Type
 #'
 #' Provides a short phrase identifying the statistical type.

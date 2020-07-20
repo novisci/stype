@@ -9,10 +9,12 @@
 purpose <- setClass(
   "purpose",
   slots = c(
-    "study_role" = "character"
+    "study_role" = "character",
+    "tags"       = "character"
   ),
   prototype = methods::prototype(
-    study_role= ""
+    study_role = "",
+    tags       = ""
   )
 )
 
@@ -30,7 +32,6 @@ setValidity(
     )
   }
 )
-
 
 #' Check a study role
 #' 

@@ -7,9 +7,9 @@ stype_tester(
   error_generators = list(function() { c(-1, -1.1) })
 )
 
-test_that(
-  "v_event_time operations work",
-  {
-    # TODO: more checks
-  }
-)
+# test_that(
+#   "v_event_time operations work",
+#   {
+#     # TODO: more checks
+#   }
+# )

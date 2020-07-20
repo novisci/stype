@@ -13,3 +13,12 @@ test_that("purpose class and predicate functions work as hoped", {
   )
 
 })
+
+test_that("is_tagged works", {
+  tester <- purpose(study_role = "outcome", 
+                    tags = c("primary", "jdkfal"))
+  
+  expect_true(is_tagged(tester, "primary")) 
+  expect_false(is_tagged(tester, "secondary")) 
+  
+})

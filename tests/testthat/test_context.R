@@ -14,6 +14,17 @@ test_that("context class and predicate functions work as hoped", {
   
 })
 
+test_that("is_tagged works for contexts", {
+  tester <- context(
+    purpose = purpose(study_role = "outcome", tags = c("primary", "jdkfal"))
+  )
+  
+  expect_true(is_tagged(tester, "primary")) 
+  expect_true(is_tagged(tester, "jdkfal"))
+  expect_false(is_tagged(tester, "secondary")) 
+  
+})
+
 test_that("context class has get/set methods for all slots", {
   ctxt_slots <- slotNames("context")
   

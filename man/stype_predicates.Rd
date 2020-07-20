@@ -4,14 +4,31 @@
 \alias{stype_predicates}
 \alias{is_constant}
 \alias{is_not_constant}
+\alias{is_tagged}
+\alias{is_tagged,purpose,character-method}
+\alias{is_tagged,context,character-method}
+\alias{is_tagged,stype,character-method}
+\alias{is_tagged,ANY,character-method}
 \title{Useful stype predicates}
 \usage{
 is_constant(x)
 
 is_not_constant(x)
+
+is_tagged(x, tags)
+
+\S4method{is_tagged}{purpose,character}(x, tags)
+
+\S4method{is_tagged}{context,character}(x, tags)
+
+\S4method{is_tagged}{stype,character}(x, tags)
+
+\S4method{is_tagged}{ANY,character}(x, tags)
 }
 \arguments{
-\item{x}{a \code{stype}}
+\item{x}{a \code{stype} or other object}
+
+\item{tags}{a \code{character} vector}
 }
 \description{
 Useful stype predicates
@@ -21,5 +38,19 @@ Useful stype predicates
 \item \code{is_constant}: is this vector constant?
 
 \item \code{is_not_constant}: is this vector not constant?
+
+\item \code{is_tagged}: Is this object tagged?
+
+\item \code{is_tagged,purpose,character-method}: Is this \code{\linkS4class{purpose}} tagged with
+\code{tags}?
+
+\item \code{is_tagged,context,character-method}: Is this \code{\link{context}} tagged with
+\code{tags}?
+
+\item \code{is_tagged,stype,character-method}: Is this \code{\link{stype}} tagged with
+\code{tags}?
+
+\item \code{is_tagged,ANY,character-method}: Is this non-stype tagged with \code{tags}?
+\code{FALSE}
 }}
 

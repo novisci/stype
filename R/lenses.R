@@ -3,6 +3,7 @@
 #' @name stype_lenses
 #' @param predicate a predicate function to apply to each element of the list 
 #'     (or each column of a \code{data.frame})
+#' @param tags a \code{character} vector of tags
 #' @importFrom lenses lens attr_l set view "%.%" slot_l
 #' @importFrom purrr map_lgl 
 # @export
@@ -112,6 +113,7 @@ outcome_l <- stype_df_l(is_outcome)
 weight_l <- stype_df_l(is_weight)
 
 
+# Lenses based on other predicates #### 
 #' @describeIn stype_lenses view/set constant stype vectors
 #' @export
 constant_l <- stype_df_l(is_constant)
@@ -120,6 +122,14 @@ constant_l <- stype_df_l(is_constant)
 #' @export
 not_constant_l <- stype_df_l(is_not_constant)
 
+#' @describeIn stype_lenses view/set stype vectors tagged with \code{tags}
+#' @export
+tag_l <- function(tags){
+  .predicate <- function(x) is_tagged(x, tags = tags)
+  stype_df_l(.predicate)
+}
+
+# Lenses for data within a stype ####
 #' @describeIn stype_lenses view/set the \code{data_summary} object of a stype vector
 #' @export
 data_summmary_l <- lenses::attr_l("data_summary")
@@ -173,4 +183,9 @@ purpose_l <- context_l %.% slot_l("purpose")
 #' @describeIn stype_lenses view/set the \code{study_role} slot of a \code{stype}
 #'    \code{\link{context}}'s \code{\link{purpose}}. 
 #' @export
-study_role_l <- context_l %.% slot_l("purpose") %.% slot_l("study_role")  
+study_role_l <- context_l %.% slot_l("purpose") %.% slot_l("study_role") 
+
+#' @describeIn stype_lenses view/set the \code{tags} slot of a \code{stype}
+#'    \code{\link{context}}'s \code{\link{purpose}}. 
+#' @export
+tags_l <- context_l %.% slot_l("purpose") %.% slot_l("tags")  

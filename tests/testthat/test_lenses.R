@@ -16,7 +16,7 @@ testthat::test_that("all context slots have a lens", {
   
 })
 
-testthat::test_that("all stype types  have a (list-like) lens", {
+testthat::test_that("all stype types have a (list-like) lens", {
   purrr::walk(
     .x = gsub("^v_", "", names(methods::getClass("stype")@subclasses)),
     .f = ~ { 
@@ -39,6 +39,40 @@ testthat::test_that("all roles slots have a (list-like) lens", {
     }
   )
 })
+
+
+testthat::test_that("(list-like) lens work", {
+
+  # TODO: a more comprehensive set of tests would be good
+  tester <- list(
+    v_binary(),
+    v_binary(context = context(purpose = purpose(study_role = "outcome", 
+                                                 tags = "primary"))),
+    v_continuous(),
+    v_count(),
+    v_count(context = context(purpose = purpose(study_role = "outcome", 
+                                                tags = "primary")))
+  )
+  
+  expect_length(view(tester, binary_l), 2L)
+  expect_length(view(tester, continuous_l), 1L)
+  expect_length(view(tester, count_l), 2L)
+  expect_length(view(tester, tag_l("primary")), 2L)
+  expect_length(view(tester, count_l %.% tag_l("primary")), 1L)
+  expect_length(view(tester, tag_l("secondary")), 0L)
+  
+  expect_equal(
+    view(set(tester, tag_l("primary"), list(v_binary(), v_event_time())),
+         tag_l("primary")),
+    # Tags are mutable! So tagged elements can be replaced with selements
+    # without the same tags.
+    list() 
+  )
+  
+})
+
+
+
 
 testthat::test_that("context lens view and set", {
   x1 <- v_binary(context = context(
@@ -77,5 +111,8 @@ testthat::test_that("context lens view and set", {
   x2 <- set(x1, study_role_l, "outcome")
   expect_equal(view(x2, study_role_l), "outcome")
   
-  
+  expect_equal(view(x1, tags_l), "")
+  x2 <- set(x1, tags_l, c("primary", "something"))
+  expect_equal(view(x2, tags_l), c("primary", "something")) 
+  expect_true(is_tagged(x2, "primary"))
 })

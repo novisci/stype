@@ -165,6 +165,10 @@ context_l <- lenses::attr_l("context")
 #' @export
 internal_name_l <- lenses::attr_l("internal_name")
 
+#' @describeIn stype_lenses view/set the \code{extra_descriptors} of a \code{stype}. 
+#' @export
+extra_descriptors_l <- lenses::attr_l("extra_descriptors")
+
 #' @describeIn stype_lenses view/set the \code{derivation} slot of a \code{stype}
 #'    \code{\link{context}}. 
 #' @export

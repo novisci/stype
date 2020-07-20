@@ -11,7 +11,6 @@
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
 #' @family stype types
-
 NULL
 
 #' The internal builder of v_character 

@@ -144,7 +144,7 @@ vec_restore.v_ordered <- function(x, to, ...,n = NULL) {
   edesc <- attr(to, "extra_descriptors")
   
   x   <- levels(to)[x]
-  out <- factor(x, levels = levels(to), order = TRUE)
+  out <- factor(x, levels = levels(to), ordered = TRUE)
   
   v_ordered(
     out,

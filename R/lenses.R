@@ -4,10 +4,25 @@
 #' @param predicate a predicate function to apply to each element of the list 
 #'     (or each column of a \code{data.frame})
 #' @param tags a \code{character} vector of tags
-#' @importFrom lenses lens attr_l set view "%.%" slot_l
+#' @importFrom lenses lens attr_l set view "%.%" slot_l over over_map over_with
 #' @importFrom purrr map_lgl 
 # @export
 NULL
+
+#' @export
+lenses::view
+
+#' @export
+lenses::set
+
+#' @export
+lenses::over_map
+
+#' @export
+lenses::over
+
+#' @export
+lenses::over_map
 
 #' @describeIn stype_lenses Creates a lens for stype variables with a list-like 
 #'       structure

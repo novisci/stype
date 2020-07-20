@@ -30,6 +30,7 @@
 \alias{vec_data_l}
 \alias{context_l}
 \alias{internal_name_l}
+\alias{extra_descriptors_l}
 \alias{derivation_l}
 \alias{short_label_l}
 \alias{long_label_l}
@@ -94,6 +95,8 @@ vec_data_l
 context_l
 
 internal_name_l
+
+extra_descriptors_l
 
 derivation_l
 
@@ -177,6 +180,8 @@ structure
 \item \code{context_l}: view/set the \code{\link{context}} of a \code{stype}.
 
 \item \code{internal_name_l}: view/set the \code{internal_name} of a \code{stype}.
+
+\item \code{extra_descriptors_l}: view/set the \code{extra_descriptors} of a \code{stype}.
 
 \item \code{derivation_l}: view/set the \code{derivation} slot of a \code{stype}
 \code{\link{context}}.

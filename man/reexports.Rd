@@ -7,6 +7,7 @@
 \alias{set}
 \alias{over_map}
 \alias{over}
+\alias{\%.\%}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -14,6 +15,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{lenses}{\code{\link[lenses]{over}}, \code{\link[lenses]{over_map}}, \code{\link[lenses]{over_map}}, \code{\link[lenses]{set}}, \code{\link[lenses]{view}}}
+  \item{lenses}{\code{\link[lenses]{\%.\%}}, \code{\link[lenses]{over}}, \code{\link[lenses]{over_map}}, \code{\link[lenses]{over_map}}, \code{\link[lenses]{set}}, \code{\link[lenses]{view}}}
 }}
 

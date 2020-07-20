@@ -24,6 +24,9 @@ lenses::over
 #' @export
 lenses::over_map
 
+#' @export
+lenses::`%.%`
+
 #' @describeIn stype_lenses Creates a lens for stype variables with a list-like 
 #'       structure
 #' @export

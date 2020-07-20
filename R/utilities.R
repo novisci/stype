@@ -34,6 +34,31 @@ make_stype_constructor <- function(typeFUN,
   }
 }
 
+#' Create a vec_restore function for basic stype types
+#' @inheritParams make_stype_constructor
+#' @keywords internal
+make_stype_restorator <- function(typeFUN){
+  function(x, to, ..., n = NULL) {
+    
+    # Maintain meta-info
+    iname   <- attr(to, "internal_name")
+    edesc   <- attr(to, "extra_descriptors")
+    context <- get_context(to)
+    
+    # Update description
+    desc    <- describe(
+      vctrs::vec_data(x), 
+      .descriptors = edesc)
+    
+    typeFUN(
+      x, 
+      .internal_name = iname, 
+      .data_summary = desc, 
+      .context = context,
+      .extra_descriptors = edesc)
+  }
+}
+
 #' String Representation of the Statistical Type
 #'
 #' Provides a short phrase identifying the statistical type.

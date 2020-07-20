@@ -140,21 +140,7 @@ as_canonical.v_event_time<- function(x){
 #' @importFrom vctrs vec_restore
 #' @method vec_restore v_event_time
 #' @export
-vec_restore.v_event_time <- function(x, to, ..., i = NULL) {
-  
-  iname   <- attr(to, "internal_name")
-  # Update description
-  desc    <- describe(vctrs::vec_data(x))
-  # Maintain context
-  context <- get_context(to)
-  
-  new_event_time(
-    x,
-    .internal_name = iname,
-    .data_summary  = desc, 
-    .context = context
-  )
-}
+vec_restore.v_event_time <- make_stype_restorator(new_event_time)
 
 # Math Operations ####
 # TODO: ?

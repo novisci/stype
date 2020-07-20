@@ -138,16 +138,21 @@ vec_cast.v_nominal.list <- function(x, to, ..., x_arg = "", to_arg = "") {
 
 #' @export
 #' @method vec_restore v_nominal 
-vec_restore.v_nominal <- function(x, to, ..., x_arg = "", to_arg = "") {
-  # browser()
-  # Maintain context
-  ctxt <- get_context(to)
+vec_restore.v_nominal <- function(x, to, ..., n = NULL) {
+  
+  # TODO: could we use make_stype_restorator
+  ctxt  <- get_context(to)
   iname <- attr(to, "internal_name")
+  edesc <- attr(to, "extra_descriptors")
   
   x   <- levels(to)[x]
   out <- factor(x, levels = levels(to))
   
-  v_nominal(out, internal_name = iname, context = ctxt)
+  v_nominal(
+    out,
+    internal_name = iname, 
+    context = ctxt,
+    extra_descriptors = edesc)
 }
 
 

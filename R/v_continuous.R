@@ -132,20 +132,7 @@ as_canonical.v_continuous <- function(x){
 #' @importFrom vctrs vec_restore
 #' @method vec_restore v_continuous
 #' @export
-vec_restore.v_continuous <- function(x, to, ..., i = NULL) {
-  
-  iname   <- attr(to, "internal_name")
-  # Update description
-  desc    <- describe(vctrs::vec_data(x))
-  # Maintain context
-  context <- get_context(to)
-  
-  new_continuous(
-    x, 
-    .internal_name = iname,
-    .data_summary  = desc, 
-    .context = context)
-}
+vec_restore.v_continuous <- make_stype_restorator(new_continuous)
 
 # Math Operations ####
 

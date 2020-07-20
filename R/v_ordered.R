@@ -20,7 +20,6 @@ new_ordered <- function(x = integer(), .levels = character(),
                         .data_summary = data_summary(), 
                         .context = context(),
                         .extra_descriptors = list()) {
-  # browser()
   stopifnot(is.integer(x))
   stopifnot(is.character(.levels))
   
@@ -137,15 +136,21 @@ vec_cast.v_ordered.list <- function(x, to, ..., x_arg = "", to_arg = "") {
 
 #' @export
 #' @method vec_restore v_ordered 
-vec_restore.v_ordered <- function(x, to, ..., x_arg = "", to_arg = "") {
-  iname   <- attr(to, "internal_name")
-  x   <- levels(to)[x]
-  out <- factor(x, levels = levels(to), ordered = TRUE)
-
-  # Maintain context
-  ctxt <- get_context(to)
+vec_restore.v_ordered <- function(x, to, ...,n = NULL) {
   
-  v_ordered(out, internal_name = iname, context = ctxt)
+  # TODO: could we use make_stype_restorator
+  ctxt  <- get_context(to)
+  iname <- attr(to, "internal_name")
+  edesc <- attr(to, "extra_descriptors")
+  
+  x   <- levels(to)[x]
+  out <- factor(x, levels = levels(to), order = TRUE)
+  
+  v_ordered(
+    out,
+    internal_name = iname, 
+    context = ctxt,
+    extra_descriptors = edesc)
 }
 
 

@@ -134,20 +134,7 @@ as_canonical.v_continuous_nonneg <- function(x){
 #' @importFrom vctrs vec_restore
 #' @method vec_restore v_continuous_nonneg
 #' @export
-vec_restore.v_continuous_nonneg <- function(x, to, ..., i = NULL) {
-  
-  iname   <- attr(to, "internal_name")
-  # Update description
-  desc    <- describe(vctrs::vec_data(x))
-  # Maintain context
-  context <- get_context(to)
-  
-  new_continuous_nonneg(
-    x,
-    .internal_name = iname,
-    .data_summary  = desc, 
-    .context = context)
-}
+vec_restore.v_continuous_nonneg <- make_stype_restorator(new_continuous_nonneg)
 
 # Math Operations ####
 # TODO:?

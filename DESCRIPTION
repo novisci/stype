@@ -35,6 +35,7 @@ RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 Repository: cran.novisci.com
 Collate: 
+    'utilities.R'
     'v_count.R'
     'v_continuous.R'
     'v_continuous_nonneg.R'
@@ -51,4 +52,3 @@ Collate:
     'predicates.R'
     'lenses.R'
     'aREADME.R'
-    'utilities.R'

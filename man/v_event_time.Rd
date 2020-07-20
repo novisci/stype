@@ -8,7 +8,12 @@
 \alias{as_canonical.v_event_time}
 \title{Time to event vectors}
 \usage{
-v_event_time(x = v_continuous_nonneg(), internal_name = "", context)
+v_event_time(
+  x = ptypeFUN(),
+  internal_name = "",
+  context,
+  extra_descriptors = list()
+)
 
 is_event_time(x)
 
@@ -24,6 +29,9 @@ as_event_time(x)
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
+
+\item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
+appended to the default \code{\link{descriptors}}.}
 }
 \description{
 {

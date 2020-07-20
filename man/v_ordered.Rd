@@ -6,7 +6,12 @@
 \alias{as_canonical.v_ordered}
 \title{Ordered categorical vectors}
 \usage{
-v_ordered(x = factor(ordered = TRUE), internal_name = "", context)
+v_ordered(
+  x = factor(ordered = TRUE),
+  internal_name = "",
+  context,
+  extra_descriptors = list()
+)
 
 is_ordered(x)
 
@@ -18,6 +23,9 @@ is_ordered(x)
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
+
+\item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
+appended to the default \code{\link{descriptors}}.}
 }
 \description{
 {

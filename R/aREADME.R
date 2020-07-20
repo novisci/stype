@@ -31,6 +31,7 @@
 #' @include v_continuous_nonneg.R
 #' @include v_continuous.R
 #' @include v_count.R
+#' @include utilities.R
 "_PACKAGE"
 
 #' Display an object

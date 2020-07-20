@@ -6,7 +6,12 @@
 \alias{as_canonical.v_nominal}
 \title{Nominal categorical vectors}
 \usage{
-v_nominal(x = factor(), internal_name = "", context)
+v_nominal(
+  x = factor(),
+  internal_name = "",
+  context,
+  extra_descriptors = list()
+)
 
 is_nominal(x)
 
@@ -18,6 +23,9 @@ is_nominal(x)
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
+
+\item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
+appended to the default \code{\link{descriptors}}.}
 }
 \description{
 {

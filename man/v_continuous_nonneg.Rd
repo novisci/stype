@@ -8,7 +8,12 @@
 \alias{as_canonical.v_continuous_nonneg}
 \title{Non-negative continuous vectors}
 \usage{
-v_continuous_nonneg(x = double(), internal_name = "", context)
+v_continuous_nonneg(
+  x = ptypeFUN(),
+  internal_name = "",
+  context,
+  extra_descriptors = list()
+)
 
 is_continuous_nonneg(x)
 
@@ -24,6 +29,9 @@ as_nonneg_continuous(x)
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
+
+\item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
+appended to the default \code{\link{descriptors}}.}
 }
 \description{
 {

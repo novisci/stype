@@ -8,7 +8,12 @@
 \alias{as_canonical.v_character}
 \title{Character vectors}
 \usage{
-v_character(x = character(), internal_name = "", context)
+v_character(
+  x = ptypeFUN(),
+  internal_name = "",
+  context,
+  extra_descriptors = list()
+)
 
 is_character(x)
 
@@ -24,6 +29,9 @@ as_character(x)
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
+
+\item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
+appended to the default \code{\link{descriptors}}.}
 
 \item{...}{passed to other methods such as \code{as.character}}
 }

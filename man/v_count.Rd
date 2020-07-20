@@ -9,7 +9,12 @@
 \alias{as_canonical.v_count}
 \title{Count vectors}
 \usage{
-v_count(x = integer(), internal_name = "", context)
+v_count(
+  x = ptypeFUN(),
+  internal_name = "",
+  context,
+  extra_descriptors = list()
+)
 
 is_count(x)
 
@@ -27,6 +32,9 @@ as_canonical(x)
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
+
+\item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
+appended to the default \code{\link{descriptors}}.}
 
 \item{...}{passed to other methods such as \code{as.character}}
 }

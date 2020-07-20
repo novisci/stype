@@ -8,7 +8,12 @@
 \alias{as_canonical.v_binary}
 \title{Binary vectors}
 \usage{
-v_binary(x = logical(), internal_name = "", context)
+v_binary(
+  x = ptypeFUN(),
+  internal_name = "",
+  context,
+  extra_descriptors = list()
+)
 
 is_binary(x)
 
@@ -24,6 +29,9 @@ as_binary(x)
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
+
+\item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
+appended to the default \code{\link{descriptors}}.}
 
 \item{...}{passed to other methods such as \code{as.character}}
 }

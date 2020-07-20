@@ -19,8 +19,9 @@ new_nominal <- function(x = integer(),
                         .levels = character(),
                         .internal_name = character(), 
                         .data_summary = data_summary(), 
-                        .context = context()){
-  # browser()
+                        .context = context(),
+                        .extra_descriptors = list()){
+  
   stopifnot(is.integer(x))
   stopifnot(is.character(.levels))
   
@@ -30,6 +31,7 @@ new_nominal <- function(x = integer(),
     internal_name = .internal_name,
     data_summary  = .data_summary, 
     context       = .context,
+    extra_descriptors = .extra_descriptors,
     class   = c("v_nominal", "vctrs_vctr", "factor")
   )
 }
@@ -40,9 +42,12 @@ methods::setOldClass(c("v_nominal", "vctrs_vctr"))
 #' @rdname v_nominal
 #' @param x a \code{factor}
 #' @export
-v_nominal <- function(x = factor(), internal_name = "", context){
+v_nominal <- function(x = factor(), internal_name = "", context,
+                      extra_descriptors = list()){
+  
   # x <- vctrs::vec_cast(x, factor())
-  dsum <- describe(x)
+  dsum <- describe(x, .descriptors = extra_descriptors)
+  
   if(missing(context)){
     context <- methods::new("context")
   }
@@ -52,7 +57,8 @@ v_nominal <- function(x = factor(), internal_name = "", context){
     .levels  = levels(x), 
     .internal_name = internal_name,
     .data_summary  = dsum,
-    .context       = context)
+    .context       = context,
+    .extra_descriptors = extra_descriptors)
 }
 
 #' Predicate function for nominal objects

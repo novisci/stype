@@ -18,7 +18,8 @@ NULL
 new_ordered <- function(x = integer(), .levels = character(),
                         .internal_name = character(), 
                         .data_summary = data_summary(), 
-                        .context = context()) {
+                        .context = context(),
+                        .extra_descriptors = list()) {
   # browser()
   stopifnot(is.integer(x))
   stopifnot(is.character(.levels))
@@ -29,6 +30,7 @@ new_ordered <- function(x = integer(), .levels = character(),
     internal_name = .internal_name,
     data_summary  = .data_summary, 
     context       = .context,
+    extra_descriptors = .extra_descriptors,
     class   = c("v_ordered", "vctrs_vctr", "ordered", "factor")
   )
 }
@@ -39,9 +41,12 @@ methods::setOldClass(c("v_ordered", "vctrs_vctr"))
 #' @rdname v_ordered
 #' @param x a \code{factor}
 #' @export
-v_ordered <- function(x = factor(ordered = TRUE), internal_name = "", context){
+v_ordered <- function(x = factor(ordered = TRUE), internal_name = "", context,
+                      extra_descriptors = list()){
+  
   # x <- vctrs::vec_cast(x, factor())
-  dsum <- describe(x)
+  dsum <- describe(x, .descriptors = extra_descriptors)
+  
   if(missing(context)){
     context <- methods::new("context")
   }
@@ -51,7 +56,8 @@ v_ordered <- function(x = factor(ordered = TRUE), internal_name = "", context){
     .levels  = levels(x), 
     .internal_name = internal_name,
     .data_summary  = dsum,
-    .context       = context)
+    .context       = context,
+    .extra_descriptors = extra_descriptors)
 }
 
 #' Predicate function for ordered objects

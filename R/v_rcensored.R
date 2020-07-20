@@ -93,7 +93,8 @@ v_rcensored <- function(outcomes = list(),
   if(missing(censors)){
     censors <- vctrs::vec_recycle(
       v_event_time(NA_real_),
-      if (vctrs::vec_size(outcomes) == 0L) 0L else vctrs::vec_size(outcomes[[1]]))
+      if (vctrs::vec_size(outcomes) == 0L) 0L
+      else vctrs::vec_size(outcomes[[1]]))
   }
   
   if(is_event_time(censors)){
@@ -206,7 +207,8 @@ get_levels_labels <- function(x){
   outs <- gather_times_reasons(outcomes,c("not_outcome", olev[["levels"]]))
   
   hold <- gather_times_reasons(
-    append(list(outs[["times"]], cens[["times"]]), list(v_event_time(end_time))),
+    append(list(outs[["times"]], cens[["times"]]), 
+           list(v_event_time(end_time))),
     levs =  c("none", "outcome", "censor", "admin")
   )
   
@@ -297,7 +299,9 @@ is_rcensored <- function(x){
 #' @method vec_ptype2 v_rcensored
 #' @export
 #' @export vec_ptype2.v_rcensored
-vec_ptype2.v_rcensored <- function(x, y, ...) UseMethod("vec_ptype2.v_rcensored", y)
+vec_ptype2.v_rcensored <- function(x, y, ...) {
+  UseMethod("vec_ptype2.v_rcensored", y)
+}
 
 #' @method vec_ptype2.v_rcensored v_rcensored
 #' @export

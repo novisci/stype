@@ -29,6 +29,7 @@ test_that(
 test_that(
   "is that a stype?",
   {
+    skip_on_ci()
     expect_false(is_stype(1))
   }
 )
@@ -47,6 +48,7 @@ otimes <- list(
 test_that(
   "v_rcensored describe works",
   {
+    skip_on_ci()
     x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
     desc <- getDescriptors(x1)
     expect_true(all(c("outcome_info", "censor_info",
@@ -57,6 +59,7 @@ test_that(
 test_that(
   "describe data.frame",
   {
+    skip_on_ci()
     df1 <- data.frame(n1 = c(1, 2, 3, 4, 5),
                       n2 = c(6, 7, 8, 9, 10), 
                       n3 = c(NA_integer_, 1, 7, 3, 9))
@@ -70,6 +73,7 @@ test_that(
 test_that(
   "describe continuous stype",
   {
+    skip_on_ci()
     n1 <- rnorm(n = 5)
     
     cont <- v_continuous(n1)

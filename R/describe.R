@@ -45,7 +45,7 @@ setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
 NULL
 
 #' @rdname descriptors 
-  standardDescriptors <- list(
+standardDescriptors <- list(
   n            = function(x, ...) length(x),
   has_missing  = function(x, ...) anyNA(x),
   n_nonmissing = function(x, ...) sum(!is.na(x)),

@@ -80,6 +80,7 @@ test_that("v_rcensored can be cast to a Surv", {
   x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
 
   expect_is(as_Surv(x1), "Surv")
+  expect_is(as_Surv(x1, censor_as_event = TRUE), "Surv")
 })
 
 test_that("v_rcensored get_data_summary works", {
@@ -133,4 +134,15 @@ test_that("row binding works for v_rcensored", {
   # TODO: this doesn't work (I don't know how to begin to fix)
   # rbind(z1, z2)
   # rbind(z1, z2, z3)
+})
+
+
+test_that("v_rcensored getters work", {
+  x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
+ 
+  expect_is(get_time(x1), "v_event_time")
+  expect_is(get_censored(x1), "v_binary")
+  expect_is(get_outcome(x1), "v_binary")
+  expect_is(get_censor_reason(x1), "v_nominal")
+  expect_is(get_outcome_reason(x1), "v_nominal")
 })

@@ -55,7 +55,7 @@ v_nominal <- function(x = factor(), internal_name = "", context,
   new_nominal(
     x        = as.integer(x),
     .levels  = levels(x), 
-    .internal_name = internal_name,
+    .internal_name = check_internal_name(internal_name),
     .data_summary  = dsum,
     .context       = context,
     .extra_descriptors = extra_descriptors)

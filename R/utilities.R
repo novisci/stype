@@ -26,7 +26,7 @@ make_stype_constructor <- function(typeFUN,
 
       typeFUN(
         x,
-        .internal_name = internal_name,
+        .internal_name = check_internal_name(internal_name),
         .data_summary = dsum,
         .context = context,
         .extra_descriptors = extra_descriptors
@@ -155,4 +155,15 @@ check_internal_names <- function(x, y){
 swap_function <- function(cl, fn){
   cl[[1]] <- fn
   cl
+}
+
+#' Check that a character vector has length 0 or 1
+#' @param x what to check
+#' @keywords internal
+check_internal_name <- function(x){
+  assertthat::assert_that(
+    is.character(x) && length(x) <= 1,
+    msg = "An internal name should be a single string"
+  )
+  x
 }

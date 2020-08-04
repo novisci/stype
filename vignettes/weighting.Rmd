@@ -19,32 +19,15 @@ knitr::opts_chunk$set(
 
 ```{r}
 library(stype)
-library(lenses)
 library(dplyr)
+library(lenses)
 ```
 
-# Option 1: add the `describe` function as an attribute of the vector
+# `weight`ing a `stype` to update the `data_summary`
 
-```{r, eval=FALSE}
-# data_summmary_l <- attr_l("data_summary")
-describe_l <- attr_l("describe")
+The `weight` function updates a the `data_summary` of a `stype` vector with a weight.
 
-make_describer <- function(x){
-  function(g = NULL, w = NULL){
-    set(x, data_summmary_l, describe(vctrs::vec_data(x), g, w))
-  }
-}
-
-x <- v_binary(c(TRUE, TRUE, TRUE, FALSE))
-w <- c(10, 10, 1, 1)
-x <- set(x, describe_l, make_describer(x))
-view(x, describe_l)
-
-x <- view(x, describe_l)(w = w)
-view(x, data_summmary_l)
-```
-
-# Option 2: a weight (or update) function entirely separate from the vector
+## a single `stype` vector
 
 ```{r}
 x <- v_binary(c(TRUE, TRUE, TRUE, FALSE))
@@ -52,15 +35,23 @@ w <- c(10, 10, 1, 1)
 get_data_summary(x)
 
 z <- weight(x, w)
+class(w)
 get_data_summary(z)
 ```
 
-# Comparison of options for basic stypes
+However, the weights are not part of the data, thus when subsetting the vector the `data_summary` no longer includes the weighted summaries:
 
-```{r, eval = FALSE}
+```{r}
+get_data_summary(z[1:2])
+```
+
+## a list of `stype` vectors
+
+Here, we use `lenses` to `weight` only certain variables within a `tibble`.
 
 
-weight_var_l <- weight_l %.% index_l(1) %.% vec_data_l
+```{r}
+weight_var_l <- weight_l %.% lenses::index_l(1) %.% vec_data_l
 
 otcm <- context(purpose = purpose(study_role = "outcome"))
 # note the different ways of setting the context
@@ -72,87 +63,84 @@ dt <- tibble::tibble(
     set(context_l, context(purpose = purpose(study_role = "weight"))),
 )
 
-tail(view(dt[[1]], data_summmary_l), 2)
+tail(view(dt[[1]], data_summary_l), 2)
 
 # Just weight binary variables
 dt1 <- over_map(dt, outcome_l %.% binary_l, function(x){ 
   weight(x, view(dt, weight_var_l))
 })
 dt1
-tail(view(dt1[[1]], data_summmary_l), 2)
-tail(view(dt1[[3]], data_summmary_l), 2)
+tail(view(dt1[[1]], data_summary_l), 2)
+tail(view(dt1[[3]], data_summary_l), 2)
 
 # Weight all outcomes
 dt2 <- over_map(dt, outcome_l, function(x){ 
   weight(x, view(dt, weight_var_l))
 })
 
-tail(view(dt2[[1]], data_summmary_l), 2)
-tail(view(dt2[[3]], data_summmary_l), 2)
+tail(view(dt2[[1]], data_summary_l), 2)
+tail(view(dt2[[3]], data_summary_l), 2)
 ```
 
-# Comparison of options for `r_censored` stype
+# Estimating cumulative risk
 
-```{r, eval = FALSE}
-library(survival)
+```{r}
 ctimes <- list(
-   v_event_time(c(5, 6, 10, NA_integer_, 1, NA_integer_, 19), internal_name = "cA"),
-   v_event_time(c(4, 1, 15, NA_integer_, NA_integer_, NA_integer_, 21), internal_name = "cB")
+   v_event_time(c(5, 6, 10, NA_integer_, 1, NA_integer_, 19), 
+                internal_name = "cA"),
+   v_event_time(c(4, 1, 15, NA_integer_, NA_integer_, NA_integer_, 21), 
+                internal_name = "cB")
 )
 
 otimes <- list(
-  v_event_time(c(2, 6, 11, 12, NA_integer_, NA_integer_, 25), internal_name = "oA"),
-  v_event_time(c(1, NA_integer_, 10, NA_integer_, NA_integer_, NA_integer_, 23), internal_name = "oB")
+  v_event_time(c(2, 6, 11, 12, NA_integer_, NA_integer_, 25),
+               internal_name = "oA"),
+  v_event_time(c(1, NA_integer_, 10, NA_integer_, NA_integer_, NA_integer_, 23), 
+               internal_name = "oB")
 )
-
-surv_fit <- function(x) list(survfit(as_Surv(x) ~ 1))
-
 
 x1 <- v_rcensored(
   outcomes = otimes, censors = ctimes, end_time = 15,
-  extra_descriptors = list(survival_curve = surv_fit))
+  extra_descriptors = list(
+    crisk = function(x) { 
+      list( riskimator::cumrisk(x, w = riskimator::product_limit) )
+    } ))
 
-get_data_summary(x1, "survival_curve")
-get_data_summary(x1[c(3,5,6)], "survival_curve")
+
+get_data_summary(x1, "crisk")
+get_data_summary(x1[c(3,5,6)], "crisk")
 ```
 
-```{r, eval= FALSE}
+## Cumrisk in a data pipeline
 
-# The goal is to:
-# * fit a coxph? using the covariate
-# * pull out the weights
-# * describe() the r_censored by these weights (accounting for censoring)
-# library(causalRisk)
-library(dplyr)
+```{r, eval= FALSE}
+library(riskimator)
+
 dt <- tibble(
   x1 = v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15),
   x2 = v_rcensored(outcomes = otimes[[1]], end_time = 15),
-  x3 = v_binary(c(TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, TRUE),
+  x3 = v_binary(as.logical(rbinom(7, 1, prob = 0.5)),
                 context  = context(purpose = purpose(study_role = "covariate"))),
 )
 
-
-non_constant_covariates_l <- covariate_l %.% not_constant_l
-
-estimate_Pr_uncensored<- function(x){
-  z <- survfit(as_Surv(x, censor_as_event = TRUE) ~ 1)
-  z$surv[match(as_canonical(vctrs::field(x, "time")), z$time)]
+est_cph <- function(x, df){
+  cph <- survival::coxph(
+    formula = as_Surv(x, censor_as_event = TRUE) ~ as_canonical(x3),
+    data = df)
+  exp(-predict(cph, type = "expected"))
 }
-
-# zz <- estimate_Pr_uncensored(dt$x1)
-# zz
+# est_cph(x = dt$x1, df = dt)
 
 weight_rcensored_outcomes <- function(dt){
-  # covariates <- view(dt, non_constant_covariates_l)
-  # weights <- estimate_weights(covariates)
   over_map(dt, rcensored_l, function(x) {
-    weights <- estimate_Pr_uncensored(x1)
-    weight(x, w = 1/weights)
+    set(x, data_summary_l, 
+        c(view(x, data_summary_l), 
+          list(crisk = cumrisk(x, w = est_cph, df = dt))))
   })
 }
-
+# 
 dt2 <- weight_rcensored_outcomes(dt)
-dt2
+view(dt2$x1, data_summary_l)
 
 ```
 

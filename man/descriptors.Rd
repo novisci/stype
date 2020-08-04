@@ -13,7 +13,25 @@
 \alias{groupedDescriptors}
 \alias{rcensoredDescriptors}
 \title{Descriptors}
-\format{An object of class \code{list} of length 6.}
+\format{
+An object of class \code{list} of length 6.
+
+An object of class \code{list} of length 4.
+
+An object of class \code{list} of length 1.
+
+An object of class \code{list} of length 3.
+
+An object of class \code{list} of length 3.
+
+An object of class \code{list} of length 8.
+
+An object of class \code{list} of length 1.
+
+An object of class \code{list} of length 1.
+
+An object of class \code{list} of length 4.
+}
 \usage{
 standardDescriptors
 
@@ -36,10 +54,10 @@ rcensoredDescriptors
 \description{
 Lists of functions to used to \code{\link{describe}} a \code{describeable}
 vector to create a \code{\link{data_summary}} object. A \code{descriptor} is
-a function of \code{x} (and optionally \code{g} (a grouping vector and/or 
+a function of \code{x} (and optionally \code{g} (a grouping vector and/or
 \code{w} a numeric weight vector)).
 
-\code{describable} vectors include: integer, logical, numeric, factor, 
+\code{describable} vectors include: integer, logical, numeric, factor,
 ordered, and v_rcensored.
 }
 \keyword{datasets}

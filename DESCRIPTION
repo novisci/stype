@@ -9,9 +9,10 @@ Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"),
                             email = "dpritchard@novisci.com"))
 Maintainer: Bradley Saul <bsaul@novisci.com>
 Description: Provides S3 classes aligned with statistical language such as binary,
-    continuous, count, non-negative continuous, time to event, etc. Provides
-    variable-level metadata useful for sharing information about a variable across 
-    applications. Automatically generates summary statistics to the variable metadata.
+    continuous, count, non-negative continuous, time to event, right-censored, etc. 
+    Provides variable-level metadata useful for sharing information about a variable
+    across applications. Automatically generates summary statistics to the variable
+    metadata.
 Imports:
    methods (>= 3.5),
    vctrs (>= 0.3.0),
@@ -26,12 +27,14 @@ Suggests:
    dplyr,
    tibble,
    survival,
-   MASS
+   MASS,
+   riskimator
 License: GPL-3 + file LICENSE
 URL: https://gitlab.novisci.com/nsStat/stype
 BugReports: https://gitlab.novisci.com/nsStat/stype/issues
 Encoding: UTF-8
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Repository: cran.novisci.com
 Collate: 

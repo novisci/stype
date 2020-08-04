@@ -11,18 +11,18 @@ eair(x)
 }
 \value{
 a \code{list} containing:
-   \itemize{
-     \item eair the point estimate
-     \item eair_variance the variance estimate
-   }
+\itemize{
+\item eair the point estimate
+\item eair_variance the variance estimate
+}
 }
 \description{
-Computes the exposure-adjusted incidence rate and variance using He et al. 
+Computes the exposure-adjusted incidence rate and variance using He et al.
 (2015).
 }
 \references{
 He X, Chen L, Lei L, Xia HA, Lee MLT (2015) A Simple Method for
-    Estimating Confidence Intervals for Exposure Adjusted Incidence Rate and
-    Its Applications to Clinical Trials. J Biom Biostat 6: 238.
-    doi:10.4172/2155-6180.1000238
+Estimating Confidence Intervals for Exposure Adjusted Incidence Rate and
+Its Applications to Clinical Trials. J Biom Biostat 6: 238.
+doi:10.4172/2155-6180.1000238
 }

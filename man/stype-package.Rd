@@ -11,11 +11,11 @@ to implement algebraic data types that:
 }
 \details{
 \itemize{
- \item provide S3 classes aligned with statistical language: binary, 
- continuous, count, non-negative continuous, time to event, etc;
- \item create variable-level metadata useful for sharing information 
- about a variable across applications;
- \item add automatically generated summary statistics to the variable metadata.
+\item provide S3 classes aligned with statistical language: binary,
+continuous, count, non-negative continuous, time to event, etc;
+\item create variable-level metadata useful for sharing information
+about a variable across applications;
+\item add automatically generated summary statistics to the variable metadata.
 }
 }
 \seealso{

@@ -26,7 +26,7 @@
 \alias{constant_l}
 \alias{not_constant_l}
 \alias{tag_l}
-\alias{data_summmary_l}
+\alias{data_summary_l}
 \alias{vec_data_l}
 \alias{context_l}
 \alias{internal_name_l}
@@ -40,7 +40,75 @@
 \alias{study_role_l}
 \alias{tags_l}
 \title{Lenses for stype vectors}
-\format{An object of class \code{lens} of length 2.}
+\format{
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+}
 \usage{
 stype_df_l(predicate)
 
@@ -88,7 +156,7 @@ not_constant_l
 
 tag_l(tags)
 
-data_summmary_l
+data_summary_l
 
 vec_data_l
 
@@ -115,7 +183,7 @@ study_role_l
 tags_l
 }
 \arguments{
-\item{predicate}{a predicate function to apply to each element of the list 
+\item{predicate}{a predicate function to apply to each element of the list
 (or each column of a \code{data.frame})}
 
 \item{tags}{a \code{character} vector of tags}
@@ -125,7 +193,7 @@ Lenses for stype vectors
 }
 \section{Functions}{
 \itemize{
-\item \code{stype_df_l}: Creates a lens for stype variables with a list-like 
+\item \code{stype_df_l}: Creates a lens for stype variables with a list-like
 structure
 
 \item \code{binary_l}: view/set \code{\link{v_binary}} stype vectors
@@ -172,7 +240,7 @@ structure
 
 \item \code{tag_l}: view/set stype vectors tagged with \code{tags}
 
-\item \code{data_summmary_l}: view/set the \code{data_summary} object of a stype vector
+\item \code{data_summary_l}: view/set the \code{data_summary} object of a stype vector
 
 \item \code{vec_data_l}: view/set the \code{\link[vctrs]{vec_data}} of a
 \code{stype}. Casts to the original type when \code{set}.

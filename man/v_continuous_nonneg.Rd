@@ -38,8 +38,12 @@ appended to the default \code{\link{descriptors}}.}
 Support: \eqn{\mathbf{R^+}}{the nonnegative Reals}* (plus \code{\link{NA_real_}})
 
 Prototype: \code{\link{double}}
-
-* - i.e. floating-point number
+\itemize{
+\item 
+\itemize{
+\item i.e. floating-point number
+}
+}
 }
 }
 \seealso{

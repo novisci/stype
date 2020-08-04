@@ -411,15 +411,26 @@ type_sum.v_rcensored <- function(x) {
 #' 
 #' Supports (hopefully obviously) \code{type = "right"} in \code{survival::Surv}
 #' @param x a \code{\link{v_rcensored}} object
+#' @param censor_as_event an indicator to treat censoring as the event of 
+#'    interest. Defaults to \code{FALSE}. When \code{TRUE}, the first outcome is 
+#'    treated as the outcome of interest and the others as competing risks. When
+#'    \code{FALSE}, all outcomes are treated as a single censoring event and 
+#'    censoring events as a single outcome.
 #' @export
-
-as_Surv <- function(x){
+as_Surv <- function(x, censor_as_event = FALSE){
   hold <- as.integer(as_canonical(vctrs::field(x, "outcome_reason")))
   hold[is.na(hold)] <- 0L
   
+  # TODO: how should administrative censoring be handled here?
+  event <- `if`(
+    censor_as_event,
+    hold == 0L,
+    as.factor(hold)
+  )
+  
   survival::Surv(
     time  = as_canonical(vctrs::field(x, "time")),
-    event = as.factor(hold),
+    event = event,
     type  = "right"
   )
 }

@@ -451,7 +451,7 @@ setMethod(
   signature  = c("stype", "weightVar", "maybeDescriptor"),
   definition = function(x, w, .descriptors){
     cl <- swap_function(match.call(), describe)
-    set(x, data_summmary_l, eval(cl, sys.parent()))
+    set(x, data_summary_l, eval(cl, sys.parent()))
   }
 )
 

@@ -150,7 +150,7 @@ tag_l <- function(tags){
 # Lenses for data within a stype ####
 #' @describeIn stype_lenses view/set the \code{data_summary} object of a stype vector
 #' @export
-data_summmary_l <- lenses::attr_l("data_summary")
+data_summary_l <- lenses::attr_l("data_summary")
 
 #' @describeIn stype_lenses view/set the \code{\link[vctrs]{vec_data}} of a
 #'      \code{stype}. Casts to the original type when \code{set}.

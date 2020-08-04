@@ -10,20 +10,57 @@ globalVariables(c("view", "set"))
 # Classes used internally to define methods for signatures with possibly missing
 # arguments.
 
+#' Stype classes
+#' 
+#' S4 classes uses in defining methods.
+#' @name stype_classes
+NULL
+
+#' @rdname stype_classes
+#' @export
 setClassUnion("groupVar",        c("character", "factor"))
+
+#' @rdname stype_classes
+#' @export
 setClassUnion("weightVar",       c("numeric"))
+
+#' @rdname stype_classes
+#' @export
 setClassUnion("categorical",     c("factor", "ordered"))
+
+#' @rdname stype_classes
+#' @export
 setClassUnion("Missing",         c("missing", "NULL"))
+
+#' @rdname stype_classes
+#' @export
 setClassUnion("maybeGroup",      c("Missing", "groupVar"))
+
+#' @rdname stype_classes
+#' @export
 setClassUnion("maybeWeight",     c("Missing", "weightVar"))
+
+#' @rdname stype_classes
+#' @export
 setClassUnion("maybeDescriptor", c("missing", "NULL", "list"))
+
+#' @rdname stype_classes
+#' @export
 setClassUnion("describable",     c("integer", "logical", "numeric", "factor",
                                    "ordered", "character", "v_rcensored"))
+
+#' @rdname stype_classes
+#' @export
 setClassUnion("simpleStype",     c("v_count", "v_binary", "v_continuous", 
                                    "v_continuous_nonneg", "v_event_time",
                                    "v_nominal", "v_ordered", "v_character"))
+
+#' @rdname stype_classes
+#' @export
 setClassUnion("complexStype",    c("v_rcensored"))
-# setClassUnion("stype",           c("simpleStype", "complexStype"))
+
+#' @rdname stype_classes
+#' @export
 setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
                                    "v_continuous_nonneg", "v_event_time",
                                    "v_nominal", "v_ordered", "v_character",
@@ -399,22 +436,6 @@ setMethod(
   }
 )
 
-#' @rdname describe
-#' @export
-
-setMethod(
-  f          = "describe",
-  signature  = c("data.frame", "maybeGroup", "maybeWeight", "maybeDescriptor"),
-  definition = function(x, g, w, .descriptors, ...){
-    
-    # TODO: add described() method which detects whether a variable has been 
-    # previously describe()d using the same arguments. If it has, then simply
-    # return the description slot rather than carrying out computations.
-    purrr::map_dfr(x, describe)
-    # as.data.frame(attr(x, "desc"))
-  }
-)
-
 #' (Re)\code{describe} a \code{stype} by weighting the vector.
 #' @rdname describe
 #' @export
@@ -427,7 +448,7 @@ setGeneric(
 #' @export
 setMethod(
   f          = "weight",
-  signature  = c("stype", "weightVar","maybeDescriptor"),
+  signature  = c("stype", "weightVar", "maybeDescriptor"),
   definition = function(x, w, .descriptors){
     cl <- swap_function(match.call(), describe)
     set(x, data_summmary_l, eval(cl, sys.parent()))
@@ -500,7 +521,6 @@ setMethod(
 #' 
 #' @param object any \code{R} object
 #' @export
-
 is_stype <- function(object) {
   is(object, "stype")
 }

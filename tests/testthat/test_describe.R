@@ -56,19 +56,6 @@ test_that(
   }
 )
 
-test_that(
-  "describe data.frame",
-  {
-    skip_on_ci()
-    df1 <- data.frame(n1 = c(1, 2, 3, 4, 5),
-                      n2 = c(6, 7, 8, 9, 10), 
-                      n3 = c(NA_integer_, 1, 7, 3, 9))
-    
-    desc <- describe(df1)
-    expect_true(all(c("n1", "n2", "n3") %in% names(desc)))
-    expect_error(describe(cbind(df1, cat = c("A", "B", "C", "D", "E"))))
-  }
-)
 
 test_that(
   "describe continuous stype",

@@ -1,6 +1,18 @@
 #' Right censored vectors
 #' 
-#' TODO: add a description
+#' `v_rcensored` provides a right-censored vector. Unlike other representations, 
+#' such the `survival` package's `Surv` object, `v_rcensored` can be subset with 
+#' `[` and concatenated with `c` as you would any other vector. The type is 
+#' implemented as a \code{\link[vctrs]{new_rcrd}} where the necessary data are
+#' contained in \code{\link[vctrs]{fields}}.
+#' 
+#' `as_canonical` casts the vector to a `list`. See \code{\link{v_rcensored_accessors}} 
+#' for functions to access components of a `v_rcensored`.
+#' 
+#' When printed, an open right triangle indicates an observation was censored. 
+#' A closed right triangle indicates an observation reached `end_time` without 
+#' being censored or having an outcome. No triangles indicated an observation
+#' that had one of the outcomes.
 #' 
 #' @name v_rcensored
 #' @importFrom methods setOldClass
@@ -18,7 +30,6 @@ NULL
 #'        appended to the default \code{\link{descriptors}}.
 #' @importFrom vctrs new_rcrd
 #' @keywords internal
-
 new_rcensored <- function(time           = v_event_time(),
                           censored       = v_binary(),
                           outcome        = v_binary(),

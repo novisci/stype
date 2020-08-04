@@ -464,10 +464,10 @@ as_Surv <- function(x, censor_as_event = FALSE){
 #' @param x a \code{\link{v_rcensored}} vector
 #' @importFrom vctrs field
 NULL
+
 get_from_rcensored <- function(x, what){
   vctrs::field(x, what)
 }
-
 
 #' @rdname v_rcensored_accessors
 #' @export

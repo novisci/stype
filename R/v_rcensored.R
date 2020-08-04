@@ -424,3 +424,43 @@ as_Surv <- function(x){
   )
 }
 
+#' Get elements from v_rcensored
+#' 
+#' @name v_rcensored_accessors
+#' @param x a \code{\link{v_rcensored}} vector
+#' @importFrom vctrs field
+NULL
+
+get_from_rcensored <- function(x, what){
+  vctrs::field(x, what)
+}
+
+#' @rdname v_rcensored_accessors
+#' @export
+get_time <- function(x){
+  get_from_rcensored(x, "time")
+}
+
+#' @rdname v_rcensored_accessors
+#' @export
+get_censored <- function(x){
+  get_from_rcensored(x, "censored")
+}
+
+#' @rdname v_rcensored_accessors
+#' @export
+get_censor_reason <- function(x){
+  get_from_rcensored(x, "censor_reason")
+}
+
+#' @rdname v_rcensored_accessors
+#' @export
+get_outcome <- function(x){
+  get_from_rcensored(x, "outcome")
+}
+
+#' @rdname v_rcensored_accessors
+#' @export
+get_outcome_reason <- function(x){
+  get_from_rcensored(x, "outcome_reason")
+}

@@ -1,8 +1,8 @@
 Package: stype
 Type: Package
 Title: Statistical types
-Version: 0.2.0
-Date: 2020-07-01
+Version: 0.2.1
+Date: 2020-08-04
 Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
                             email = "bsaul@novisci.com"),
                      person("David", "Pritchard", role = c("aut"),
@@ -29,7 +29,7 @@ License: GPL-3 + file LICENSE
 URL: https://gitlab.novisci.com/nsStat/stype
 BugReports: https://gitlab.novisci.com/nsStat/stype/issues
 Encoding: UTF-8
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 Repository: cran.novisci.com
 Collate: 

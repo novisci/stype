@@ -69,3 +69,30 @@ test_that(
 
   }
 )
+
+test_that(
+  "test binary weighting in describe.R",
+  {
+    skip_on_ci()
+    b1 <- c(TRUE, TRUE, FALSE, FALSE, TRUE, FALSE)
+    w1 <- c(1, 1, 1, 1, 1, 1)
+    w2 <- c(1, 2, 3, 4, 5, 6)
+    bin <- v_binary(b1)
+    bin_wght1 <- weight(bin, w1)
+    bin_wght2 <- weight(bin, w2)
+    
+    expect_equal(
+      get_data_summary(bin_wght1)[["weighted_proportion"]],
+      get_data_summary(bin_wght1)[["proportion"]])
+    
+    expect_equal(
+      get_data_summary(bin_wght2)[["weighted_proportion"]],
+      sum(w2*b1)/sum(w2)
+    )
+    
+    expect_false(
+      get_data_summary(bin_wght2)[["weighted_proportion"]] ==
+        get_data_summary(bin_wght2)[["proportion"]]
+    )
+  }
+)

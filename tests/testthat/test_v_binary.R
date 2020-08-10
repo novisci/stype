@@ -20,9 +20,17 @@ test_that(
     expect_error(sum(x1[1:4], x1[1:2]))
     
     expect_equal(x1 | x1, c(TRUE, FALSE, TRUE, FALSE, NA))
+    expect_equal(c(TRUE, FALSE, TRUE, FALSE, NA) | x1, 
+                 c(TRUE, FALSE, TRUE, FALSE, NA))
+    expect_equal(x1 | c(TRUE, FALSE, TRUE, FALSE, NA), 
+                 c(TRUE, FALSE, TRUE, FALSE, NA))
     expect_error(x1 | x1[1:2])
     expect_equal(x1 + x1, c(TRUE, FALSE, TRUE, FALSE, NA))
     expect_equal(x1 & x1, c(TRUE, FALSE, TRUE, FALSE, NA))
+    expect_equal(x1 & c(TRUE, FALSE, TRUE, FALSE, NA),
+                 c(TRUE, FALSE, TRUE, FALSE, NA))
+    expect_equal(c(TRUE, FALSE, TRUE, FALSE, NA) & x1,
+                 c(TRUE, FALSE, TRUE, FALSE, NA))
     expect_error(x1 & x1[1:2])
     expect_equal(x1 * x1, c(TRUE, FALSE, TRUE, FALSE, NA))
   }

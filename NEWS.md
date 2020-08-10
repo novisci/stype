@@ -1,3 +1,9 @@
+# `stype` 0.2.4
+
+## Minor changes
+
+* Adds a `sort` method for `v_rcensored`.
+
 # `stype` 0.2.3
 
 ## Major changes

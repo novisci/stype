@@ -123,3 +123,22 @@ test_that("row binding works for v_rcensored", {
   # rbind(z1, z2)
   # rbind(z1, z2, z3)
 })
+
+test_that("sort of v_rcensored works", {
+  x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
+  
+  x2 <- sort(x1)
+  
+  expect_equal(get_context(x1), get_context(x2))
+  expect_equal(get_internal_name(x1), get_internal_name(x2))
+  expect_equal(get_data_summary(x1), get_data_summary(x2))
+  
+  expect_equal(sort(get_time(x1)), get_time(x2))
+  expect_equal(as_canonical(get_outcome(x2)),
+               c(TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE))
+  expect_equal(as_canonical(get_censored(x2)),
+               c(FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE))
+  
+  
+})
+  

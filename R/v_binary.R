@@ -215,7 +215,6 @@ vec_math.v_binary <- function(fun, x, ...) {
 
 #' @method sum v_binary
 #' @export
-# @export sum.v_binary
 sum.v_binary <- function(..., na.rm = TRUE) {
   
   dots <- list(...)
@@ -238,6 +237,38 @@ sum.v_binary <- function(..., na.rm = TRUE) {
 '!.v_binary' <- function(x){
   v_binary(!vctrs::vec_data(x), context = get_context(x))
 }
+
+#' @method | v_binary
+#' @export
+'|.v_binary' <- function(x, y){
+  
+  assertthat::assert_that(
+    length(x) == length(y) || length(x) == 1L || length(y) == 1L,
+    msg = "x and y must have the same size or either x or y should be a scalar."
+  )
+  
+  vctrs::vec_data(x) | vctrs::vec_data(y)
+}
+
+#' @method + v_binary
+#' @export
+'+.v_binary' <- function(x, y){ x | y }
+
+#' @method & v_binary
+#' @export
+'&.v_binary' <- function(x, y){
+  
+  assertthat::assert_that(
+    length(x) == length(y) || length(x) == 1L || length(y) == 1L,
+    msg = "x and y must have the same size or either x or y should be a scalar."
+  )
+  
+  vctrs::vec_data(x) & vctrs::vec_data(y)
+}
+
+#' @method * v_binary
+#' @export
+'*.v_binary' <- function(x, y){ x & y }
 
 #' @method all v_binary
 #' @export

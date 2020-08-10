@@ -96,3 +96,25 @@ test_that(
     )
   }
 )
+
+
+test_that(
+  "test get_data_summaries",
+  {
+
+    dt <-
+    list(
+      x = v_binary(),
+      y = v_continuous(),
+      z = v_count()
+    )  
+
+    purrr::walk(get_data_summaries(dt),
+                ~ expect_is(.x, "data_summary"))
+    purrr::walk(get_data_summaries(as.data.frame(dt)), 
+                ~ expect_is(.x, "data_summary"))
+    purrr::walk(get_data_summaries(tibble::as_tibble(dt)), 
+                ~ expect_is(.x, "data_summary"))
+  }
+)
+

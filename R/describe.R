@@ -500,6 +500,35 @@ setMethod(
   definition = function(x, element){ attr(x, "data_summary")[[element]] }
 )
 
+#' Get data summaries from a list of stypes
+#' 
+#' @param x the object from which to get the \code{data_summaries}
+#' @param element either \code{NULL} to get the full \code{data_summary}
+#'  or a length 1 \code{character} to select a particular element of the summary
+#' @export
+setGeneric(
+  name = "get_data_summaries", 
+  def  = function(x, element) standardGeneric("get_data_summaries")
+)
+
+#' @rdname get_data_summaries
+#' @export
+setMethod(
+  f          = "get_data_summaries",
+  signature  = c("list", NULL),
+  definition = function(x, element){ purrr::map(x, get_data_summary) }
+)
+
+#' @rdname get_data_summaries
+#' @export
+setMethod(
+  f          = "get_data_summaries",
+  signature  = c("list", "character"),
+  definition = function(x, element){ 
+    purrr::map(x,~ get_data_summary(.x, element))
+  }
+)
+
 #' Get the internal name from a stype variable
 #' 
 #' @param x the object from which to get the \code{internal_name} attribute

@@ -137,7 +137,7 @@ weight_rcensored_outcomes <- function(dt){
     })
   })
 }
-# 
+ 
 dt2 <- weight_rcensored_outcomes(dt)
 view(dt2$x1, data_summary_l)
 ```

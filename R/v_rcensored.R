@@ -435,6 +435,19 @@ as_Surv <- function(x, censor_as_event = FALSE){
   )
 }
 
+#' @method sort v_rcensored
+#' @export
+sort.v_rcensored <- function(x, decreasing = FALSE, ...){
+  ord <- order(get_time(x), decreasing = decreasing)
+  
+  vctrs::field(x, "time")           <- get_time(x)[ord]
+  vctrs::field(x, "censored")       <- get_censored(x)[ord]
+  vctrs::field(x, "censor_reason")  <- get_censor_reason(x)[ord]
+  vctrs::field(x, "outcome")        <- get_outcome(x)[ord]
+  vctrs::field(x, "outcome_reason") <- get_outcome_reason(x)[ord]
+  x
+}
+
 #' Get elements from v_rcensored
 #' 
 #' @name v_rcensored_accessors

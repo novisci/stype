@@ -1,7 +1,7 @@
 Package: stype
 Type: Package
 Title: Statistical types
-Version: 0.2.3
+Version: 0.2.4
 Date: 2020-08-10
 Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
                             email = "bsaul@novisci.com"),

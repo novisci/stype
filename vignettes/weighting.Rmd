@@ -129,19 +129,17 @@ est_cph <- function(x, df){
     data = df)
   exp(-predict(cph, type = "expected"))
 }
-# est_cph(x = dt$x1, df = dt)
 
 weight_rcensored_outcomes <- function(dt){
   over_map(dt, rcensored_l, function(x) {
-    set(x, data_summary_l, 
-        c(view(x, data_summary_l), 
-          list(crisk = cumrisk(x, w = est_cph, df = dt))))
+    over(x, data_summary_l, function(ds) { 
+      c(ds, list(crisk = cumrisk(x, w = est_cph, df = dt)))
+    })
   })
 }
 # 
 dt2 <- weight_rcensored_outcomes(dt)
 view(dt2$x1, data_summary_l)
-
 ```
 
 

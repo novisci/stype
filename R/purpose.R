@@ -1,6 +1,7 @@
 #' Purpose object
 #' 
 #' @slot study_role the study role
+#' @slot tags a character vector of tags
 #' @importFrom purrr walk
 #' @importFrom methods slot slotNames new
 #' @importFrom assertthat validate_that

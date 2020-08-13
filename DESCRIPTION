@@ -2,11 +2,19 @@ Package: stype
 Type: Package
 Title: Statistical types
 Version: 0.3.0
-Date: 2020-08-05
+Date: 2020-08-13
 Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
                             email = "bsaul@novisci.com"),
                      person("David", "Pritchard", role = c("aut"),
-                            email = "dpritchard@novisci.com"))
+                            email = "dpritchard@novisci.com"),
+                     person("Catie", "Wiener", role = c("ctb"),
+                            email = "cwiener@novisci.com"),
+                     person("Ying", "Yu", role = c("ctb"),
+                            email = "yingyu@novisci.com"),
+                     person("Matt", "Phelan", role = c("ctb"),
+                            email = "mphelan@novisci.com"),
+                     person("Bassim", "Eledath", role = c("ctb"),
+                            email = "beledath@novisci.com"))
 Maintainer: Bradley Saul <bsaul@novisci.com>
 Description: Provides S3 classes aligned with statistical language such as binary,
     continuous, count, non-negative continuous, time to event, right-censored, etc. 

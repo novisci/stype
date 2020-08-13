@@ -25,7 +25,11 @@
 \alias{weight_l}
 \alias{constant_l}
 \alias{not_constant_l}
+\alias{tagged_l}
 \alias{tag_l}
+\alias{any_tags_l}
+\alias{all_tags_l}
+\alias{only_tags_l}
 \alias{data_summary_l}
 \alias{vec_data_l}
 \alias{context_l}
@@ -41,6 +45,10 @@
 \alias{tags_l}
 \title{Lenses for stype vectors}
 \format{
+An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
+
 An object of class \code{lens} of length 2.
 
 An object of class \code{lens} of length 2.
@@ -154,7 +162,17 @@ constant_l
 
 not_constant_l
 
-tag_l(tags)
+tagged_l
+
+tagged_l
+
+tag_l(tag)
+
+any_tags_l(tags)
+
+all_tags_l(tags)
+
+only_tags_l(tags)
 
 data_summary_l
 
@@ -185,6 +203,8 @@ tags_l
 \arguments{
 \item{predicate}{a predicate function to apply to each element of the list
 (or each column of a \code{data.frame})}
+
+\item{tag}{a length 1 \code{character} vector}
 
 \item{tags}{a \code{character} vector of tags}
 }
@@ -238,7 +258,23 @@ structure
 
 \item \code{not_constant_l}: view/set not constant stype vectors
 
-\item \code{tag_l}: view/set stype vectors tagged with \code{tags}
+\item \code{tagged_l}: view/set stype vectors where \code{\link{is_tagged}}
+is \code{TRUE}
+
+\item \code{tagged_l}: view/set stype vectors where \code{\link{is_not_tagged}}
+is \code{TRUE}
+
+\item \code{tag_l}: view/set stype vectors where \code{\link{has_tag}}
+is \code{TRUE}
+
+\item \code{any_tags_l}: view/set stype vectors where \code{\link{has_any_tags}}
+is \code{TRUE}
+
+\item \code{all_tags_l}: view/set stype vectors where \code{\link{has_all_tags}}
+is \code{TRUE}
+
+\item \code{only_tags_l}: view/set stype vectors where \code{\link{has_only_tags}}
+is \code{TRUE}
 
 \item \code{data_summary_l}: view/set the \code{data_summary} object of a stype vector
 

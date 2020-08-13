@@ -5,28 +5,78 @@
 \alias{is_constant}
 \alias{is_not_constant}
 \alias{is_tagged}
-\alias{is_tagged,purpose,character-method}
-\alias{is_tagged,context,character-method}
-\alias{is_tagged,stype,character-method}
-\alias{is_tagged,ANY,character-method}
+\alias{is_tagged,purpose-method}
+\alias{is_tagged,context-method}
+\alias{is_tagged,stype-method}
+\alias{is_tagged,ANY-method}
+\alias{is_not_tagged}
+\alias{is_not_tagged,ANY-method}
+\alias{has_tag}
+\alias{has_tag,purpose-method}
+\alias{has_tag,context-method}
+\alias{has_tag,stype-method}
+\alias{has_tag,ANY-method}
+\alias{has_any_tags}
+\alias{has_any_tags,ANY-method}
+\alias{has_all_tags}
+\alias{has_all_tags,ANY-method}
+\alias{has_only_tags}
+\alias{has_only_tags,purpose-method}
+\alias{has_only_tags,context-method}
+\alias{has_only_tags,stype-method}
+\alias{has_only_tags,ANY-method}
 \title{Useful stype predicates}
 \usage{
 is_constant(x)
 
 is_not_constant(x)
 
-is_tagged(x, tags)
+is_tagged(x)
 
-\S4method{is_tagged}{purpose,character}(x, tags)
+\S4method{is_tagged}{purpose}(x)
 
-\S4method{is_tagged}{context,character}(x, tags)
+\S4method{is_tagged}{context}(x)
 
-\S4method{is_tagged}{stype,character}(x, tags)
+\S4method{is_tagged}{stype}(x)
 
-\S4method{is_tagged}{ANY,character}(x, tags)
+\S4method{is_tagged}{ANY}(x)
+
+is_not_tagged(x)
+
+\S4method{is_not_tagged}{ANY}(x)
+
+has_tag(x, tag)
+
+\S4method{has_tag}{purpose}(x, tag)
+
+\S4method{has_tag}{context}(x, tag)
+
+\S4method{has_tag}{stype}(x, tag)
+
+\S4method{has_tag}{ANY}(x, tag)
+
+has_any_tags(x, tags)
+
+\S4method{has_any_tags}{ANY}(x, tags)
+
+has_all_tags(x, tags)
+
+\S4method{has_all_tags}{ANY}(x, tags)
+
+has_only_tags(x, tags)
+
+\S4method{has_only_tags}{purpose}(x, tags)
+
+\S4method{has_only_tags}{context}(x, tags)
+
+\S4method{has_only_tags}{stype}(x, tags)
+
+\S4method{has_only_tags}{ANY}(x, tags)
 }
 \arguments{
 \item{x}{a \code{stype} or other object}
+
+\item{tag}{a length 1 \code{character} vector}
 
 \item{tags}{a \code{character} vector}
 }
@@ -41,16 +91,44 @@ Useful stype predicates
 
 \item \code{is_tagged}: Is this object tagged?
 
-\item \code{is_tagged,purpose,character-method}: Is this \code{\linkS4class{purpose}} tagged with
-\code{tags}?
+\item \code{is_tagged,purpose-method}: Is this \code{\linkS4class{purpose}} tagged?
 
-\item \code{is_tagged,context,character-method}: Is this \code{\link{context}} tagged with
-\code{tags}?
+\item \code{is_tagged,context-method}: Is this \code{\link{context}} tagged?
 
-\item \code{is_tagged,stype,character-method}: Is this \code{\link{stype}} tagged with
-\code{tags}?
+\item \code{is_tagged,stype-method}: Is this \code{\link{stype}} tagged?
 
-\item \code{is_tagged,ANY,character-method}: Is this non-stype tagged with \code{tags}?
-\code{FALSE}
+\item \code{is_tagged,ANY-method}: Is this non-stype tagged?  \code{FALSE}
+
+\item \code{is_not_tagged}: Is this object not tagged?
+
+\item \code{is_not_tagged,ANY-method}: Is this non-stype tagged?  \code{FALSE}
+
+\item \code{has_tag}: Does \code{x} have the \code{tag}?
+
+\item \code{has_tag,purpose-method}: Does \code{\linkS4class{purpose}} have \code{tag}?
+
+\item \code{has_tag,context-method}: Does \code{\link{context}} have \code{tag}?
+
+\item \code{has_tag,stype-method}: Does \code{\link{stype}} have \code{tag}?
+
+\item \code{has_tag,ANY-method}: Does this non-stype have \code{tag}?
+
+\item \code{has_any_tags}: Does \code{x} have any of the \code{tags}?
+
+\item \code{has_any_tags,ANY-method}: Does \code{x} have any of the \code{tags}?
+
+\item \code{has_all_tags}: Does \code{x} have all of the \code{tags}?
+
+\item \code{has_all_tags,ANY-method}: Does \code{x} have all of the \code{tags}?
+
+\item \code{has_only_tags}: Does \code{x} have only the \code{tags}?
+
+\item \code{has_only_tags,purpose-method}: Does \code{x} have only the \code{tags}?
+
+\item \code{has_only_tags,context-method}: Does \code{x} have only the \code{tags}?
+
+\item \code{has_only_tags,stype-method}: Does \code{x} have only the \code{tags}?
+
+\item \code{has_only_tags,ANY-method}: Does \code{x} have only the \code{tags}?
 }}
 

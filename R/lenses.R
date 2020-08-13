@@ -3,6 +3,7 @@
 #' @name stype_lenses
 #' @param predicate a predicate function to apply to each element of the list 
 #'     (or each column of a \code{data.frame})
+#' @param tag a length 1 \code{character} vector   
 #' @param tags a \code{character} vector of tags
 #' @importFrom lenses lens attr_l set view "%.%" slot_l over over_map over_with
 #' @importFrom purrr map_lgl 
@@ -52,6 +53,7 @@ stype_df_l <- function(predicate){
   )
 }
 
+#------------------------------------------------------------------------------#
 # Type-based lenses ####
 #' @describeIn stype_lenses view/set \code{\link{v_binary}} stype vectors
 #' @export
@@ -130,7 +132,7 @@ outcome_l <- stype_df_l(is_outcome)
 #' @export
 weight_l <- stype_df_l(is_weight)
 
-
+#------------------------------------------------------------------------------#
 # Lenses based on other predicates #### 
 #' @describeIn stype_lenses view/set constant stype vectors
 #' @export
@@ -140,13 +142,49 @@ constant_l <- stype_df_l(is_constant)
 #' @export
 not_constant_l <- stype_df_l(is_not_constant)
 
-#' @describeIn stype_lenses view/set stype vectors tagged with \code{tags}
+#' @describeIn stype_lenses view/set stype vectors where \code{\link{is_tagged}}
+#'             is \code{TRUE}
 #' @export
-tag_l <- function(tags){
-  .predicate <- function(x) is_tagged(x, tags = tags)
-  stype_df_l(.predicate)
+tagged_l <- stype_df_l(is_tagged)
+
+#' @describeIn stype_lenses view/set stype vectors where \code{\link{is_not_tagged}}
+#'             is \code{TRUE}
+#' @export
+tagged_l <- stype_df_l(is_not_tagged)
+
+#' @describeIn stype_lenses view/set stype vectors where \code{\link{has_tag}}
+#'             is \code{TRUE}
+#' @export
+tag_l  <- function(tag){
+  .p <- function(x) has_tag(x, tag = tag)
+  stype_df_l(.p)
 }
 
+#' @describeIn stype_lenses view/set stype vectors where \code{\link{has_any_tags}}
+#'             is \code{TRUE}
+#' @export
+any_tags_l  <- function(tags){
+  .p <- function(x) has_any_tags(x, tags = tags)
+  stype_df_l(.p)
+}
+
+#' @describeIn stype_lenses view/set stype vectors where \code{\link{has_all_tags}}
+#'             is \code{TRUE}
+#' @export
+all_tags_l  <- function(tags){
+  .p <- function(x) has_all_tags(x, tags = tags)
+  stype_df_l(.p)
+}
+
+#' @describeIn stype_lenses view/set stype vectors where \code{\link{has_only_tags}}
+#'             is \code{TRUE}
+#' @export
+only_tags_l  <- function(tags){
+  .p <- function(x) has_only_tags(x, tags = tags)
+  stype_df_l(.p)
+}
+
+#------------------------------------------------------------------------------#
 # Lenses for data within a stype ####
 #' @describeIn stype_lenses view/set the \code{data_summary} object of a stype vector
 #' @export

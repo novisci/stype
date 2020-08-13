@@ -66,7 +66,7 @@ testthat::test_that("(list-like) lens work", {
          tag_l("primary")),
     # Tags are mutable! So tagged elements can be replaced with selements
     # without the same tags.
-    list() 
+    list()
   )
   
 })
@@ -111,8 +111,8 @@ testthat::test_that("context lens view and set", {
   x2 <- set(x1, study_role_l, "outcome")
   expect_equal(view(x2, study_role_l), "outcome")
   
-  expect_equal(view(x1, tags_l), "")
-  x2 <- set(x1, tags_l, c("primary", "something"))
-  expect_equal(view(x2, tags_l), c("primary", "something")) 
-  expect_true(is_tagged(x2, "primary"))
+  # expect_equal(view(x1, tags_l), "")
+  # x2 <- set(x1, tags_l, c("primary", "something"))
+  # expect_equal(view(x2, tags_l), c("primary", "something")) 
+  # expect_true(is_tagged(x2, "primary"))
 })

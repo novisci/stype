@@ -1,6 +1,7 @@
 #' Purpose object
 #' 
 #' @slot study_role the study role
+#' @slot tags a character vector of tags
 #' @importFrom purrr walk
 #' @importFrom methods slot slotNames new
 #' @importFrom assertthat validate_that
@@ -9,10 +10,12 @@
 purpose <- setClass(
   "purpose",
   slots = c(
-    "study_role" = "character"
+    "study_role" = "character",
+    "tags"       = "character"
   ),
   prototype = methods::prototype(
-    study_role= ""
+    study_role = "",
+    tags       = ""
   )
 )
 

@@ -12,5 +12,7 @@ Purpose object
 
 \describe{
 \item{\code{study_role}}{the study role}
+
+\item{\code{tags}}{a character vector of tags}
 }}
 

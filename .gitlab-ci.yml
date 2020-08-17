@@ -19,6 +19,7 @@ cran_check:
   stage: cran_check
   script:
     - R -e "install.packages(c('lenses'))"
+    - R -e "install.packages(c('riskimator'), repos = 'http://cran.novisci.com')"
     - R CMD check . --as-cran
 
 

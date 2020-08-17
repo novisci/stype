@@ -37,7 +37,7 @@ Suggests:
    survival,
    MASS,
    riskimator
-License: GPL-3 + file LICENSE
+License: MIT + file LICENSE
 URL: https://gitlab.novisci.com/nsStat/stype
 BugReports: https://gitlab.novisci.com/nsStat/stype/issues
 Encoding: UTF-8

@@ -1,4 +1,3 @@
-testthat::context("testing purpose object class")
 
 test_that("purpose class and predicate functions work as hoped", {
   

@@ -1,4 +1,3 @@
-testthat::context("Testing stype utilities")
 
 test_that("print functions work", {
   x <- v_binary(c(TRUE))

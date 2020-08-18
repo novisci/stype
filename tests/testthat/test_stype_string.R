@@ -1,4 +1,3 @@
-testthat::context("testing stype_str")
 
 test_that("stype_str methods", {
 

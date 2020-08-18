@@ -1,4 +1,3 @@
-testthat::context("testing context object class")
 
 test_that("context class and predicate functions work as hoped", {
   

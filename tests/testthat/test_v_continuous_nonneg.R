@@ -1,4 +1,3 @@
-testthat::context("Testing v_continuous_nonneg class")
 
 stype_tester(
   v_type         = "v_continuous_nonneg",

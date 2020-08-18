@@ -1,4 +1,3 @@
-testthat::context("Testing v_event_time class")
 
 stype_tester(
   v_type         = "v_event_time",

@@ -1,4 +1,3 @@
-testthat::context("Testing v_rcensored")
 
 ctimes <- list(
    v_event_time(c(5, 6, 10, NA_integer_, 1, NA_integer_, 19), internal_name = "cA"),

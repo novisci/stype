@@ -1,4 +1,3 @@
-testthat::context("Testing v_nomimal class")
 
 stype_tester(
   v_type         = "v_nominal",

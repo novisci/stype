@@ -1,4 +1,3 @@
-testthat::context("describe functions")
 
 test_that(
   "grouped summaries work",

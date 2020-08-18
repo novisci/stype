@@ -1,4 +1,3 @@
-testthat::context("Testing v_character class")
 
 stype_tester(
   v_type         = "v_character",

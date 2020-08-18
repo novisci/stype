@@ -1,4 +1,3 @@
-testthat::context("Testing v_continuous class")
 
 stype_tester(
   v_type         = "v_continuous",

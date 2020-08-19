@@ -150,7 +150,7 @@ tagged_l <- stype_df_l(is_tagged)
 #' @describeIn stype_lenses view/set stype vectors where \code{\link{is_not_tagged}}
 #'             is \code{TRUE}
 #' @export
-tagged_l <- stype_df_l(is_not_tagged)
+not_tagged_l <- stype_df_l(is_not_tagged)
 
 #' @describeIn stype_lenses view/set stype vectors where \code{\link{has_tag}}
 #'             is \code{TRUE}

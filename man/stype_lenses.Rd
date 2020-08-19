@@ -26,6 +26,7 @@
 \alias{constant_l}
 \alias{not_constant_l}
 \alias{tagged_l}
+\alias{not_tagged_l}
 \alias{tag_l}
 \alias{any_tags_l}
 \alias{all_tags_l}
@@ -164,7 +165,7 @@ not_constant_l
 
 tagged_l
 
-tagged_l
+not_tagged_l
 
 tag_l(tag)
 
@@ -261,7 +262,7 @@ structure
 \item \code{tagged_l}: view/set stype vectors where \code{\link{is_tagged}}
 is \code{TRUE}
 
-\item \code{tagged_l}: view/set stype vectors where \code{\link{is_not_tagged}}
+\item \code{not_tagged_l}: view/set stype vectors where \code{\link{is_not_tagged}}
 is \code{TRUE}
 
 \item \code{tag_l}: view/set stype vectors where \code{\link{has_tag}}

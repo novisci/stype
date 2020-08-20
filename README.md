@@ -8,7 +8,7 @@
 
 ## Statistical types
 
-The `stype` package provides classes that enforce (run-time) safety for types common to many statistical analyses such as `v_binary`, `v_continuous`, `v_count`, `v_nominal`, and `v_event_time`. For example, binary data can be represented in `R` in at least three ways: a `logical`, a `factor` with two levels, or a `numeric` using just `0` and `1`. Which representation should one use? The latter two do not guarantee that certain operations are closed in a mathematical sense; e.g., `c(0, 1, 0, 1) + 1:4` runs error. Such errors are not possible with `v_binary`. Similarly, count data can be represented by an `integer` in `R` but without the restriction of being non-negative. The `v_count` constructor enforces positivity.
+The `stype` package provides classes that enforce (run-time) safety for types common to many statistical analyses such as `v_binary`, `v_continuous`, `v_count`, `v_nominal`, and `v_event_time`. For example, binary data can be represented in `R` in at least three ways: a `logical`, a `factor` with two levels, or a `numeric` using just `0` and `1`. Which representation should one use? The latter two do not guarantee that certain operations are closed in a mathematical sense; e.g., `c(0, 1, 0, 1) + 1:4` runs without error. Such behavior is not possible with `v_binary`. Similarly, count data can be represented by an `integer` in `R` but without the restriction of being non-negative. The `v_count` constructor enforces positivity.
 
 ## Contextual information
 

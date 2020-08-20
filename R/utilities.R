@@ -1,3 +1,64 @@
+#' Create a constructor function for stype vectors
+#' 
+#' @param typeFUN the \code{new_} function that creates vdctors of the type
+#' @param ptypeFUN the prototype of the vector
+#' @param castFUN optionally cast the data by \code{\link[vctrs]{vec_cast}}
+#' @param dataFUN a function to apply to the data before \code{describe}ing the
+#'     the data. Defaults to \code{identity}.
+#' @keywords internal
+make_stype_constructor <- function(typeFUN, 
+                                   ptypeFUN, 
+                                   castFUN = ptypeFUN, 
+                                   dataFUN = identity){
+  function(x = ptypeFUN(), internal_name = "", context, 
+           extra_descriptors = list()){
+
+      x <- vctrs::vec_cast(x, castFUN())
+      
+      dsum <- describe(
+        dataFUN(x),
+        .descriptors = extra_descriptors
+      )
+
+      if(missing(context)){
+        context <- methods::new("context")
+      }
+
+      typeFUN(
+        x,
+        .internal_name = check_internal_name(internal_name),
+        .data_summary = dsum,
+        .context = context,
+        .extra_descriptors = extra_descriptors
+      )
+  }
+}
+
+#' Create a vec_restore function for basic stype types
+#' @inheritParams make_stype_constructor
+#' @keywords internal
+make_stype_restorator <- function(typeFUN){
+  function(x, to, ..., n = NULL) {
+    
+    # Maintain meta-info
+    iname   <- attr(to, "internal_name")
+    edesc   <- attr(to, "extra_descriptors")
+    context <- get_context(to)
+    
+    # Update description
+    desc    <- describe(
+      vctrs::vec_data(x), 
+      .descriptors = edesc)
+    
+    typeFUN(
+      x, 
+      .internal_name = iname, 
+      .data_summary = desc, 
+      .context = context,
+      .extra_descriptors = edesc)
+  }
+}
+
 #' String Representation of the Statistical Type
 #'
 #' Provides a short phrase identifying the statistical type.
@@ -85,4 +146,24 @@ check_internal_names <- function(x, y){
     get_internal_name(x) == get_internal_name(y),
     msg = "internal names of x and y must match"
   )
+}
+
+#' Swap the called function for a different function
+#' @param cl a call
+#' @param fn the new function
+#' @keywords internal
+swap_function <- function(cl, fn){
+  cl[[1]] <- fn
+  cl
+}
+
+#' Check that a character vector has length 0 or 1
+#' @param x what to check
+#' @keywords internal
+check_internal_name <- function(x){
+  assertthat::assert_that(
+    is.character(x) && length(x) <= 1,
+    msg = "An internal name should be a single string"
+  )
+  x
 }

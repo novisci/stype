@@ -21,7 +21,8 @@ NULL
 new_event_time <- function(x = double(), 
                            .internal_name = character(), 
                            .data_summary = data_summary(), 
-                           .context = context()){
+                           .context = context(),
+                           .extra_descriptors = list()){
   
   vctrs::vec_assert(vctrs::vec_data(x), ptype = double())
   assertthat::assert_that(
@@ -35,42 +36,32 @@ new_event_time <- function(x = double(),
     internal_name = .internal_name,
     data_summary  = .data_summary, 
     context       = .context,
+    extra_descriptors = .extra_descriptors,
     class = c("v_event_time", "v_continuous_nonneg", "v_continuous"))
 }
 
 #' @importFrom methods setOldClass
-methods::setOldClass(c("v_event_time", "v_continuous_nonneg", "v_continuous", "vctrs_vctr"))
+methods::setOldClass(c("v_event_time", "v_continuous_nonneg",
+                       "v_continuous", "vctrs_vctr"))
 
 #' Time to event constructor
 #' @param x vector of values
 #' @rdname v_event_time 
 #' @export
-
-v_event_time <- function(x = v_continuous_nonneg(), internal_name = "", context){
-  # x <- vctrs::vec_cast(x, double())
-  dsum <- describe(vctrs::vec_data(x))
-  if(missing(context)){
-    context <- methods::new("context")
-  }
-  new_event_time(
-    x,
-    .internal_name = internal_name,
-    .data_summary  = dsum,
-    .context       = context
-  )
-}
+v_event_time <- make_stype_constructor(
+  typeFUN = new_event_time,
+  ptypeFUN = v_continuous_nonneg,
+  dataFUN  = vctrs::vec_data
+)
 
 #' Predicate function for count objects
 #' @rdname v_event_time 
 #' @export
-
 is_event_time <- function(x){
   inherits(x, "v_event_time")
 }
 
-
 # Formatting of example vectors
-
 format.v_event_time <- function(x, ...) {
   ## TODO
   x
@@ -149,21 +140,7 @@ as_canonical.v_event_time<- function(x){
 #' @importFrom vctrs vec_restore
 #' @method vec_restore v_event_time
 #' @export
-vec_restore.v_event_time <- function(x, to, ..., i = NULL) {
-  
-  iname   <- attr(to, "internal_name")
-  # Update description
-  desc    <- describe(vctrs::vec_data(x))
-  # Maintain context
-  context <- get_context(to)
-  
-  new_event_time(
-    x,
-    .internal_name = iname,
-    .data_summary  = desc, 
-    .context = context
-  )
-}
+vec_restore.v_event_time <- make_stype_restorator(new_event_time)
 
 # Math Operations ####
 # TODO: ?

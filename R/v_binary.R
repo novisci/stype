@@ -11,17 +11,16 @@
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
 #' @family stype types
-
 NULL
 
 #' The internal builder of v_binary
 #' @noRd
 #' @keywords internal
-
 new_binary <- function(x = logical(),                     
                        .internal_name = character(), 
                        .data_summary = data_summary(), 
-                       .context = context()){
+                       .context = context(),
+                       .extra_descriptors = list()){
   x <- vctrs::vec_cast(x, logical())
   vctrs::vec_assert(x, ptype = logical())
   
@@ -30,6 +29,7 @@ new_binary <- function(x = logical(),
     internal_name = .internal_name,
     data_summary  = .data_summary, 
     context       = .context, 
+    extra_descriptors = .extra_descriptors,
     class = "v_binary")
 }
 
@@ -40,22 +40,12 @@ methods::setOldClass(c("v_binary", "vctrs_vctr"))
 #' @param x a \code{logical} vector
 #' @rdname v_binary 
 #' @export
-
-v_binary <- function(x = logical(), internal_name = "", context){
-  
-  x <- vctrs::vec_cast(x, logical())
-  dsum <- describe(vctrs::vec_data(x))
-  
-  if(missing(context)){
-    context <- methods::new("context")
-  }
-  
-  new_binary(
-    x, 
-   .internal_name = internal_name,
-   .data_summary  = dsum,
-   .context       = context)
-}
+v_binary <- make_stype_constructor(
+  typeFUN = new_binary,
+  ptypeFUN = logical,
+  castFUN  = logical,
+  dataFUN  = vctrs::vec_data
+)
 
 #' Predicate function for binary objects
 #' @rdname v_binary 
@@ -127,18 +117,7 @@ as_canonical.v_binary <- function(x){
 #' @importFrom vctrs vec_restore
 #' @method vec_restore v_binary
 #' @export
-vec_restore.v_binary <- function(x, to, ..., i = NULL) {
-  iname   <- attr(to, "internal_name")
-  # Update description
-  desc    <- describe(vctrs::vec_data(x))
-  # Maintain context
-  context <- get_context(to)
-  
-  new_binary(x, 
-             .internal_name = iname, 
-             .data_summary  = desc,
-             .context       = context)
-}
+vec_restore.v_binary <- make_stype_restorator(new_binary)
 
 # Math Operations ####
 

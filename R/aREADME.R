@@ -16,6 +16,8 @@
 #'  \item add automatically generated summary statistics to the variable metadata.
 #' }
 #' 
+#' @include lenses.R
+#' @include predicates.R
 #' @include context.R
 #' @include describe.R
 #' @include data_summary.R
@@ -29,6 +31,7 @@
 #' @include v_continuous_nonneg.R
 #' @include v_continuous.R
 #' @include v_count.R
+#' @include utilities.R
 "_PACKAGE"
 
 #' Display an object

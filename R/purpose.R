@@ -34,7 +34,6 @@ setValidity(
   }
 )
 
-
 #' Check a study role
 #' 
 #' @name is_study_role

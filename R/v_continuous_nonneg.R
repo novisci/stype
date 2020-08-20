@@ -22,7 +22,8 @@ NULL
 new_continuous_nonneg <- function(x = double(), 
                                   .internal_name = character(), 
                                   .data_summary = data_summary(), 
-                                  .context = context()){
+                                  .context = context(),
+                                  .extra_descriptors = list()){
   
   # x <- vctrs::vec_cast(x, double())
   vctrs::vec_assert(vctrs::vec_data(x), ptype = double())
@@ -37,6 +38,7 @@ new_continuous_nonneg <- function(x = double(),
     internal_name = .internal_name,
     data_summary  = .data_summary, 
     context       = .context, 
+    extra_descriptors = .extra_descriptors,
     class = c("v_continuous_nonneg", "v_continuous"))
 }
 
@@ -47,19 +49,11 @@ methods::setOldClass(c("v_continuous_nonneg", "v_continuous", "vctrs_vctr"))
 #' @rdname v_continuous_nonneg 
 #' @param x nonnegative \code{double}
 #' @export
-
-v_continuous_nonneg <- function(x = double(), internal_name = "", context){
-  # x <- vctrs::vec_cast(x, double())
-  dsum <- describe(vctrs::vec_data(x))
-  if(missing(context)){
-    context <- methods::new("context")
-  }
-  new_continuous_nonneg(
-    x,
-    .internal_name = internal_name,
-    .data_summary  = dsum,
-    .context       = context)
-}
+v_continuous_nonneg <- make_stype_constructor(
+  typeFUN = new_continuous_nonneg,
+  ptypeFUN = double,
+  dataFUN  = vctrs::vec_data
+)
 
 #' Predicate function for count objects
 #' @rdname v_continuous_nonneg 
@@ -140,20 +134,7 @@ as_canonical.v_continuous_nonneg <- function(x){
 #' @importFrom vctrs vec_restore
 #' @method vec_restore v_continuous_nonneg
 #' @export
-vec_restore.v_continuous_nonneg <- function(x, to, ..., i = NULL) {
-  
-  iname   <- attr(to, "internal_name")
-  # Update description
-  desc    <- describe(vctrs::vec_data(x))
-  # Maintain context
-  context <- get_context(to)
-  
-  new_continuous_nonneg(
-    x,
-    .internal_name = iname,
-    .data_summary  = desc, 
-    .context = context)
-}
+vec_restore.v_continuous_nonneg <- make_stype_restorator(new_continuous_nonneg)
 
 # Math Operations ####
 # TODO:?

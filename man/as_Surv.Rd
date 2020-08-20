@@ -9,10 +9,10 @@ as_Surv(x, censor_as_event = FALSE)
 \arguments{
 \item{x}{a \code{\link{v_rcensored}} object}
 
-\item{censor_as_event}{an indicator to treat censoring as the event of 
-interest. Defaults to \code{FALSE}. When \code{TRUE}, the first outcome is 
+\item{censor_as_event}{an indicator to treat censoring as the event of
+interest. Defaults to \code{FALSE}. When \code{TRUE}, the first outcome is
 treated as the outcome of interest and the others as competing risks. When
-\code{FALSE}, all outcomes are treated as a single censoring event and 
+\code{FALSE}, all outcomes are treated as a single censoring event and
 censoring events as a single outcome.}
 }
 \description{

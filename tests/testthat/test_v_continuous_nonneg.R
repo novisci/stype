@@ -1,4 +1,3 @@
-testthat::context("Testing v_continuous_nonneg class")
 
 stype_tester(
   v_type         = "v_continuous_nonneg",
@@ -9,9 +8,9 @@ stype_tester(
 
 
 
-test_that(
-  "v_continuous_nonneg operations work",
-  {
-    # TODO: more checks
-  }
-)
+# test_that(
+#   "v_continuous_nonneg operations work",
+#   {
+#     # TODO: more checks
+#   }
+# )

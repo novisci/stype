@@ -11,7 +11,6 @@
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' @inheritParams v_count
 #' @family stype types
-
 NULL
 
 #' The internal builder of v_character 
@@ -20,7 +19,8 @@ NULL
 new_character <- function(x = character(), 
                           .internal_name = character(),
                           .data_summary = data_summary(), 
-                          .context = context()){
+                          .context = context(),
+                          .extra_descriptors = list()){
   # x <- vctrs::vec_cast(x, character())
   # vctrs::vec_assert(x, ptype = character())
   vctrs::new_vctr(
@@ -28,6 +28,7 @@ new_character <- function(x = character(),
     internal_name = .internal_name,
     data_summary  = .data_summary, 
     context       = .context, 
+    extra_descriptors = .extra_descriptors,
     class = "v_character")
 }
 
@@ -38,20 +39,11 @@ methods::setOldClass(c("v_character", "vctrs_vctr"))
 #' @param x a \code{character} vector
 #' @rdname v_character 
 #' @export
-
-v_character <- function(x = character(), internal_name = "", context){
-  # x <- vctrs::vec_cast(x, character())
-  dsum <- describe(vctrs::vec_data(x))
-  if(missing(context)){
-    context <- methods::new("context")
-  }
-  
-  new_character(
-    x, 
-    .internal_name = internal_name,
-    .data_summary  = dsum,
-    .context       = context)
-}
+v_character <- make_stype_constructor(
+  typeFUN = new_character,
+  ptypeFUN = character,
+  dataFUN = vctrs::vec_data
+)
 
 #' Predicate function for count objects
 #' @rdname v_character 
@@ -120,19 +112,7 @@ as_canonical.v_character <- function(x){
 #' @importFrom vctrs vec_restore
 #' @method vec_restore v_character
 #' @export
-vec_restore.v_character <- function(x, to, ..., i = NULL) {
-  iname   <- attr(to, "internal_name")
-  # Update description
-  desc    <- describe(vctrs::vec_data(x))
-  # Maintain context
-  context <- get_context(to)
-  
-  new_character(
-    x,
-    .internal_name = iname,
-    .data_summary  = desc, 
-    .context       = context)
-}
+vec_restore.v_character <- make_stype_restorator(new_character)
 
 # Formatting ####
 #' @method format v_character

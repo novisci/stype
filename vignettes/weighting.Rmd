@@ -1,0 +1,145 @@
+---
+title: "Workflow for weighting stypes"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Workflow for weighting stypes}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+library(stype)
+library(dplyr)
+library(lenses)
+```
+
+# `weight`ing a `stype` to update the `data_summary`
+
+The `weight` function updates a the `data_summary` of a `stype` vector with a weight.
+
+## a single `stype` vector
+
+```{r}
+x <- v_binary(c(TRUE, TRUE, TRUE, FALSE))
+w <- c(10, 10, 1, 1)
+get_data_summary(x)
+
+z <- weight(x, w)
+class(w)
+get_data_summary(z)
+```
+
+However, the weights are not part of the data, thus when subsetting the vector the `data_summary` no longer includes the weighted summaries:
+
+```{r}
+get_data_summary(z[1:2])
+```
+
+## a list of `stype` vectors
+
+Here, we use `lenses` to `weight` only certain variables within a `tibble`.
+
+
+```{r}
+weight_var_l <- weight_l %.% lenses::index_l(1) %.% vec_data_l
+
+otcm <- context(purpose = purpose(study_role = "outcome"))
+# note the different ways of setting the context
+dt <- tibble::tibble(
+  x1 = v_binary(c(TRUE, FALSE, TRUE), context  = otcm),
+  x2 = v_binary(c(FALSE, TRUE, FALSE)) %>% set(context_l, otcm),
+  x3 = v_continuous(c(1.5, 1.6, 0.1), context = otcm),
+  x4 = v_continuous(c(1.5, 1.6, 0.1)) %>%
+    set(context_l, context(purpose = purpose(study_role = "weight"))),
+)
+
+tail(view(dt[[1]], data_summary_l), 2)
+
+# Just weight binary variables
+dt1 <- over_map(dt, outcome_l %.% binary_l, function(x){ 
+  weight(x, view(dt, weight_var_l))
+})
+dt1
+tail(view(dt1[[1]], data_summary_l), 2)
+tail(view(dt1[[3]], data_summary_l), 2)
+
+# Weight all outcomes
+dt2 <- over_map(dt, outcome_l, function(x){ 
+  weight(x, view(dt, weight_var_l))
+})
+
+tail(view(dt2[[1]], data_summary_l), 2)
+tail(view(dt2[[3]], data_summary_l), 2)
+```
+
+# Estimating cumulative risk
+
+```{r}
+ctimes <- list(
+   v_event_time(c(5, 6, 10, NA_integer_, 1, NA_integer_, 19), 
+                internal_name = "cA"),
+   v_event_time(c(4, 1, 15, NA_integer_, NA_integer_, NA_integer_, 21), 
+                internal_name = "cB")
+)
+
+otimes <- list(
+  v_event_time(c(2, 6, 11, 12, NA_integer_, NA_integer_, 25),
+               internal_name = "oA"),
+  v_event_time(c(1, NA_integer_, 10, NA_integer_, NA_integer_, NA_integer_, 23), 
+               internal_name = "oB")
+)
+
+x1 <- v_rcensored(
+  outcomes = otimes, censors = ctimes, end_time = 15,
+  extra_descriptors = list(
+    crisk = function(x) { 
+      list( riskimator::cumrisk(x, w = riskimator::product_limit) )
+    } ))
+
+
+get_data_summary(x1, "crisk")
+get_data_summary(x1[c(3,5,6)], "crisk")
+```
+
+## Cumrisk in a data pipeline
+
+```{r, eval= FALSE}
+library(riskimator)
+
+dt <- tibble(
+  x1 = v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15),
+  x2 = v_rcensored(outcomes = otimes[[1]], end_time = 15),
+  x3 = v_binary(as.logical(rbinom(7, 1, prob = 0.5)),
+                context  = context(purpose = purpose(study_role = "covariate"))),
+)
+
+est_cph <- function(x, df){
+  cph <- survival::coxph(
+    formula = as_Surv(x, censor_as_event = TRUE) ~ as_canonical(x3),
+    data = df)
+  exp(-predict(cph, type = "expected"))
+}
+
+weight_rcensored_outcomes <- function(dt){
+  over_map(dt, rcensored_l, function(x) {
+    over(x, data_summary_l, function(ds) { 
+      c(ds, list(crisk = cumrisk(x, w = est_cph, df = dt)))
+    })
+  })
+}
+ 
+dt2 <- weight_rcensored_outcomes(dt)
+view(dt2$x1, data_summary_l)
+```
+
+

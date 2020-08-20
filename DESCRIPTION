@@ -1,38 +1,52 @@
 Package: stype
 Type: Package
 Title: Statistical types
-Version: 0.2.5
+Version: 0.3.0
 Date: 2020-08-13
 Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
                             email = "bsaul@novisci.com"),
                      person("David", "Pritchard", role = c("aut"),
-                            email = "dpritchard@novisci.com"))
+                            email = "dpritchard@novisci.com"),
+                     person("Catie", "Wiener", role = c("ctb"),
+                            email = "cwiener@novisci.com"),
+                     person("Ying", "Yu", role = c("ctb"),
+                            email = "yingyu@novisci.com"),
+                     person("Matt", "Phelan", role = c("ctb"),
+                            email = "mphelan@novisci.com"),
+                     person("Bassim", "Eledath", role = c("ctb"),
+                            email = "beledath@novisci.com"))
 Maintainer: Bradley Saul <bsaul@novisci.com>
 Description: Provides S3 classes aligned with statistical language such as binary,
-    continuous, count, non-negative continuous, time to event, etc. Provides
-    variable-level metadata useful for sharing information about a variable across 
-    applications. Automatically generates summary statistics to the variable metadata.
+    continuous, count, non-negative continuous, time to event, right-censored, etc. 
+    Provides variable-level metadata useful for sharing information about a variable
+    across applications. Automatically generates summary statistics to the variable
+    metadata.
 Imports:
    methods (>= 3.5),
    vctrs (>= 0.3.0),
    assertthat (>= 0.2.0),
    purrr (>= 0.2.5),
    pillar (>= 1.3.1),
-   crayon (>= 1.3.4)
+   crayon (>= 1.3.4),
+   lenses (>= 0.0.3)
 Suggests:
    knitr,
    testthat,
    dplyr,
    tibble,
-   survival
-License: GPL-3 + file LICENSE
+   survival,
+   MASS,
+   riskimator
+License: MIT + file LICENSE
 URL: https://gitlab.novisci.com/nsStat/stype
 BugReports: https://gitlab.novisci.com/nsStat/stype/issues
 Encoding: UTF-8
 RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Repository: cran.novisci.com
 Collate: 
+    'utilities.R'
     'v_count.R'
     'v_continuous.R'
     'v_continuous_nonneg.R'
@@ -46,5 +60,6 @@ Collate:
     'data_summary.R'
     'describe.R'
     'context.R'
+    'predicates.R'
+    'lenses.R'
     'aREADME.R'
-    'utilities.R'

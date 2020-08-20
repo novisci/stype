@@ -1,6 +1,18 @@
 #' Right censored vectors
 #' 
-#' TODO: add a description
+#' `v_rcensored` provides a right-censored vector. Unlike other representations, 
+#' such the `survival` package's `Surv` object, `v_rcensored` can be subset with 
+#' `[` and concatenated with `c` as you would any other vector. The type is 
+#' implemented as a \code{\link[vctrs]{new_rcrd}} where the necessary data are
+#' contained in \code{\link[vctrs]{fields}}.
+#' 
+#' `as_canonical` casts the vector to a `list`. See \code{\link{v_rcensored_accessors}} 
+#' for functions to access components of a `v_rcensored`.
+#' 
+#' When printed, an open right triangle indicates an observation was censored. 
+#' A closed right triangle indicates an observation reached `end_time` without 
+#' being censored or having an outcome. No triangles indicated an observation
+#' that had one of the outcomes.
 #' 
 #' @name v_rcensored
 #' @importFrom methods setOldClass
@@ -14,9 +26,10 @@ NULL
 #' @param .internal_name the internal name of the variable
 #' @param .data_summary a \code{\link{data_summary}}
 #' @param .context a \code{\link{context}}
+#' @param .extra_descriptors A \code{list} of \code{\link{descriptors}} functions
+#'        appended to the default \code{\link{descriptors}}.
 #' @importFrom vctrs new_rcrd
 #' @keywords internal
-
 new_rcensored <- function(time           = v_event_time(),
                           censored       = v_binary(),
                           outcome        = v_binary(),
@@ -25,8 +38,9 @@ new_rcensored <- function(time           = v_event_time(),
                           .end_time      = numeric(),
                           .internal_name = character(), 
                           .data_summary  = data_summary(), 
-                          .context       = context()){
-  # browser()
+                          .context       = context(),
+                          .extra_descriptors = list()){
+ 
   vctrs::vec_assert(time, ptype = v_event_time())
   vctrs::vec_assert(censored, ptype = v_binary())
   vctrs::vec_assert(outcome, ptype = v_binary())
@@ -52,6 +66,7 @@ new_rcensored <- function(time           = v_event_time(),
     data_summary  = .data_summary, 
     context       = .context, 
     end_time      = .end_time,
+    extra_descriptors = .extra_descriptors,
     class         = c("v_rcensored", "censored"))
 }
 
@@ -69,6 +84,8 @@ methods::setOldClass(c("v_rcensored", "v_censored", "vctrs_vctr"))
 #' if the first censor and second censor occur at the same time, the first 
 #' censor is the reason for the censoring
 #' @param end_time A \code{numeric} scalar defining the end of follow-up.
+#' @param extra_descriptors A \code{list} of \code{\link{descriptors}} functions
+#'        appended to the default \code{\link{descriptors}}.
 #' @importFrom vctrs vec_recycle vec_size
 #' @rdname v_rcensored 
 #' @export
@@ -77,8 +94,8 @@ v_rcensored <- function(outcomes = list(),
                         censors,
                         end_time = Inf,
                         internal_name = "", 
-                        context){
-  
+                        context,
+                        extra_descriptors = list()){
   
   if(is_event_time(outcomes)){
     outcomes <- list(outcomes)
@@ -87,7 +104,8 @@ v_rcensored <- function(outcomes = list(),
   if(missing(censors)){
     censors <- vctrs::vec_recycle(
       v_event_time(NA_real_),
-      if (vctrs::vec_size(outcomes) == 0L) 0L else vctrs::vec_size(outcomes[[1]]))
+      if (vctrs::vec_size(outcomes) == 0L) 0L
+      else vctrs::vec_size(outcomes[[1]]))
   }
   
   if(is_event_time(censors)){
@@ -115,11 +133,12 @@ v_rcensored <- function(outcomes = list(),
     outcome_reason = vdat[["outcome_reason"]],
     censor_reason  = vdat[["censor_reason"]], 
     .end_time      = end_time,
-    .internal_name = internal_name,
+    .internal_name = check_internal_name(internal_name),
     .data_summary  = data_summary(),
-    .context       = context)
+    .context       = context,
+    .extra_descriptors = extra_descriptors)
   
-  dsum <- describe(out)
+  dsum <- describe(out, .descriptors = extra_descriptors)
   attr(out, "data_summary") <- dsum
   out
 }
@@ -199,7 +218,8 @@ get_levels_labels <- function(x){
   outs <- gather_times_reasons(outcomes,c("not_outcome", olev[["levels"]]))
   
   hold <- gather_times_reasons(
-    append(list(outs[["times"]], cens[["times"]]), list(v_event_time(end_time))),
+    append(list(outs[["times"]], cens[["times"]]), 
+           list(v_event_time(end_time))),
     levs =  c("none", "outcome", "censor", "admin")
   )
   
@@ -290,7 +310,9 @@ is_rcensored <- function(x){
 #' @method vec_ptype2 v_rcensored
 #' @export
 #' @export vec_ptype2.v_rcensored
-vec_ptype2.v_rcensored <- function(x, y, ...) UseMethod("vec_ptype2.v_rcensored", y)
+vec_ptype2.v_rcensored <- function(x, y, ...) {
+  UseMethod("vec_ptype2.v_rcensored", y)
+}
 
 #' @method vec_ptype2.v_rcensored v_rcensored
 #' @export
@@ -312,12 +334,13 @@ vec_ptype2.v_rcensored.v_rcensored <- function(x, y, ...) {
   oreasy <- vctrs::field(y, "outcome_reason") 
   creasx <- vctrs::field(x, "censor_reason") 
   creasy <- vctrs::field(y, "censor_reason") 
-   
+  
   new_rcensored(
     outcome_reason = new_nominal(.levels = union(levels(oreasx), levels(oreasy))),
     censor_reason  = new_nominal(.levels = union(levels(creasx), levels(creasy))),
     .internal_name = get_internal_name(x),
-    .context = get_context(x)
+    .context = get_context(x),
+    .extra_descriptors = attr(x, "extra_descriptors")
   )
 }
 
@@ -345,6 +368,7 @@ vec_restore.v_rcensored <- function(x, to, ...) {
   # Maintain metainfo
   iname <- attr(to, "internal_name")
   etime <- attr(to, "end_time")
+  edesc <- attr(to, "extra_descriptors")
   ctxt  <- get_context(to)
   hold  <- as.list(x)
 
@@ -358,11 +382,12 @@ vec_restore.v_rcensored <- function(x, to, ...) {
     .internal_name = iname,
     .data_summary  = data_summary(),
     .context       = ctxt,
-    .end_time      = etime
+    .end_time      = etime,
+    .extra_descriptors = edesc
   )
 
   # Update data summary
-  attr(out, "data_summary") <- describe(out)
+  attr(out, "data_summary") <- describe(out, .descriptors = edesc)
   out
 }
 
@@ -384,7 +409,6 @@ obj_print_footer.v_rcensored <- function(x, ...) {
   cat(out, "\n")
 }
 
-
 #' @importFrom vctrs vec_ptype_full
 #' @method vec_ptype_full v_rcensored
 #' @export
@@ -405,7 +429,6 @@ vec_ptype_abbr.v_rcensored <- function(x) {
 type_sum.v_rcensored <- function(x) {
   "rcen"
 }
-
 
 #' Cast a v_rcensored type to a Surv object
 #' 

@@ -1,4 +1,3 @@
-testthat::context("Checks common to all types")
 
 # Exposing the desired_methods
 library(vctrs)

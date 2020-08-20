@@ -12,7 +12,8 @@ v_rcensored(
   censors,
   end_time = Inf,
   internal_name = "",
-  context
+  context,
+  extra_descriptors = list()
 )
 
 is_rcensored(x)
@@ -22,14 +23,14 @@ is_rcensored(x)
 \method{as_canonical}{v_rcensored}(x)
 }
 \arguments{
-\item{outcomes}{A \code{list} of \code{v_event_time} vectors that define the 
+\item{outcomes}{A \code{list} of \code{v_event_time} vectors that define the
 outcomes. The order of this list defines the precedence of outcomes. That is,
-if the first outcome and second outcome occur at the same time, the first 
+if the first outcome and second outcome occur at the same time, the first
 outcome is the reason for the outcome.}
 
-\item{censors}{A \code{list} of \code{v_event_time} vectors that define the 
+\item{censors}{A \code{list} of \code{v_event_time} vectors that define the
 censor The order of this list defines the precedence of censoring That is,
-if the first censor and second censor occur at the same time, the first 
+if the first censor and second censor occur at the same time, the first
 censor is the reason for the censoring}
 
 \item{end_time}{A \code{numeric} scalar defining the end of follow-up.}
@@ -38,12 +39,28 @@ censor is the reason for the censoring}
 
 \item{context}{a \code{\link{context}}}
 
+\item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
+appended to the default \code{\link{descriptors}}.}
+
 \item{x}{a \code{integer} vector}
 
 \item{...}{passed to other methods such as \code{as.character}}
 }
 \description{
-TODO: add a description
+\code{v_rcensored} provides a right-censored vector. Unlike other representations,
+such the \code{survival} package's \code{Surv} object, \code{v_rcensored} can be subset with
+\code{[} and concatenated with \code{c} as you would any other vector. The type is
+implemented as a \code{\link[vctrs]{new_rcrd}} where the necessary data are
+contained in \code{\link[vctrs]{fields}}.
+}
+\details{
+\code{as_canonical} casts the vector to a \code{list}. See \code{\link{v_rcensored_accessors}}
+for functions to access components of a \code{v_rcensored}.
+
+When printed, an open right triangle indicates an observation was censored.
+A closed right triangle indicates an observation reached \code{end_time} without
+being censored or having an outcome. No triangles indicated an observation
+that had one of the outcomes.
 }
 \seealso{
 Other stype types: 

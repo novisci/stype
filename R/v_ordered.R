@@ -18,8 +18,8 @@ NULL
 new_ordered <- function(x = integer(), .levels = character(),
                         .internal_name = character(), 
                         .data_summary = data_summary(), 
-                        .context = context()) {
-  # browser()
+                        .context = context(),
+                        .extra_descriptors = list()) {
   stopifnot(is.integer(x))
   stopifnot(is.character(.levels))
   
@@ -29,6 +29,7 @@ new_ordered <- function(x = integer(), .levels = character(),
     internal_name = .internal_name,
     data_summary  = .data_summary, 
     context       = .context,
+    extra_descriptors = .extra_descriptors,
     class   = c("v_ordered", "vctrs_vctr", "ordered", "factor")
   )
 }
@@ -39,9 +40,12 @@ methods::setOldClass(c("v_ordered", "vctrs_vctr"))
 #' @rdname v_ordered
 #' @param x a \code{factor}
 #' @export
-v_ordered <- function(x = factor(ordered = TRUE), internal_name = "", context){
+v_ordered <- function(x = factor(ordered = TRUE), internal_name = "", context,
+                      extra_descriptors = list()){
+  
   # x <- vctrs::vec_cast(x, factor())
-  dsum <- describe(x)
+  dsum <- describe(x, .descriptors = extra_descriptors)
+  
   if(missing(context)){
     context <- methods::new("context")
   }
@@ -49,9 +53,10 @@ v_ordered <- function(x = factor(ordered = TRUE), internal_name = "", context){
   new_ordered(
     x        = as.integer(x),
     .levels  = levels(x), 
-    .internal_name = internal_name,
+    .internal_name = check_internal_name(internal_name),
     .data_summary  = dsum,
-    .context       = context)
+    .context       = context,
+    .extra_descriptors = extra_descriptors)
 }
 
 #' Predicate function for ordered objects
@@ -131,15 +136,21 @@ vec_cast.v_ordered.list <- function(x, to, ..., x_arg = "", to_arg = "") {
 
 #' @export
 #' @method vec_restore v_ordered 
-vec_restore.v_ordered <- function(x, to, ..., x_arg = "", to_arg = "") {
-  iname   <- attr(to, "internal_name")
+vec_restore.v_ordered <- function(x, to, ...,n = NULL) {
+  
+  # TODO: could we use make_stype_restorator
+  ctxt  <- get_context(to)
+  iname <- attr(to, "internal_name")
+  edesc <- attr(to, "extra_descriptors")
+  
   x   <- levels(to)[x]
   out <- factor(x, levels = levels(to), ordered = TRUE)
-
-  # Maintain context
-  ctxt <- get_context(to)
   
-  v_ordered(out, internal_name = iname, context = ctxt)
+  v_ordered(
+    out,
+    internal_name = iname, 
+    context = ctxt,
+    extra_descriptors = edesc)
 }
 
 

@@ -1,4 +1,3 @@
-testthat::context("Testing v_rcensored")
 
 ctimes <- list(
    v_event_time(c(5, 6, 10, NA_integer_, 1, NA_integer_, 19), internal_name = "cA"),
@@ -80,6 +79,7 @@ test_that("v_rcensored can be cast to a Surv", {
   x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
 
   expect_is(as_Surv(x1), "Surv")
+  expect_is(as_Surv(x1, censor_as_event = TRUE), "Surv")
 })
 
 test_that("v_rcensored get_data_summary works", {
@@ -88,11 +88,15 @@ test_that("v_rcensored get_data_summary works", {
   z <- list(
     n = 7L,
     has_missing = FALSE,
+    n_nonmissing = 7,
+    n_missing = 0,
+    proportion_missing = 0,
+    is_constant = FALSE,
     person_time = 55,
     n_events     = 3,
+    outcome_reasons = table(c("oA", "oB", "oB", NA, NA, NA, NA), useNA = "always"),
     n_censored   = 2,
     censor_reasons = table(c("cA", "cB", NA, NA, NA, NA, NA), useNA = "always"),
-    outcome_reasons = table(c("oA", "oB", "oB", NA, NA, NA, NA), useNA = "always"),
     eair = 0.54545454,
     eair_variance = 0.006923789
   )
@@ -100,6 +104,13 @@ test_that("v_rcensored get_data_summary works", {
   expect_equivalent(get_data_summary(x1), z, tolerance = 8)
 })
 
+
+test_that("v_rcensored extra_descriptors works", {
+  x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15,
+                    extra_descriptors = list(length = function(x) length(x)))
+  x2 <- x1[1:5]
+  expect_true("length" %in% names(get_data_summary(x2)))
+})
 
 test_that("row binding works for v_rcensored", {
   x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
@@ -122,6 +133,17 @@ test_that("row binding works for v_rcensored", {
   # TODO: this doesn't work (I don't know how to begin to fix)
   # rbind(z1, z2)
   # rbind(z1, z2, z3)
+})
+
+
+test_that("v_rcensored getters work", {
+  x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
+ 
+  expect_is(get_time(x1), "v_event_time")
+  expect_is(get_censored(x1), "v_binary")
+  expect_is(get_outcome(x1), "v_binary")
+  expect_is(get_censor_reason(x1), "v_nominal")
+  expect_is(get_outcome_reason(x1), "v_nominal")
 })
 
 test_that("sort of v_rcensored works", {

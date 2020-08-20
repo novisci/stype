@@ -19,8 +19,9 @@ new_nominal <- function(x = integer(),
                         .levels = character(),
                         .internal_name = character(), 
                         .data_summary = data_summary(), 
-                        .context = context()){
-  # browser()
+                        .context = context(),
+                        .extra_descriptors = list()){
+  
   stopifnot(is.integer(x))
   stopifnot(is.character(.levels))
   
@@ -30,6 +31,7 @@ new_nominal <- function(x = integer(),
     internal_name = .internal_name,
     data_summary  = .data_summary, 
     context       = .context,
+    extra_descriptors = .extra_descriptors,
     class   = c("v_nominal", "vctrs_vctr", "factor")
   )
 }
@@ -40,9 +42,12 @@ methods::setOldClass(c("v_nominal", "vctrs_vctr"))
 #' @rdname v_nominal
 #' @param x a \code{factor}
 #' @export
-v_nominal <- function(x = factor(), internal_name = "", context){
+v_nominal <- function(x = factor(), internal_name = "", context,
+                      extra_descriptors = list()){
+  
   # x <- vctrs::vec_cast(x, factor())
-  dsum <- describe(x)
+  dsum <- describe(x, .descriptors = extra_descriptors)
+  
   if(missing(context)){
     context <- methods::new("context")
   }
@@ -50,9 +55,10 @@ v_nominal <- function(x = factor(), internal_name = "", context){
   new_nominal(
     x        = as.integer(x),
     .levels  = levels(x), 
-    .internal_name = internal_name,
+    .internal_name = check_internal_name(internal_name),
     .data_summary  = dsum,
-    .context       = context)
+    .context       = context,
+    .extra_descriptors = extra_descriptors)
 }
 
 #' Predicate function for nominal objects
@@ -132,16 +138,21 @@ vec_cast.v_nominal.list <- function(x, to, ..., x_arg = "", to_arg = "") {
 
 #' @export
 #' @method vec_restore v_nominal 
-vec_restore.v_nominal <- function(x, to, ..., x_arg = "", to_arg = "") {
-  # browser()
-  # Maintain context
-  ctxt <- get_context(to)
+vec_restore.v_nominal <- function(x, to, ..., n = NULL) {
+  
+  # TODO: could we use make_stype_restorator
+  ctxt  <- get_context(to)
   iname <- attr(to, "internal_name")
+  edesc <- attr(to, "extra_descriptors")
   
   x   <- levels(to)[x]
   out <- factor(x, levels = levels(to))
   
-  v_nominal(out, internal_name = iname, context = ctxt)
+  v_nominal(
+    out,
+    internal_name = iname, 
+    context = ctxt,
+    extra_descriptors = edesc)
 }
 
 

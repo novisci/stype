@@ -1,0 +1,77 @@
+---
+title: "Using stype lenses"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using stype lenses}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# `lenses` and `stype`
+
+The `stype` package provides [`lenses`](https://cfhammill.github.io/lenses/) for getting and settings two types of data:
+
+1. the attributes of an individual `stype` vector (e.g. a `context`, `purpose` or `internal_name`)
+2. sets of `stype` vectors within a `list`-like structure (such as a `data.frame` or `tibble`)
+
+## `view` and `set` elements of a `stype` vector
+
+```{r, message=FALSE, warning=FALSE}
+library(stype)
+library(dplyr)
+```
+
+A `lens` consists of two functions: `view` and `set`. `set` can be used to update parts of a `stype` vector.
+
+```{r}
+x <-  v_binary() %>%
+  set(derivation_l, "some derivation") %>% 
+  set(long_label_l, "a new label") %>% 
+  set(study_role_l, "outcome")
+x
+```
+
+And the `view` can be used to get parts of a vector:
+```{r}
+view(x, derivation_l)
+view(x, long_label_l)
+view(x, study_role_l)
+```
+
+In most cases, `stype` also has `get_*` functions that mimic `view`:
+
+```{r}
+get_derivation(x)
+get_long_label(x)
+```
+
+## `view` and `set` `stype` vectors within a list-like structure
+
+Lenses for `list`-like structures can be used to `view` and `set` vectors within a data.frame. In this example, we set all `continuous` variables to be covariates, `binary` to exposures, and `count` to outcome:
+
+```{r}
+df <- tibble(
+  x1 = v_binary(),
+  x2 = v_continuous(),
+  x3 = v_continuous(),
+  x4 = v_count()
+)
+
+df <- df %>%
+  over_map(continuous_l, function(x) set(x, study_role_l, "covariate"))%>%
+  over_map(binary_l, function(x) set(x, study_role_l, "exposure")) %>%
+  over_map(count_l, function(x) set(x, study_role_l, "outcome"))
+ 
+view(df$x1, study_role_l)
+view(df$x2, study_role_l)
+view(df$x3, study_role_l) 
+view(df$x4, study_role_l) 
+```

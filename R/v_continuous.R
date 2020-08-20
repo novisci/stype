@@ -23,7 +23,8 @@ NULL
 new_continuous <- function(x = double(),
                            .internal_name = character(), 
                            .data_summary = data_summary(), 
-                           .context = context()){
+                           .context = context(),
+                           .extra_descriptors = list()){
   
   # x <- vctrs::vec_cast(x, double())
   vctrs::vec_assert(vctrs::vec_data(x), ptype = double())
@@ -33,6 +34,7 @@ new_continuous <- function(x = double(),
     internal_name = .internal_name,
     data_summary  = .data_summary, 
     context       = .context, 
+    extra_descriptors = .extra_descriptors,
     class = "v_continuous")
 }
 
@@ -43,20 +45,11 @@ methods::setOldClass(c("v_continuous", "vctrs_vctr"))
 #' @rdname v_continuous 
 #' @param x a \code{double} vector
 #' @export
-
-v_continuous <- function(x = double(), internal_name = "", context){
-  # x <- vctrs::vec_cast(x, double())
-  dsum <- describe(vctrs::vec_data(x))
-  if(missing(context)){
-    context <- methods::new("context")
-  }
-  new_continuous(
-    x, 
-    .internal_name = internal_name,
-    .data_summary  = dsum,
-    .context       = context
-  )
-}
+v_continuous <- make_stype_constructor(
+  typeFUN = new_continuous,
+  ptypeFUN = double,
+  dataFUN  = vctrs::vec_data
+)
 
 #' Predicate function for count objects
 #' @rdname v_continuous 
@@ -139,20 +132,7 @@ as_canonical.v_continuous <- function(x){
 #' @importFrom vctrs vec_restore
 #' @method vec_restore v_continuous
 #' @export
-vec_restore.v_continuous <- function(x, to, ..., i = NULL) {
-  
-  iname   <- attr(to, "internal_name")
-  # Update description
-  desc    <- describe(vctrs::vec_data(x))
-  # Maintain context
-  context <- get_context(to)
-  
-  new_continuous(
-    x, 
-    .internal_name = iname,
-    .data_summary  = desc, 
-    .context = context)
-}
+vec_restore.v_continuous <- make_stype_restorator(new_continuous)
 
 # Math Operations ####
 

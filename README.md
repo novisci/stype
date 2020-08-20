@@ -8,11 +8,11 @@
 
 ## Statistical types
 
-The `stype` package provides classes that enforce (run-time) safety for types common to many statistical analyses such as `v_binary`, `v_continuous`, `v_count`, `v_nominal`, and `v_event_time`. For example, binary data can be represented in `R` in at least three ways: a `logical`, a `factor` with two levels, or a `numeric` using just `0` and `1`. Which representation should one use? The latter two do not guarantee that certain operations are closed in a mathematical sense; e.g., `c(0, 1, 0, 1) + 1:4` runs without error. Such behavior is not possible with `v_binary`. Similarly, count data can be represented by an `integer` in `R` but without the restriction of being non-negative. The `v_count` constructor enforces positivity.
+The `stype` package provides classes that enforce (run-time) safety for types common to many statistical analyses such as `v_binary`, `v_continuous`, `v_count`, `v_nominal`, and `v_event_time`. For example, binary data can be represented in `R` in at least three ways: a `logical`, a `factor` with two levels, or a `numeric` using just `0` and `1`. Which representation should one use? The latter two do not guarantee that certain binary operations are closed in a mathematical sense; e.g., `c(0, 1, 0, 1) + 1:4` returns `c(1, 3, 3, 5)`. Such behavior is not possible with `v_binary`. Similarly, count data can be represented by an `integer` in `R` but without the restriction of being non-negative. The `v_count` constructor enforces positivity.
 
 ## Contextual information
 
-Each instance of `stype` objects contain 2 attributes that users may find useful: `context` and `data_summary`. A `context` can be used to specify study-specific metadata. It is an `S4` object containing slots like `short_label`, `long_label`, `description`, `security_type`, and `purpose`. A `purpose`, for example, can be used to define a variable's role in a study design such as "outcome", "identifier", "covariate", or "exposure". This kind of contextual information is invaluable in data pipelines.
+Each instance of `stype` objects contain 2 attributes that users may find useful: `context` and `data_summary`. A `context` can be used to specify project-specific metadata. It is an `S4` object containing slots such as `short_label`, `long_label`, `description`, `security_type`, `tags`, and `purpose`. A `purpose`, for example, can be used to define a variable's role in a study design such as "outcome", "identifier", "covariate", or "exposure". This kind of contextual information is invaluable in data pipelines.
 
 ## Summary statistics
 

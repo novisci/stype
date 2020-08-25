@@ -4,6 +4,7 @@
 \alias{describe}
 \alias{describe,describable,maybeGroup,maybeWeight,maybeDescriptor-method}
 \alias{describe,simpleStype,maybeGroup,maybeWeight,maybeDescriptor-method}
+\alias{describe,tbl_df,missing,missing,maybeDescriptor-method}
 \alias{describe,v_rcensored,maybeGroup,maybeWeight,maybeDescriptor-method}
 \alias{weight}
 \alias{weight,stype,weightVar,maybeDescriptor-method}
@@ -14,6 +15,8 @@ describe(x, g = NULL, w = NULL, .descriptors, ...)
 \S4method{describe}{describable,maybeGroup,maybeWeight,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
 
 \S4method{describe}{simpleStype,maybeGroup,maybeWeight,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
+
+\S4method{describe}{tbl_df,missing,missing,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
 
 \S4method{describe}{v_rcensored,maybeGroup,maybeWeight,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
 

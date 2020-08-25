@@ -61,10 +61,21 @@ setClassUnion("complexStype",    c("v_rcensored"))
 
 #' @rdname stype_classes
 #' @export
-setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
+setClassUnion("v_stype",         c("v_count", "v_binary", "v_continuous",
                                    "v_continuous_nonneg", "v_event_time",
                                    "v_nominal", "v_ordered", "v_character",
                                    "v_rcensored"))
+
+#' @rdname stype_classes
+#' @export
+setClassUnion("tbl_stype",       c("tbl_analysis"))
+
+#' @rdname stype_classes
+#' @export
+setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
+                                   "v_continuous_nonneg", "v_event_time",
+                                   "v_nominal", "v_ordered", "v_character",
+                                   "v_rcensored", "tbl_analysis"))
 
 #' Descriptors
 #' @name descriptors 
@@ -157,6 +168,14 @@ rcensoredDescriptors <- list(
   outcome_info = function(x, ...) get_outcomeinfo(x),
   censor_info  = function(x, ...) get_censorinfo(x),
   eair = function(x, ...) eair(x)
+)
+
+#' @rdname descriptors
+analysisDescriptors <- list(
+  n_obs = function(x, ...) nrow(x),
+  n_col = function(x, ...) ncol(x),
+  n_stypes = function(x, ...) { sum(purrr::map_lgl(x, is_stype) ) },
+  n_tagged = function(x, ...) { sum(purrr::map_lgl(x, is_tagged) ) }
 )
 
 #' Get person-time info for a data_summary
@@ -397,6 +416,24 @@ setMethod(
     cl <- lapply(as.list(cl), eval, sys.parent())
     cl$x <- as_canonical(cl$x)
     eval(as.call(cl))
+  }
+)
+
+#' @rdname describe
+#' @export
+setMethod(
+  f          = "describe",
+  signature  = c("tbl_df", "missing", "missing", "maybeDescriptor"),
+  definition = function(x, g, w, .descriptors, ...){
+    
+    analysisDescriptors <- `if`(
+      missing(.descriptors) || methods::is(.descriptors, "Missing"),
+      analysisDescriptors,
+      vctrs::vec_c(analysisDescriptors, .descriptors)
+    )
+    
+    desc <- purrr::map(analysisDescriptors, ~ .x(x))
+    data_summary(desc)
   }
 )
 

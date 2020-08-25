@@ -1,3 +1,7 @@
+# `stype` 0.4.0
+
+* Adds an *experimental* `tbl_analysis` type, which includes the basic utilities of a `stype` such as a `context` and `data_summary`. It also includes a `modifiers` argument which is a `list` of functions sequentially modify the table. These functions are applied whenever the table is subset, and thus can act to define analytic workflows that should be run whenever a table is modified. This feature is experimental and will be tested internally at NoviSci before being further developed.
+
 # `stype` 0.3.0
 
 ## Major Changes

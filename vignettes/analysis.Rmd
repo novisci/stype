@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
 library(stype)
 library(dplyr)
 library(riskimator)
+set.seed(122)
 ```
 
 ## Workflows as part of a data.frame

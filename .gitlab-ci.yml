@@ -9,6 +9,7 @@ testing:
   stage: testing
   script:
     - R -e 'install.packages("lenses")'
+    - R -e 'install.packages("smd", repos = "http://cran.novisci.com")'
     - R -e 'devtools::check(manual = FALSE)'
 
 cran_check:
@@ -19,7 +20,7 @@ cran_check:
   stage: cran_check
   script:
     - R -e "install.packages(c('lenses'))"
-    - R -e "install.packages(c('riskimator'), repos = 'http://cran.novisci.com')"
+    - R -e "install.packages(c('riskimator', 'smd'), repos = 'http://cran.novisci.com')"
     - R CMD check . --as-cran
 
 

@@ -38,6 +38,7 @@ site:
      - master
   script:
      - R -e "install.packages(c('lenses'))"
+     - R -e "install.packages(c('riskimator', 'smd'), repos = 'http://cran.novisci.com')"
      - R -e 'pkgdown::build_site()'
      - aws s3 sync $CI_PROJECT_DIR/docs/ s3://docs.novisci.com/stype/ --delete --acl public-read
 
@@ -47,5 +48,6 @@ minicran:
     - master
   script:
     - R -e "install.packages(c('lenses'))"
+    - R -e "install.packages(c('riskimator', 'smd'), repos = 'http://cran.novisci.com')"
     - Rscript -e "library(miniCRAN); addLocalPackage('${CI_PROJECT_NAME}', pkgPath='..', path='/mnt/cran.novisci.com', type='source', build=TRUE)"
     - R -e "drat::archivePackages(repopath='/mnt/cran.novisci.com', pkg = '${CI_PROJECT_NAME}')"

@@ -113,7 +113,7 @@ get_data_summary(x1[c(3,5,6)], "crisk")
 
 ## Cumrisk in a data pipeline
 
-```{r, eval= FALSE}
+```{r}
 library(riskimator)
 
 dt <- tibble(

@@ -16,9 +16,9 @@ testthat::test_that("all context slots have a lens", {
   
 })
 
-testthat::test_that("all stype types have a (list-like) lens", {
+testthat::test_that("all v_stype types have a (list-like) lens", {
   purrr::walk(
-    .x = gsub("^v_", "", names(methods::getClass("stype")@subclasses)),
+    .x = gsub("^v_", "", names(methods::getClass("v_stype")@subclasses)),
     .f = ~ { 
       expect_true(
         paste0(.x, "_l") %in% stype_lenses,

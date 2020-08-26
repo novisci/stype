@@ -3,7 +3,7 @@
 library(vctrs)
 library(pillar)
 
-v_types <- names(methods::getClass("stype")@subclasses)
+v_types <- names(methods::getClass("v_stype")@subclasses)
 
 test_that("testing that described types at least have all common methods", {
   desired_methods <- 

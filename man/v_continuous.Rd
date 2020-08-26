@@ -50,6 +50,7 @@ Prototype: \code{\link{double}}
 }
 \seealso{
 Other stype types: 
+\code{\link{tbl_analysis}},
 \code{\link{v_binary}},
 \code{\link{v_character}},
 \code{\link{v_continuous_nonneg}},

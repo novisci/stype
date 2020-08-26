@@ -12,6 +12,7 @@
 \alias{wnumericDescriptors}
 \alias{groupedDescriptors}
 \alias{rcensoredDescriptors}
+\alias{analysisDescriptors}
 \title{Descriptors}
 \format{
 An object of class \code{list} of length 6.
@@ -29,6 +30,8 @@ An object of class \code{list} of length 8.
 An object of class \code{list} of length 1.
 
 An object of class \code{list} of length 1.
+
+An object of class \code{list} of length 4.
 
 An object of class \code{list} of length 4.
 }
@@ -50,6 +53,8 @@ wnumericDescriptors
 groupedDescriptors
 
 rcensoredDescriptors
+
+analysisDescriptors
 }
 \description{
 Lists of functions to used to \code{\link{describe}} a \code{describeable}

@@ -13,6 +13,8 @@
 \alias{describable-class}
 \alias{simpleStype-class}
 \alias{complexStype-class}
+\alias{v_stype-class}
+\alias{tbl_stype-class}
 \alias{stype-class}
 \title{Stype classes}
 \description{

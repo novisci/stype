@@ -226,7 +226,9 @@ sum.v_binary <- function(..., na.rm = TRUE) {
     msg = "x and y must have the same size or either x or y should be a scalar."
   )
   
-  vctrs::vec_data(x) | vctrs::vec_data(y)
+  x <- vctrs::vec_cast(x, to = logical())
+  y <- vctrs::vec_cast(y, to = logical())
+  x | y
 }
 
 #' @method + v_binary
@@ -242,7 +244,9 @@ sum.v_binary <- function(..., na.rm = TRUE) {
     msg = "x and y must have the same size or either x or y should be a scalar."
   )
   
-  vctrs::vec_data(x) & vctrs::vec_data(y)
+  x <- vctrs::vec_cast(x, to = logical())
+  y <- vctrs::vec_cast(y, to = logical())
+  x & y 
 }
 
 #' @method * v_binary

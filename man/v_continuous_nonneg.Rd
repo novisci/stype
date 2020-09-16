@@ -2,6 +2,7 @@
 % Please edit documentation in R/v_continuous_nonneg.R
 \name{v_continuous_nonneg}
 \alias{v_continuous_nonneg}
+\alias{nneg}
 \alias{is_continuous_nonneg}
 \alias{is_nonneg}
 \alias{as_nonneg_continuous}
@@ -14,6 +15,8 @@ v_continuous_nonneg(
   context,
   extra_descriptors = list()
 )
+
+nneg(x = ptypeFUN(), internal_name = "", context, extra_descriptors = list())
 
 is_continuous_nonneg(x)
 

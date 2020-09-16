@@ -2,6 +2,7 @@
 % Please edit documentation in R/v_continuous.R
 \name{v_continuous}
 \alias{v_continuous}
+\alias{cont}
 \alias{is_continuous}
 \alias{as_continuous}
 \alias{as.character.v_continuous}
@@ -14,6 +15,8 @@ v_continuous(
   context,
   extra_descriptors = list()
 )
+
+cont(x = ptypeFUN(), internal_name = "", context, extra_descriptors = list())
 
 is_continuous(x)
 

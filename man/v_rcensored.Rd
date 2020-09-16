@@ -2,12 +2,22 @@
 % Please edit documentation in R/v_rcensored.R
 \name{v_rcensored}
 \alias{v_rcensored}
+\alias{rcen}
 \alias{is_rcensored}
 \alias{as.character.v_rcensored}
 \alias{as_canonical.v_rcensored}
 \title{Right censored vectors}
 \usage{
 v_rcensored(
+  outcomes = list(),
+  censors,
+  end_time = Inf,
+  internal_name = "",
+  context,
+  extra_descriptors = list()
+)
+
+rcen(
   outcomes = list(),
   censors,
   end_time = Inf,

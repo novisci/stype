@@ -2,6 +2,7 @@
 % Please edit documentation in R/v_event_time.R
 \name{v_event_time}
 \alias{v_event_time}
+\alias{tmev}
 \alias{is_event_time}
 \alias{as_time_to_event}
 \alias{as_event_time}
@@ -14,6 +15,8 @@ v_event_time(
   context,
   extra_descriptors = list()
 )
+
+tmev(x = ptypeFUN(), internal_name = "", context, extra_descriptors = list())
 
 is_event_time(x)
 

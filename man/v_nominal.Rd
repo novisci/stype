@@ -2,6 +2,7 @@
 % Please edit documentation in R/v_nominal.R
 \name{v_nominal}
 \alias{v_nominal}
+\alias{nom}
 \alias{is_nominal}
 \alias{as_canonical.v_nominal}
 \title{Nominal categorical vectors}
@@ -12,6 +13,8 @@ v_nominal(
   context,
   extra_descriptors = list()
 )
+
+nom(x = factor(), internal_name = "", context, extra_descriptors = list())
 
 is_nominal(x)
 

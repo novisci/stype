@@ -51,6 +51,10 @@ v_continuous <- make_stype_constructor(
   dataFUN  = vctrs::vec_data
 )
 
+#' @rdname v_continuous 
+#' @export
+cont <- v_continuous
+
 #' Predicate function for count objects
 #' @rdname v_continuous 
 #' @export

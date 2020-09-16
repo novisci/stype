@@ -89,7 +89,6 @@ methods::setOldClass(c("v_rcensored", "v_censored", "vctrs_vctr"))
 #' @importFrom vctrs vec_recycle vec_size
 #' @rdname v_rcensored 
 #' @export
-
 v_rcensored <- function(outcomes = list(), 
                         censors,
                         end_time = Inf,
@@ -143,8 +142,11 @@ v_rcensored <- function(outcomes = list(),
   out
 }
 
+#' @rdname v_rcensored 
+#' @export
+rcen <- v_rcensored
 
-#' Right-censored constructor
+#' Internal function for finding the times/reasons for a right censored stype
 #' @param ... TODO
 #' @noRd
 gather_time_reason <- function(...){

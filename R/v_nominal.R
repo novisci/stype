@@ -61,6 +61,10 @@ v_nominal <- function(x = factor(), internal_name = "", context,
     .extra_descriptors = extra_descriptors)
 }
 
+#' @rdname v_nominal
+#' @export
+nom <- v_nominal
+
 #' Predicate function for nominal objects
 #' @rdname v_nominal 
 #' @export

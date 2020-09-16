@@ -2,11 +2,19 @@
 % Please edit documentation in R/v_ordered.R
 \name{v_ordered}
 \alias{v_ordered}
+\alias{ord}
 \alias{is_ordered}
 \alias{as_canonical.v_ordered}
 \title{Ordered categorical vectors}
 \usage{
 v_ordered(
+  x = factor(ordered = TRUE),
+  internal_name = "",
+  context,
+  extra_descriptors = list()
+)
+
+ord(
   x = factor(ordered = TRUE),
   internal_name = "",
   context,

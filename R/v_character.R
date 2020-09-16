@@ -45,6 +45,10 @@ v_character <- make_stype_constructor(
   dataFUN = vctrs::vec_data
 )
 
+#' @rdname v_character 
+#' @export
+chr <- v_character
+
 #' Predicate function for count objects
 #' @rdname v_character 
 #' @export

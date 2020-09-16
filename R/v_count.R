@@ -62,10 +62,13 @@ v_count <- make_stype_constructor(
   castFUN  = integer, 
   dataFUN  = vctrs::vec_data)
 
+#' @rdname v_count 
+#' @export
+cnt <- v_count
+
 #' Predicate function for count objects
 #' @rdname v_count 
 #' @export
-
 is_count <- function(x){
   inherits(x, "v_count")
 }

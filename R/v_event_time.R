@@ -54,6 +54,10 @@ v_event_time <- make_stype_constructor(
   dataFUN  = vctrs::vec_data
 )
 
+#' @rdname v_event_time 
+#' @export
+tmev <- v_event_time
+
 #' Predicate function for count objects
 #' @rdname v_event_time 
 #' @export

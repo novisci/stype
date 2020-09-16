@@ -2,6 +2,7 @@
 % Please edit documentation in R/v_character.R
 \name{v_character}
 \alias{v_character}
+\alias{chr}
 \alias{is_character}
 \alias{as_character}
 \alias{as.character.v_character}
@@ -14,6 +15,8 @@ v_character(
   context,
   extra_descriptors = list()
 )
+
+chr(x = ptypeFUN(), internal_name = "", context, extra_descriptors = list())
 
 is_character(x)
 

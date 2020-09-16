@@ -2,6 +2,7 @@
 % Please edit documentation in R/v_binary.R
 \name{v_binary}
 \alias{v_binary}
+\alias{bnry}
 \alias{is_binary}
 \alias{as_binary}
 \alias{as.character.v_binary}
@@ -14,6 +15,8 @@ v_binary(
   context,
   extra_descriptors = list()
 )
+
+bnry(x = ptypeFUN(), internal_name = "", context, extra_descriptors = list())
 
 is_binary(x)
 

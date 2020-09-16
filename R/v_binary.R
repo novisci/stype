@@ -47,6 +47,10 @@ v_binary <- make_stype_constructor(
   dataFUN  = vctrs::vec_data
 )
 
+#' @rdname v_binary 
+#' @export
+bnry <- v_binary
+
 #' Predicate function for binary objects
 #' @rdname v_binary 
 #' @export

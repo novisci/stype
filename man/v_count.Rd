@@ -2,6 +2,7 @@
 % Please edit documentation in R/v_count.R
 \name{v_count}
 \alias{v_count}
+\alias{cnt}
 \alias{is_count}
 \alias{as_count}
 \alias{as.character.v_count}
@@ -15,6 +16,8 @@ v_count(
   context,
   extra_descriptors = list()
 )
+
+cnt(x = ptypeFUN(), internal_name = "", context, extra_descriptors = list())
 
 is_count(x)
 

@@ -59,6 +59,10 @@ v_ordered <- function(x = factor(ordered = TRUE), internal_name = "", context,
     .extra_descriptors = extra_descriptors)
 }
 
+#' @rdname v_ordered 
+#' @export
+ord <- v_ordered
+
 #' Predicate function for ordered objects
 #' @rdname v_ordered 
 #' @export

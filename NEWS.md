@@ -1,3 +1,16 @@
+# `stype` 0.4.2
+
+* Adds the following constructor synonyms:
+    * `bnry` : `v_binary`
+    * `cnt`  : `v_count`
+    * `chr`  : `v_character`
+    * `cont` : `v_continuous`
+    * `nneg` : `v_continuous_nonneg`
+    * `tmev` : `v_event_time`
+    * `nom`  : `v_nominal`
+    * `ord`  : `v_ordered`
+    * `rcen` : `v_rcensored`
+
 # `stype` 0.4.1
 
 * Fixes bug in `*` and `+` where (e.g) `v_binary(c(FALSE, TRUE, FALSE, TRUE)) +  c(1, 3, 3, 5)` now returns an error.

@@ -55,6 +55,10 @@ v_continuous_nonneg <- make_stype_constructor(
   dataFUN  = vctrs::vec_data
 )
 
+#' @rdname v_continuous_nonneg 
+#' @export
+nneg <- v_continuous_nonneg
+
 #' Predicate function for count objects
 #' @rdname v_continuous_nonneg 
 #' @export

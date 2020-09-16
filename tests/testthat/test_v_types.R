@@ -30,6 +30,21 @@ test_that("testing that described types at least have all common methods", {
   )
 })
 
+test_that(
+  "all stype vectors have constructor synonym with same as its vec_ptype_abbr", 
+  {
+    purrr::walk(
+      .x = v_types,
+      .f = ~ {
+        x <- do.call(.x, args = list())
+        abbr <- vctrs::vec_ptype_abbr(x)
+        y <- do.call(abbr, args = list())
+        expect_equal(x, y)
+      }
+    )
+  }
+)
+
 test_that("creating a length 0 v_<type> returns the appropriate type without warnings or errors", {
   purrr::walk(
     .x = v_types,

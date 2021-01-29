@@ -493,6 +493,9 @@ as_Surv_events_single <- function(x_fct, censor_as_event) {
 #' @noRd
 as_Surv_events_multiple <- function(x_fct) {
 
+  # Obtain the names of the levels in `x_fct` and ensure that there isn't a name
+  # collision with the name we will give to censored observations as given by
+  # `na_lvl`
   na_lvl <- "(censored)"
   lvls <- levels(x_fct)
   if (na_lvl %in% lvls) {
@@ -504,7 +507,9 @@ as_Surv_events_multiple <- function(x_fct) {
     )
   }
 
-  # adapted from `forcats::refactor`
+  # Add a new level with name `na_lvl` (and make it the first level to conform
+  # with `survival::Surv`'s expectations), and convert NAs to this new level.
+  # Adapted from `forcats::refactor`.
   new_fct <- factor(x_fct, levels = c(na_lvl, lvls), ordered = FALSE)
   new_fct[is.na(new_fct)] <- na_lvl
   attributes(new_fct) <- utils::modifyList(attributes(x_fct), attributes(new_fct))

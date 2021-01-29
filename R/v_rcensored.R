@@ -458,9 +458,9 @@ as_Surv <- function(x, censor_as_event = FALSE, multiple_endpoint = FALSE){
     ! (censor_as_event && multiple_endpoint)
   )
 
-  # `as_canonical` converts the `outcome_reason` field to a factor with missing
+  # `as_canonical` converts the `outcome_reason` field to a factor where missing
   # values corresponding to non-events (i.e. censored data)
-  x_fct <- as_canonical(vctrs::field(x, "outcome_reason"))
+  x_fct <- as_canonical(get_outcome_reason(x))
   event <- `if`(
     multiple_endpoint,
     as_Surv_events_multiple(x_fct),
@@ -469,7 +469,7 @@ as_Surv <- function(x, censor_as_event = FALSE, multiple_endpoint = FALSE){
 
   # Cast the `time` field to numeric before invoking `Surv`
   survival::Surv(
-    time  = as_canonical(vctrs::field(x, "time")),
+    time  = as_canonical(get_time(x)),
     event = event,
     type  = "right"
   )

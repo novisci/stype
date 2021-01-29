@@ -1,3 +1,5 @@
+library(survival)
+
 ctimes <- list(
    v_event_time(c(5, 6, 10, NA_integer_, 1, NA_integer_, 19), internal_name = "cA"),
    v_event_time(c(4, 1, 15, NA_integer_, NA_integer_, NA_integer_, 21), internal_name = "cB")
@@ -27,12 +29,12 @@ mgus2_censor_event <- ifelse(mgus2_single_event == 1, 0, 1)
 # Represent the mgus2 data using `v_rcensored` types
 mgus2_rcen <- rcen(
   outcomes = list(
-    outcome_pcm = tmev(if_else(mgus2$pstat == 1, mgus2$ptime, NA_real_), internal_name = "outcome_pcm"),
-    outcome_death = tmev(if_else(mgus2$death == 1, mgus2$futime, NA_real_), internal_name = "outcome_death")
+    outcome_pcm = tmev(ifelse(mgus2$pstat == 1, mgus2$ptime, NA_real_), internal_name = "outcome_pcm"),
+    outcome_death = tmev(ifelse(mgus2$death == 1, mgus2$futime, NA_real_), internal_name = "outcome_death")
   ),
   censors = list(
-    outcome_pcm = tmev(if_else(mgus2$pstat == 0, mgus2$ptime, NA_real_), internal_name = "censor_pcm"),
-    outcome_death = tmev(if_else(mgus2$death == 0, mgus2$futime, NA_real_), internal_name = "censor_death")
+    outcome_pcm = tmev(ifelse(mgus2$pstat == 0, mgus2$ptime, NA_real_), internal_name = "censor_pcm"),
+    outcome_death = tmev(ifelse(mgus2$death == 0, mgus2$futime, NA_real_), internal_name = "censor_death")
   ),
   internal_name = "mgus2"
 )

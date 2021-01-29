@@ -167,3 +167,10 @@ check_internal_name <- function(x){
   )
   x
 }
+
+#' Check whether a value is a positive scalar number
+#' @param x what to check
+#' @keywords internal
+check_number_positive <- function(x){
+  is.numeric(x) && (length(x) == 1L) && (! is.na(x)) && (x > 0)
+}

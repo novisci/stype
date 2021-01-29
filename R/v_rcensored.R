@@ -146,6 +146,13 @@ v_rcensored <- function(outcomes = list(),
 #' @export
 rcen <- v_rcensored
 
+#' Predicate function for right-censored objects
+#' @rdname v_rcensored
+#' @export
+is_v_rcensored <- function(x){
+  inherits(x, "v_rcensored")
+}
+
 #' Internal function for finding the times/reasons for a right censored stype
 #' @param ... TODO
 #' @noRd

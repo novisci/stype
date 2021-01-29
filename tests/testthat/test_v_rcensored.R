@@ -41,6 +41,10 @@ test_that("v_rcensored class descriptions update appropriately", {
   
 })
 
+test_that("predicate function for v_rcensored types", {
+  expect_false(is_v_rcensored(22))
+  expect_true(is_v_rcensored(v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)))
+})
 
 test_that("v_rcensored sets levels and labels correctly", {
   

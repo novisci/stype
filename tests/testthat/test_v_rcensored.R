@@ -168,3 +168,89 @@ test_that("sort of v_rcensored works", {
   
 })
   
+test_that("pmin_v_rcensored equivalent values", {
+
+  x1 <- v_rcensored(outcomes = list(oA = otimeA), censors = list(cA = ctimeA))
+  x2 <- v_rcensored(outcomes = list(oB = otimeB), censors = list(cB = ctimeB))
+  x3 <- v_rcensored(outcomes = list(oC = otimeC), censors = list(cC = ctimeC))
+
+  # one input
+  actual <- pmin_v_rcensored(x1)
+  expected <- v_rcensored(
+    outcomes = list(oA = otimeA),
+    censors  = list(cA = ctimeA),
+    end_time = Inf
+  )
+  expect_equal(actual, expected)
+
+  # three inputs
+  actual <- pmin_v_rcensored(x1, x2, x3)
+  expected <- v_rcensored(
+    outcomes = list(oA = otimeA, oB = otimeB, oC = otimeC),
+    censors  = list(cA = ctimeA, cB = ctimeB, cC = ctimeC),
+    end_time = Inf
+  )
+  expect_equal(actual, expected)
+
+  # three inputs -- changed order
+  actual <- pmin_v_rcensored(x3, x1, x2)
+  expected <- v_rcensored(
+    outcomes = list(oC = otimeC, oA = otimeA, oB = otimeB),
+    censors  = list(cC = ctimeC, cA = ctimeA, cB = ctimeB),
+    end_time = Inf
+  )
+  expect_equal(actual, expected)
+
+  # sequential combinations
+  actual <- pmin_v_rcensored(pmin_v_rcensored(x1, x2), x3)
+  expected <- v_rcensored(
+    outcomes = list(oA = otimeA, oB = otimeB, oC = otimeC),
+    censors  = list(cA = ctimeA, cB = ctimeB, cC = ctimeC),
+    end_time = Inf
+  )
+  expect_equal(actual, expected)
+})
+
+test_that("pmin_v_rcensored end time selection", {
+
+  a_15 <- v_rcensored(outcomes = list(oA = otimeA), censors = list(cA = ctimeA), end_time = 15)
+  b_15 <- v_rcensored(outcomes = list(oB = otimeB), censors = list(cB = ctimeB), end_time = 15)
+  c_15 <- v_rcensored(outcomes = list(oC = otimeC), censors = list(cC = ctimeC), end_time = 15)
+
+  # end times all equal
+  actual_strict <- pmin_v_rcensored(a_15, b_15, c_15, new_end_time = "strict")
+  actual_min <- pmin_v_rcensored(a_15, b_15, c_15, new_end_time = "strict")
+  actual_dbl15 <- pmin_v_rcensored(a_15, b_15, c_15, new_end_time = 15)
+  expected_15 <- v_rcensored(
+    outcomes = list(oA = otimeA, oB = otimeB, oC = otimeC),
+    censors  = list(cA = ctimeA, cB = ctimeB, cC = ctimeC),
+    end_time = 15
+  )
+  expect_equal(actual_strict, expected_15)
+  expect_equal(actual_min, expected_15)
+  expect_equal(actual_dbl15, expected_15)
+
+  a_12 <- v_rcensored(outcomes = list(oA = otimeA), censors = list(cA = ctimeA), end_time = 12)
+  b_18 <- v_rcensored(outcomes = list(oB = otimeB), censors = list(cB = ctimeB), end_time = 18)
+  c_22 <- v_rcensored(outcomes = list(oC = otimeC), censors = list(cC = ctimeC), end_time = 22)
+
+  # end times differ
+  actual_min <- pmin_v_rcensored(a_12, b_18, c_22, new_end_time = "min")
+  actual_dbl10 <- pmin_v_rcensored(a_12, b_18, c_22, new_end_time = 10)
+  actual_dbl12 <- pmin_v_rcensored(a_12, b_18, c_22, new_end_time = 12)
+  expected_10 <- v_rcensored(
+    outcomes = list(oA = otimeA, oB = otimeB, oC = otimeC),
+    censors  = list(cA = ctimeA, cB = ctimeB, cC = ctimeC),
+    end_time = 10
+  )
+  expected_12 <- v_rcensored(
+    outcomes = list(oA = otimeA, oB = otimeB, oC = otimeC),
+    censors  = list(cA = ctimeA, cB = ctimeB, cC = ctimeC),
+    end_time = 12
+  )
+  expect_error(pmin_v_rcensored(a_12, b_18, c_22, new_end_time = "strict"))
+  expect_equal(actual_min, expected_12)
+  expect_equal(actual_dbl10, expected_10)
+  expect_equal(actual_dbl12, expected_12)
+  expect_error(pmin_v_rcensored(a_12, b_18, c_22, new_end_time = 13))
+})

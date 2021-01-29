@@ -483,6 +483,107 @@ sort.v_rcensored <- function(x, decreasing = FALSE, ...){
   x
 }
 
+#' Combine Right-Censored Events
+#'
+#' Create a right-censored event based on the minimum time to event among a
+#' collection of right-censored events. In the event of ties for censoring or
+#' outcome events, earlier inputs are given precedence over later inputs.
+#'
+#' @inheritParams v_rcensored
+#' @param new_end_time either one of `"strict"` or `"min"`, or a postive scalar
+#'   value. In the case of `"strict"` the inputs are assumed to all have the
+#'   same `end_time` value (otherwise and error is thrown), and the `end_time`
+#'   of the output object is the same as that of the inputs. In the case of
+#'   `"min"`, the minimum `end_time` value among all of the inputs is the taken
+#'   to be the `end_time` of the output object. In the case of a positive scalar
+#'   input for `new_end_time`, the `end_time` of the output object is taken to
+#'   be the value of `new_end_time`. Note that an error is thrown if the value
+#'   of `new_end_time` is larger than the smallest `end_time` value among the
+#'   inputs since this situation could result in faulty data.
+#'
+#' @return A `v_rcensored` object.
+#' @export
+
+pmin_v_rcensored <- function(...,
+                             new_end_time = "strict",
+                             internal_name = "",
+                             context = methods::new("context"),
+                             extra_descriptors = list()) {
+
+  # collect the dots into a list and validate the form of the inputs
+  rcen_list <- list(...)
+  stopifnot(
+    purrr::map_lgl(rcen_list, is_v_rcensored),
+    is.character(new_end_time) || check_number_positive(new_end_time)
+  )
+  # if there are no input `v_rcensored` objects then construct an empty
+  # `v_rcensored` object and return early
+  if (length(rcen_list) == 0L) {
+    out <- v_rcensored(
+      end_time          = `if`(is.character(new_end_time), Inf, new_end_time),
+      internal_name     = internal_name,
+      context           = context,
+      extra_descriptors = extra_descriptors
+    )
+    return(out)
+  }
+
+  # extract a representation of the original outcome and censoring times for
+  # each input (and noting that "unneeded" information that was shadowed by
+  # earlier events or censoring has been discarded), and then combine the
+  # elements of the per-input lists across the various inputs
+  unpacked_list <- purrr::map(rcen_list, .v_rcensored_unpack)
+  unpacked_t_list <- purrr::map(
+    purrr::transpose(unpacked_list),
+    purrr::flatten
+  )
+
+  # compute the end time that will be used for the new variable
+  end_time_prev <- unlist(unpacked_t_list$end_time)
+  etime_dbl <- `if`(
+    is.character(new_end_time),
+    pmin_v_rcensored_endtime_inputchr(end_time_prev, new_end_time),
+    pmin_v_rcensored_endtime_inputdbl(end_time_prev, new_end_time)
+  )
+
+  v_rcensored(
+    outcomes = unpacked_t_list$outcomes,
+    censors  = unpacked_t_list$censors,
+    end_time = etime_dbl
+  )
+}
+
+#' Obtain An End Time Value for a Numeric New Event Time Input
+#'
+#' @param new_end_time a positive scalar value.
+#' @param end_time_prev a vector of positive values.
+#' @return a positive scalar value.
+#' @noRd
+pmin_v_rcensored_endtime_inputdbl <- function(end_time_prev, new_end_time) {
+  stopifnot(new_end_time <= end_time_prev)
+  new_end_time
+}
+
+#' Obtain An End Time Value for a Character New Event Time Input
+#'
+#' @param new_end_time a string.
+#' @param end_time_prev a vector of positive values.
+#' @return a positive scalar value.
+#' @noRd
+pmin_v_rcensored_endtime_inputchr <- function(end_time_prev, new_end_time) {
+  stopifnot(new_end_time %in% c("strict", "min"))
+  switch(
+    EXPR = new_end_time,
+    strict = {
+      stopifnot(end_time_prev == end_time_prev[1L])
+      end_time_prev[1L]
+    },
+    min = {
+      min(end_time_prev)
+    }
+  )
+}
+
 #' Get elements from v_rcensored
 #' 
 #' @name v_rcensored_accessors

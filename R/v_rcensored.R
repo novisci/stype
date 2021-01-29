@@ -111,7 +111,8 @@ v_rcensored <- function(outcomes = list(),
     censors <- list(censors)
   }
   
-  # TODO: drop requirement that inputs be v_event_time()? 
+  # TODO: drop requirement that inputs be v_event_time()?
+  # FIXME: this doesn't actually do anything, right?
   purrr::walk(
     .x = append(outcomes, censors),
     .f = ~ is_event_time(.x)
@@ -268,6 +269,7 @@ get_levels_labels <- function(x){
       hold <- time
       idx  <- oreas == .x
       hold[!ifelse(is.na(idx), FALSE, idx)] <- NA_real_
+      attr(hold, "internal_name") <- .x
       hold
     }
   )
@@ -279,6 +281,7 @@ get_levels_labels <- function(x){
       hold <- time
       idx  <- creas == .x
       hold[!ifelse(is.na(idx), FALSE, idx)] <- NA_real_
+      attr(hold, "internal_name") <- .x
       hold
     }
   )

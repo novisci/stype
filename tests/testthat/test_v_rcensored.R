@@ -1,13 +1,13 @@
+ctimeA <- v_event_time(c(5,        6, 10, NA_real_,        1, NA_real_, 19), internal_name = "cA")
+ctimeB <- v_event_time(c(4,        1, 15, NA_real_, NA_real_, NA_real_, 21), internal_name = "cB")
+ctimeC <- v_event_time(c(8,        4,  8, NA_real_,        4, NA_real_, 19), internal_name = "cC")
 
-ctimes <- list(
-   v_event_time(c(5, 6, 10, NA_integer_, 1, NA_integer_, 19), internal_name = "cA"),
-   v_event_time(c(4, 1, 15, NA_integer_, NA_integer_, NA_integer_, 21), internal_name = "cB")
-)
+otimeA <- v_event_time(c(2,        6, 11,       12, NA_real_, NA_real_, 25), internal_name = "oA")
+otimeB <- v_event_time(c(1, NA_real_, 10, NA_real_, NA_real_, NA_real_, 23), internal_name = "oB")
+otimeC <- v_event_time(c(3,        4,  8,       12, NA_real_, NA_real_, 20), internal_name = "oC")
 
-otimes <- list(
-  v_event_time(c(2, 6, 11, 12, NA_integer_, NA_integer_, 25), internal_name = "oA"),
-  v_event_time(c(1, NA_integer_, 10, NA_integer_, NA_integer_, NA_integer_, 23), internal_name = "oB")
-)
+ctimes <- list(ctimeA, ctimeB)
+otimes <- list(otimeA, otimeB)
 
 stype_tester(
   v_type         = "v_rcensored",

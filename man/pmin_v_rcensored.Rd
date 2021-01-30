@@ -17,8 +17,8 @@ pmin_v_rcensored(
 
 \item{new_end_time}{either one of \code{"strict"} or \code{"min"}, or a postive scalar
 value. In the case of \code{"strict"} the inputs are assumed to all have the
-same \code{end_time} value (otherwise and error is thrown), and the \code{end_time}
-of the output object is the same as that of the inputs. In the case of
+same \code{end_time} value (otherwise an error is thrown), and the \code{end_time} of
+the output object is the same as that of the inputs. In the case of
 \code{"min"}, the minimum \code{end_time} value among all of the inputs is the taken
 to be the \code{end_time} of the output object. In the case of a positive scalar
 input for \code{new_end_time}, the \code{end_time} of the output object is taken to

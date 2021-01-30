@@ -492,8 +492,8 @@ sort.v_rcensored <- function(x, decreasing = FALSE, ...){
 #' @inheritParams v_rcensored
 #' @param new_end_time either one of `"strict"` or `"min"`, or a postive scalar
 #'   value. In the case of `"strict"` the inputs are assumed to all have the
-#'   same `end_time` value (otherwise and error is thrown), and the `end_time`
-#'   of the output object is the same as that of the inputs. In the case of
+#'   same `end_time` value (otherwise an error is thrown), and the `end_time` of
+#'   the output object is the same as that of the inputs. In the case of
 #'   `"min"`, the minimum `end_time` value among all of the inputs is the taken
 #'   to be the `end_time` of the output object. In the case of a positive scalar
 #'   input for `new_end_time`, the `end_time` of the output object is taken to

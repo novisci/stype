@@ -13,7 +13,7 @@ pmin_v_rcensored(
 )
 }
 \arguments{
-\item{...}{passed to other methods such as \code{as.character}}
+\item{...}{a collection of \code{v_rcensored} objects.}
 
 \item{new_end_time}{either one of \code{"strict"} or \code{"min"}, or a postive scalar
 value. In the case of \code{"strict"} the inputs are assumed to all have the

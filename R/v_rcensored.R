@@ -490,6 +490,7 @@ sort.v_rcensored <- function(x, decreasing = FALSE, ...){
 #' outcome events, earlier inputs are given precedence over later inputs.
 #'
 #' @inheritParams v_rcensored
+#' @param ... a collection of `v_rcensored` objects.
 #' @param new_end_time either one of `"strict"` or `"min"`, or a postive scalar
 #'   value. In the case of `"strict"` the inputs are assumed to all have the
 #'   same `end_time` value (otherwise an error is thrown), and the `end_time` of
@@ -555,8 +556,8 @@ pmin_v_rcensored <- function(...,
 
 #' Obtain An End Time Value for a Numeric New Event Time Input
 #'
-#' @param new_end_time a positive scalar value.
 #' @param end_time_prev a vector of positive values.
+#' @param new_end_time a positive scalar value.
 #' @return a positive scalar value.
 #' @noRd
 pmin_v_rcensored_endtime_inputdbl <- function(end_time_prev, new_end_time) {
@@ -566,8 +567,8 @@ pmin_v_rcensored_endtime_inputdbl <- function(end_time_prev, new_end_time) {
 
 #' Obtain An End Time Value for a Character New Event Time Input
 #'
-#' @param new_end_time a string.
 #' @param end_time_prev a vector of positive values.
+#' @param new_end_time a string.
 #' @return a positive scalar value.
 #' @noRd
 pmin_v_rcensored_endtime_inputchr <- function(end_time_prev, new_end_time) {

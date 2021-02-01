@@ -464,7 +464,7 @@ as_Surv <- function(x, censor_as_event = FALSE, multiple_endpoint = FALSE){
   event <- `if`(
     multiple_endpoint,
     as_Surv_events_multiple(x_fct),
-    as_Surv_events_single(x_fct, censor_as_event),
+    as_Surv_events_single(x_fct, censor_as_event)
   )
 
   # Cast the `time` field to numeric before invoking `Surv`

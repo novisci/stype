@@ -1,3 +1,5 @@
+library(survival)
+
 ctimeA <- v_event_time(c(5,        6, 10, NA_real_,        1, NA_real_, 19), internal_name = "cA")
 ctimeB <- v_event_time(c(4,        1, 15, NA_real_, NA_real_, NA_real_, 21), internal_name = "cB")
 ctimeC <- v_event_time(c(8,        4,  8, NA_real_,        4, NA_real_, 19), internal_name = "cC")
@@ -8,6 +10,35 @@ otimeC <- v_event_time(c(3,        4,  8,       12, NA_real_, NA_real_, 20), int
 
 ctimes <- list(ctimeA, ctimeB)
 otimes <- list(otimeA, otimeB)
+
+# This example is taken from the "Multi-state models and competing risks"
+# vignette in the survival package.
+#
+# ‘ptime’: time until progression to a plasma cell malignancy (PCM) or last contact, in months
+# ‘pstat’: occurrence of PCM: 0=no, 1=yes
+# ‘futime’: time until death or last contact, in months
+# ‘death’: occurrence of death: 0=no, 1=yes
+mgus2_etime <- with(mgus2, ifelse(pstat == 0, futime, ptime))
+mgus2_multiple_event <- with(mgus2, ifelse(pstat == 0, 2 * death, 1))
+mgus2_multiple_event <- factor(mgus2_multiple_event, 0:2, labels=c("(censored)", "outcome_pcm", "outcome_death"))
+
+# consider (i) either one of PCM or death to be an event, or (ii) censoring to
+# be the event
+mgus2_single_event <- ifelse((mgus2$pstat == 1) | (mgus2$death == 1), 1, 0)
+mgus2_censor_event <- ifelse(mgus2_single_event == 1, 0, 1)
+
+# Represent the mgus2 data using `v_rcensored` types
+mgus2_rcen <- rcen(
+  outcomes = list(
+    outcome_pcm = tmev(ifelse(mgus2$pstat == 1, mgus2$ptime, NA_real_), internal_name = "outcome_pcm"),
+    outcome_death = tmev(ifelse(mgus2$death == 1, mgus2$futime, NA_real_), internal_name = "outcome_death")
+  ),
+  censors = list(
+    outcome_pcm = tmev(ifelse(mgus2$pstat == 0, mgus2$ptime, NA_real_), internal_name = "censor_pcm"),
+    outcome_death = tmev(ifelse(mgus2$death == 0, mgus2$futime, NA_real_), internal_name = "censor_death")
+  ),
+  internal_name = "mgus2"
+)
 
 stype_tester(
   v_type         = "v_rcensored",
@@ -84,6 +115,27 @@ test_that("v_rcensored can be cast to a Surv", {
 
   expect_is(as_Surv(x1), "Surv")
   expect_is(as_Surv(x1, censor_as_event = TRUE), "Surv")
+})
+
+test_that("v_rcensored cast to a Surv is equivalent to Surv", {
+
+  # single event data
+  actual <- as_Surv(mgus2_rcen)
+  expected <- Surv(mgus2_etime, mgus2_single_event)
+  expect_identical(actual, expected)
+
+  # single event data with censoring considered as an event
+  actual <- as_Surv(mgus2_rcen, censor_as_event = TRUE)
+  expected <- Surv(mgus2_etime, mgus2_censor_event)
+  expect_identical(actual, expected)
+
+  # multiple event data
+  actual <- as_Surv(mgus2_rcen, multiple_endpoint = TRUE)
+  expected <- Surv(mgus2_etime, mgus2_multiple_event)
+  expect_identical(actual, expected)
+
+  # multiple event data with censoring considered as an event
+  expect_error(as_Surv(mgus2_rcen, censor_as_event = TRUE, multiple_endpoint = TRUE))
 })
 
 test_that("v_rcensored get_data_summary works", {

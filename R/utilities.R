@@ -173,4 +173,13 @@ check_internal_name <- function(x){
 #' @keywords internal
 check_number_positive <- function(x){
   is.numeric(x) && (length(x) == 1L) && (! is.na(x)) && (x > 0)
+
+#' Check if an object is either TRUE or FALSE
+#' @param x what to check
+#' @noRd
+is_truth <- function(x) {
+  (is.logical(x)
+    && (length(x) == 1L)
+    && (! is.na(x))
+  )
 }

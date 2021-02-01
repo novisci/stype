@@ -446,28 +446,84 @@ type_sum.v_rcensored <- function(x) {
 #' 
 #' Supports (hopefully obviously) \code{type = "right"} in \code{survival::Surv}
 #' @param x a \code{\link{v_rcensored}} object
-#' @param censor_as_event an indicator to treat censoring as the event of 
-#'    interest. Defaults to \code{FALSE}. When \code{TRUE}, the first outcome is 
-#'    treated as the outcome of interest and the others as competing risks. When
-#'    \code{FALSE}, all outcomes are treated as a single censoring event and 
-#'    censoring events as a single outcome.
+#' @param censor_as_event an indicator to treat censoring as the event of
+#'   interest (such as when estimating censoring probabilities). When
+#'   \code{TRUE}, all outcomes are treated as a single censoring event and
+#'   censoring events as a single outcome. Defaults to \code{FALSE}.
+#' @param multiple_endpoint an indicator to treat the outcomes as multiple
+#'   endpoint data, otherwise all outcomes are treated as being the same event
+#'   type. Defaults to \code{FALSE}.
 #' @export
-as_Surv <- function(x, censor_as_event = FALSE){
-  hold <- as.integer(as_canonical(vctrs::field(x, "outcome_reason")))
-  hold[is.na(hold)] <- 0L
-  
-  # TODO: how should administrative censoring be handled here?
-  event <- `if`(
-    censor_as_event,
-    hold == 0L,
-    as.factor(hold)
+
+# Note that there doesn't seem to be a generic defined for `as.Surv` in the
+# survival package, otherwise we would prefer to create an S3 method here.
+as_Surv <- function(x, censor_as_event = FALSE, multiple_endpoint = FALSE){
+
+  stopifnot(
+    is_rcensored(x),
+    is_truth(censor_as_event),
+    is_truth(multiple_endpoint),
+    # Multiple endpoints combined with censoring as an event doesn't make
+    # sense, so let's throw an error early
+    ! (censor_as_event && multiple_endpoint)
   )
-  
+
+  # `as_canonical` converts the `outcome_reason` field to a factor where missing
+  # values corresponding to non-events (i.e. censored data)
+  x_fct <- as_canonical(get_outcome_reason(x))
+  event <- `if`(
+    multiple_endpoint,
+    as_Surv_events_multiple(x_fct),
+    as_Surv_events_single(x_fct, censor_as_event)
+  )
+
+  # Cast the `time` field to numeric before invoking `Surv`
   survival::Surv(
-    time  = as_canonical(vctrs::field(x, "time")),
+    time  = as_canonical(get_time(x)),
     event = event,
     type  = "right"
   )
+}
+
+#' Cast an outcome factor to a logical
+#' @param x_fct a factor with nonmissing values represent a given event type
+#' @inheritParams as_Surv
+#' @noRd
+as_Surv_events_single <- function(x_fct, censor_as_event) {
+  is_censored <- is.na(x_fct)
+  `if`(
+    censor_as_event,
+    is_censored,
+    ! is_censored
+  )
+}
+
+#' Add an explicit missing level for a factor
+#' @inheritParams as_Surv_events_single
+#' @noRd
+as_Surv_events_multiple <- function(x_fct) {
+
+  # Obtain the names of the levels in `x_fct` and ensure that there isn't a name
+  # collision with the name we will give to censored observations as given by
+  # `na_lvl`
+  na_lvl <- "(censored)"
+  lvls <- levels(x_fct)
+  if (na_lvl %in% lvls) {
+    stop(
+      "the outcome name ",
+      na_lvl,
+      " is reserved to indicate censored observations, please rename this outcome.",
+      .call = FALSE
+    )
+  }
+
+  # Add a new level with name `na_lvl` (and make it the first level to conform
+  # with `survival::Surv`'s expectations), and convert NAs to this new level.
+  # Adapted from `forcats::refactor`.
+  new_fct <- factor(x_fct, levels = c(na_lvl, lvls), ordered = FALSE)
+  new_fct[is.na(new_fct)] <- na_lvl
+  attributes(new_fct) <- utils::modifyList(attributes(x_fct), attributes(new_fct))
+  new_fct
 }
 
 #' @method sort v_rcensored

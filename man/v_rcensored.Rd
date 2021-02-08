@@ -3,6 +3,7 @@
 \name{v_rcensored}
 \alias{v_rcensored}
 \alias{rcen}
+\alias{is_v_rcensored}
 \alias{is_rcensored}
 \alias{as.character.v_rcensored}
 \alias{as_canonical.v_rcensored}
@@ -25,6 +26,8 @@ rcen(
   context,
   extra_descriptors = list()
 )
+
+is_v_rcensored(x)
 
 is_rcensored(x)
 

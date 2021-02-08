@@ -1,3 +1,8 @@
+# `stype` 0.4.3
+
+* Updates the function signature for `as_Surv` to take a new formal argument `multiple_endpoint` which defaults to `FALSE`. Previous versions always returned data in a _multiple endpoints_ format (see the object documentation for `survival::Surv` for a definition) when `censor_as_event` was `FALSE`, so this is a breaking change.
+* Adds a function `pmin_v_rcensored` that can be used to combine multiple `v_rcensored` objects into a new `v_rcensored` object.
+
 # `stype` 0.4.2
 
 * Adds the following constructor synonyms:

@@ -604,9 +604,12 @@ pmin_v_rcensored <- function(...,
   )
 
   v_rcensored(
-    outcomes = unpacked_t_list$outcomes,
-    censors  = unpacked_t_list$censors,
-    end_time = etime_dbl
+    outcomes          = unpacked_t_list$outcomes,
+    censors           = unpacked_t_list$censors,
+    end_time          = etime_dbl,
+    internal_name     = internal_name,
+    context           = context,
+    extra_descriptors = extra_descriptors
   )
 }
 

@@ -5,6 +5,12 @@ stages:
   - cran_check
   - package
 
+coverage:
+  stage: testing
+  script:
+    - R -e 'install.packages("covr")'
+    - R -e 'covr::package_coverage()'
+
 testing:
   stage: testing
   script:
@@ -21,7 +27,6 @@ cran_check:
     - R -e "install.packages(c('lenses'))"
     - R -e "install.packages(c('riskimator', 'smd'), repos = 'http://cran.novisci.com')"
     - R CMD check . --as-cran
-
 
 package:
   stage: package

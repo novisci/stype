@@ -37,7 +37,8 @@ Suggests:
    survival,
    MASS,
    smd,
-   riskimator
+   riskimator,
+   rmarkdown
 License: MIT + file LICENSE
 URL: https://gitlab.novisci.com/nsStat/stype
 BugReports: https://gitlab.novisci.com/nsStat/stype/issues

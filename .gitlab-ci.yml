@@ -1,4 +1,4 @@
-image: registry.novisci.com/nsstat/statocker/r/pkgdev:3.6.3
+image: registry.novisci.com/nsstat/nsbuild/r:4.1.2
 
 stages:
   - testing
@@ -26,14 +26,14 @@ cran_check:
   script:
     - R -e "install.packages(c('lenses'))"
     - R -e "install.packages(c('riskimator', 'smd'), repos = 'http://cran.novisci.com')"
-    - R CMD check . --as-cran
+    - R CMD check --no-build-vignettes --as-cran .
 
 package:
   stage: package
   script:
     - R -e 'install.packages("lenses")'
     - rm -rf .git
-    - R CMD build .
+    - R CMD build --no-build-vignettes .
 
 site: 
   stage: package

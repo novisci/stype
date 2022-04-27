@@ -4,7 +4,9 @@
 \name{data_summary-class}
 \alias{data_summary-class}
 \alias{data_summary}
-\title{A call to describe returns a data_summary object}
+\title{A Class Subclassing From the \code{methods::namedList} Class}
 \description{
-A call to describe returns a data_summary object
+This is the class of object returned by a call to \code{\link{describe}} with a stype
+vector as the input. The class currently does not extend the
+\code{\link[methods:BasicClasses]{methods::namedList}} class.
 }

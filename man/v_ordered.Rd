@@ -4,6 +4,7 @@
 \alias{v_ordered}
 \alias{ord}
 \alias{is_ordered}
+\alias{as_ordered}
 \alias{as_canonical.v_ordered}
 \title{Ordered categorical vectors}
 \usage{
@@ -11,6 +12,7 @@ v_ordered(
   x = factor(ordered = TRUE),
   internal_name = "",
   context,
+  auto_compute_summary = auto_compute_default,
   extra_descriptors = list()
 )
 
@@ -18,10 +20,13 @@ ord(
   x = factor(ordered = TRUE),
   internal_name = "",
   context,
+  auto_compute_summary = auto_compute_default,
   extra_descriptors = list()
 )
 
 is_ordered(x)
+
+as_ordered(x)
 
 \method{as_canonical}{v_ordered}(x)
 }
@@ -32,26 +37,54 @@ is_ordered(x)
 
 \item{context}{a \code{\link{context}}}
 
+\item{auto_compute_summary}{an indicator of whether the \code{data_summary} is
+automatically computed whenever a vector is initialized, subset, or
+concatenated. Defaults to \code{TRUE}. If this option is set to \code{FALSE},
+then \code{\link{get_data_summary}} is the only way to compute the summary.
+The \code{\link{data_summary_l}} lens will return an empty \code{data_summary}.}
+
 \item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
 appended to the default \code{\link{descriptors}}.}
 }
 \description{
-{
-Support: see \code{\link{factor}}
-
+Constructors and methods for an ordered categorical data type.
+\code{v_ordered} and \code{ord} are synonyms that each create a new
+\code{v_ordered} object subclassed from \code{vctrs_vctr}, \code{ordered},
+and \code{factor}. \cr\cr
+Support: see \code{\link{factor}} \cr
 Prototype: \code{\link{integer}}
 }
+\examples{
+# Example data
+src_fct <- factor(c("a", "bb", "a", "ccc", NA_character_), ordered = TRUE)
+
+# Constructor for the `v_ordered` class. One can also use `ord` which is a
+# synonym for the `v_ordered` function.
+v <- v_ordered(
+  x = src_fct,
+  internal_name = "v_example",
+  context = context(
+    short_label = "important_var",
+    long_label  = "Very important variable"
+  ),
+  extra_descriptors = list()
+)
+
+# Helper functions and methods
+is_ordered(v)
+as_ordered(src_fct)
+as.character(v)
+as_canonical(v)
 }
 \seealso{
 Other stype types: 
 \code{\link{tbl_analysis}},
 \code{\link{v_binary}},
-\code{\link{v_character}},
 \code{\link{v_continuous_nonneg}},
 \code{\link{v_continuous}},
 \code{\link{v_count}},
-\code{\link{v_event_time}},
 \code{\link{v_nominal}},
+\code{\link{v_proportion}},
 \code{\link{v_rcensored}}
 }
 \concept{stype types}

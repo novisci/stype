@@ -14,11 +14,17 @@ globalVariables(c("view", "set"))
 #' 
 #' S4 classes uses in defining methods.
 #' @name stype_classes
+#' @keywords internal
 NULL
 
 #' @rdname stype_classes
 #' @export
 setClassUnion("groupVar",        c("character", "factor"))
+
+#' @rdname stype_classes
+#' @export
+setClassUnion("stypeWeightVar",  c("v_continuous", "v_continuous_nonneg", 
+                                   "v_proportion"))
 
 #' @rdname stype_classes
 #' @export
@@ -52,8 +58,9 @@ setClassUnion("describable",     c("integer", "logical", "numeric", "factor",
 #' @rdname stype_classes
 #' @export
 setClassUnion("simpleStype",     c("v_count", "v_binary", "v_continuous", 
-                                   "v_continuous_nonneg", "v_event_time",
-                                   "v_nominal", "v_ordered", "v_character"))
+                                   "v_continuous_nonneg", 
+                                   "v_proportion", "v_nominal", "v_ordered"))
+
 
 #' @rdname stype_classes
 #' @export
@@ -62,8 +69,8 @@ setClassUnion("complexStype",    c("v_rcensored"))
 #' @rdname stype_classes
 #' @export
 setClassUnion("v_stype",         c("v_count", "v_binary", "v_continuous",
-                                   "v_continuous_nonneg", "v_event_time",
-                                   "v_nominal", "v_ordered", "v_character",
+                                   "v_continuous_nonneg", 
+                                   "v_nominal", "v_ordered", "v_proportion",
                                    "v_rcensored"))
 
 #' @rdname stype_classes
@@ -73,8 +80,8 @@ setClassUnion("tbl_stype",       c("tbl_analysis"))
 #' @rdname stype_classes
 #' @export
 setClassUnion("stype",           c("v_count", "v_binary", "v_continuous",
-                                   "v_continuous_nonneg", "v_event_time",
-                                   "v_nominal", "v_ordered", "v_character",
+                                   "v_continuous_nonneg", 
+                                   "v_nominal", "v_ordered",  "v_proportion",
                                    "v_rcensored", "tbl_analysis"))
 
 #' Descriptors
@@ -99,7 +106,15 @@ standardDescriptors <- list(
   n_nonmissing = function(x, ...) sum(!is.na(x)),
   n_missing    = function(x, ...) sum(is.na(x)),
   proportion_missing = function(x, ...) mean(is.na(x)),
-  is_constant  = function(x, ...) all(x[1] == x)
+  is_constant  = function(x, ...) { 
+    if (anyNA(x)) { 
+      # If any values are NA, return TRUE if all are NA
+      sum(is.na(x)) == length(x)
+    } else {
+      # Otherwise, check that value is constant
+      all(x[1] == x)
+    }
+  }
 )
 
 #' @rdname descriptors
@@ -121,6 +136,7 @@ wlogicalDescriptors <- list(
 categoricalDescriptors <- list(
   table  = function(x, ...) table(x, useNA = "always"),
   ptable = function(x, ...) prop.table(table(x, useNA = "always")),
+  ptableNoNA = function(x, ...) prop.table(table(x, useNA = "no")),
   levels = function(x, ...) levels(x)
 )
 
@@ -206,6 +222,7 @@ get_censorinfo <- function(x, ...){
                    .after = function(z) { list(censor_reasons = z[[1]]) } )(x)
   )
 }
+
 #' Exposure-Adjusted Incidence Rate
 #' 
 #' Computes the exposure-adjusted incidence rate and variance using He et al. 
@@ -368,13 +385,29 @@ purrr::walk(
   }
 )
 
-#' Describe a variable
-#' 
+#' Derive Variable Statistics
+#'
+#' Return data derived from the data. For each type of stype vector, a
+#' reasonable set of default summary statistics will be provided based on the
+#' data type that is provided as an input. For example, if the data is
+#' continuous then statistics like the mean, variance, and various quantiles
+#' will be provided, whereas for a nominal variable the counts of the various
+#' levels are provided (among other information). Custom summary statistics can
+#' be appended to the base statistics by providing a list of additional
+#' functions as an input.
+#'
 #' @param x a vector a values
 #' @param g a vector a groupings (optional)
 #' @param w a vector of weights (optional)
-#' @param .descriptors an (optional) list of lambda functions
-#' @param ... additional arguments
+#' @param .descriptors an optional list of functions. Each function should have
+#'   a signature of the form `function(v, ...)`, and where `v` is expected to be
+#'   of the result of calling `as_canonical(x)` on the `x` input to `describe`,
+#'   and `...` is expected to be the unchanged value of the input to `...` in
+#'   `describe`. If the input list is named then elements in the return object
+#'   corresponding to the result of evaluating the supplied functions will have
+#'   the corresponding names.
+#' @param ... additional arguments passed on to the functions in the list
+#'   provided by `.descriptors`.
 #' @importFrom purrr reduce map
 #' @importFrom stats setNames
 #' @importFrom methods is
@@ -473,22 +506,38 @@ setMethod(
   }
 )
 
-#' (Re)\code{describe} a \code{stype} by weighting the vector.
-#' @rdname describe
+#' Change Weights for stype Vector Elements
+#'
+#' Return a stype vector where the elements are weighted according to the
+#' specified inputs. By default, all of the weights for a stype vector are
+#' effectively constant.
+#' @inheritParams describe
 #' @export
 setGeneric(
   name = "weight", 
-  def  = function(x, w, .descriptors) standardGeneric("weight")
+  def  = function(x, w, .descriptors = list()) standardGeneric("weight")
 )
 
-#' @rdname describe
+#' @rdname weight
+#' @export
+setMethod(
+  f          = "weight",
+  signature  = c("stype", "stypeWeightVar", "maybeDescriptor"),
+  definition = function(x, w, .descriptors){
+    w <- as_canonical(w)
+    weight(x = x, w = w, .descriptors = .descriptors)
+  }
+)
+
+#' @rdname weight
 #' @export
 setMethod(
   f          = "weight",
   signature  = c("stype", "weightVar", "maybeDescriptor"),
   definition = function(x, w, .descriptors){
     cl <- swap_function(match.call(), describe)
-    set(x, data_summary_l, eval(cl, sys.parent()))
+    attr(x, "data_summary") <- eval(cl, sys.parent())
+    x
   }
 )
 
@@ -526,7 +575,14 @@ setGeneric(
 setMethod(
   f          = "get_data_summary",
   signature  = c("stype", NULL),
-  definition = function(x, element){ attr(x, "data_summary") }
+  definition = function(x, element){ 
+    # browser()
+    if (is_not_computed(attr(x, "data_summary"))) {
+      describe(x, .descriptors = attr(x, "extra_descriptors"))
+    } else {
+      attr(x, "data_summary")
+    }
+  }
 )
 
 #' @rdname get_data_summary
@@ -534,7 +590,7 @@ setMethod(
 setMethod(
   f          = "get_data_summary",
   signature  = c("stype", "character"),
-  definition = function(x, element){ attr(x, "data_summary")[[element]] }
+  definition = function(x, element){ get_data_summary(x)[[element]] }
 )
 
 #' Get data summaries from a list of stypes

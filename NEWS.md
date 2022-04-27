@@ -1,3 +1,24 @@
+# `stype` 0.5.0
+
+* Modifies the behavior of how the levels and labels for outcome and censors are created. The levels/labels follow the following rules:
+    1. If a named list (all elements must be uniquely named) is passed to `outcomes` (or `censors`) and all the vectors have short labels, then the list names are the levels and the short labels become the labels.
+    2. If a named list is passed to `outcomes` (or `censors`) and *any* of the vectors are missing short labels, then the list names become the levels and the labels.
+    3. If a unnamed list is passed and all the vectors have internal names and all the vectors have short labels, then the internal names are the levels and the short labels become the labels. 
+    4. If a unnamed list is passed and all the vectors have internal names *any* of the vectors are missing short labels, then the internal names become the levels and  labels. 
+    5. Otherwise, `as.character(1:length(x))` become the levels and labels, where `length(x)` is the number of list elements.
+* Makes using `v_continuous` and `v_continuous_nonneg` as the `w` argument to `weight` possible.
+* Adds several assertions to `v_rcensored` to catch invalid inputs and provide more helpful error messages.
+* Adds the package version of `stype` under which a `stype` vector was created as an attribute. This is included for future compatibility checking when comparing vectors in the case they were created under different versions of `stype` that don't play nice together.
+* Adds an internal `new_stype_vctr` function to streamline the creation of new stype vectors, ensuring they all share a common set of attributes.
+* Removes `v_character` type.
+* Adds a `v_proportion` types with values in `[0. 1]`, which inherits from `v_continuous_nonneg`.
+* Removes `v_event_time` type.
+* The `v_rcensored` type now takes `v_continuous_nonneg` vectors instead of `v_event_time`. More importantly, `NA` values are no longer accepted as inputs to `v_rcensored`. To indicate that an observation *has not yet been observed* use `Inf`.
+* Adds the `auto_compute_summary` argument to stype `v_*` constructors. When `TRUE`, data summaries are automatically computed when a vector is created or restored (e.g. on subset or `c()`). When `FALSE`, data summaries are only computed when the user asks for a data summary. The default is `TRUE`, though this may change in the future.
+* Adds and updates Summary/Math/Arithmetic functions for `v_continous`, `v_continuous_nonneg`, `v_binary`, `v_proportion`, and `v_count`. See the `stype math` vignette for a complete list of all available functions and the respective domains/codomains of the functions.
+* Adds the `ptableNoNA` descriptor to `categoricalDescriptors`
+which summarizes a table excluding `NA` values.
+
 # `stype` 0.4.3
 
 * Updates the function signature for `as_Surv` to take a new formal argument `multiple_endpoint` which defaults to `FALSE`. Previous versions always returned data in a _multiple endpoints_ format (see the object documentation for `survival::Surv` for a definition) when `censor_as_event` was `FALSE`, so this is a breaking change.

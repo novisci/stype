@@ -1,19 +1,39 @@
 #' Continuous vectors
 #' 
-#' @description  {
-#' Support: \eqn{\mathbf{R}}{the Reals}* (plus \code{\link{NA_real_}})
-#' 
-#' Prototype: \code{\link{double}}
-#' 
-#' * - i.e. floating-point number
-#' }
-#' 
+#' Constructors and methods for a continuous data type. \code{v_continuous} and
+#' \code{cont} are synonyms that each create a new \code{v_continuous} object
+#' subclassed from \code{vctrs_vctr}. \cr\cr
+#' Support: \eqn{\mathbf{R}}{the Reals}* (plus \code{\link{NA_real_}}) \cr
+#' Prototype: \code{\link{double}} \cr
+#' \emph{}* - i.e. floating-point number
+#'
 #' @name v_continuous
 #' @importFrom methods setOldClass
 #' @importFrom vctrs vec_cast vec_ptype2 vec_data new_vctr vec_assert vec_arith_base
 #' vec_ptype2.double
-#' @inheritParams v_count
+#' @inheritParams v_binary
 #' @family stype types
+#' @examples
+#' # Example data
+#' src_dbl <- c(-0.5, 1, 2.5, 4, 5.5, NA_real_)
+#'
+#' # Constructor for the `v_continuous` class. One can also use `cont` which is a
+#' # synonym for the `v_continuous` function.
+#' v <- v_continuous(
+#'   x = src_dbl,
+#'   internal_name = "v_example",
+#'   context = context(
+#'     short_label = "important_var",
+#'     long_label  = "Very important variable"
+#'   ),
+#'   extra_descriptors = list()
+#' )
+#'
+#' # Helper functions and methods
+#' is_continuous(v)
+#' as_continuous(src_dbl)
+#' as.character(v)
+#' as_canonical(v)
 NULL
 
 #' The internal builder of v_continuous
@@ -24,18 +44,20 @@ new_continuous <- function(x = double(),
                            .internal_name = character(), 
                            .data_summary = data_summary(), 
                            .context = context(),
+                           .auto_compute_summary = auto_compute_default,
                            .extra_descriptors = list()){
   
   # x <- vctrs::vec_cast(x, double())
   vctrs::vec_assert(vctrs::vec_data(x), ptype = double())
   
-  vctrs::new_vctr(
-    x,
-    internal_name = .internal_name,
-    data_summary  = .data_summary, 
-    context       = .context, 
-    extra_descriptors = .extra_descriptors,
-    class = "v_continuous")
+  new_stype_vctr(
+    x, 
+    .internal_name = .internal_name,
+    .context       = .context, 
+    .data_summary  = .data_summary,
+    .auto_compute_summary = .auto_compute_summary,
+    .extra_descriptors = .extra_descriptors,
+    .class = c("v_continuous"))
 }
 
 #' @importFrom methods setOldClass
@@ -80,14 +102,7 @@ vec_ptype2.v_continuous <- function(x, y, ...) UseMethod("vec_ptype2.v_continuou
 
 #' @method vec_ptype2.v_continuous v_continuous
 #' @export
-vec_ptype2.v_continuous.v_continuous <- function(x, y, ...) {
-  compare_contexts(x, y)
-  check_internal_names(x, y)
-  
-  v_continuous(
-    internal_name = get_internal_name(x),
-    context = get_context(x))
-}
+vec_ptype2.v_continuous.v_continuous <- make_stype_ptype2(v_continuous)
 
 #' @method vec_ptype2.double v_continuous
 #' @export
@@ -109,8 +124,24 @@ vec_cast.v_continuous.default  <- function(x, to, ...) vctrs::vec_default_cast(x
 
 #' @method vec_cast.v_continuous double
 #' @export
-vec_cast.v_continuous.double <- function(x, to, ...) x
+vec_cast.v_continuous.double <- function(x, to, ...) {
+  vctrs::vec_default_cast(x, to)
+}
 
+#' @importFrom vctrs vec_cast.integer
+#' @method vec_cast.double v_continuous
+#' @export
+vec_cast.integer.v_continuous <- function(x, to, ...) vctrs::vec_data(x)
+
+#' @method vec_cast.v_continuous double
+#' @export
+vec_cast.v_continuous.integer <- function(x, to, ...) {
+  vctrs::vec_default_cast(x, to)
+}
+
+#' @importFrom vctrs vec_cast.double
+#' @method vec_cast.double v_continuous
+#' @export
 vec_cast.double.v_continuous <- function(x, to, ...) vctrs::vec_data(x)
 
 #' Casting function for continuous objects
@@ -145,7 +176,6 @@ vec_restore.v_continuous <- make_stype_restorator(new_continuous)
 #' @method vec_arith v_continuous
 #' @export
 #' @export vec_arith.v_continuous
-
 vec_arith.v_continuous <- function(op, x, y) {
   UseMethod("vec_arith.v_continuous", y)
 }
@@ -165,22 +195,22 @@ vec_arith.v_continuous.v_continuous <- function(op, x, y) {
     "-" = v_continuous(vctrs::vec_arith_base(op, x, y)),
     "/" = v_continuous(vctrs::vec_arith_base(op, x, y)),
     "*" = v_continuous(vctrs::vec_arith_base(op, x, y)),
+    "^" = v_continuous(vctrs::vec_arith_base(op, x, y)),
     vctrs::stop_incompatible_op(op, x, y)
   )
 }
 
+#' @method vec_arith.v_continuous v_continuous_nonneg
+#' @export
+vec_arith.v_continuous.v_continuous_nonneg <- vec_arith.v_continuous.v_continuous
+
 #' @method vec_arith.v_continuous double
 #' @export
-vec_arith.v_continuous.double <- function(op, x, y) {
-  switch(
-    op,
-    "+" = v_continuous(vctrs::vec_arith_base(op, x, y)),
-    "-" = v_continuous(vctrs::vec_arith_base(op, x, y)),
-    "/" = v_continuous(vctrs::vec_arith_base(op, x, y)),
-    "*" = v_continuous(vctrs::vec_arith_base(op, x, y)),
-    vctrs::stop_incompatible_op(op, x, y)
-  )
-}
+vec_arith.v_continuous.double <- vec_arith.v_continuous.v_continuous
+
+#' @method vec_arith.v_continuous integer
+#' @export
+vec_arith.v_continuous.integer <- vec_arith.v_continuous.v_continuous
 
 #' @rdname vec_arith
 #' @method vec_arith double
@@ -192,28 +222,46 @@ vec_arith.double <- function(op, x, y) {
 
 #' @method vec_arith.double v_continuous
 #' @export
-vec_arith.double.v_continuous <- function(op, x, y) {
-  switch(
-    op,
-    "+" = new_continuous(vctrs::vec_arith_base(op, x, y)),
-    "-" = new_continuous(vctrs::vec_arith_base(op, x, y)),
-    "/" = new_continuous(vctrs::vec_arith_base(op, x, y)),
-    "*" = new_continuous(vctrs::vec_arith_base(op, x, y)),
-    vctrs::stop_incompatible_op(op, x, y)
-  )
+vec_arith.double.v_continuous <- vec_arith.v_continuous.v_continuous
+
+#' @method vec_arith.integer v_continuous
+#' @export
+vec_arith.integer.v_continuous <- vec_arith.double.v_continuous
+
+#' @export
+Summary.v_continuous <- function(..., na.rm = FALSE) {
+  check_summary_args(...)
+  vctrs::vec_math(.Generic, vctrs::vec_c(...), na.rm = na.rm)
 }
+
 
 #' @rdname vec_math
 #' @importFrom vctrs vec_math vec_math_base
 #' @method vec_math v_continuous
 #' @export
-#' @export vec_math.v_continuous
-vec_math.v_continuous <- function(fun, x, ...) {
-  # TODO implement methods...
-  switch(fun,
-         sum  = get_data_summary(x, "sum"),
-         mean = get_data_summary(x, "mean"),
-         vctrs::vec_math_base(fun, x, ...)
+vec_math.v_continuous <- function(.fn, .x, ...) {
+  switch(.fn,
+         
+         ## Math
+         # Domain: v_continuous
+         cumsum = v_continuous(vec_math_base(.fn, .x, ...)),
+         cumprod = v_continuous(vec_math_base(.fn, .x, ...)),
+         cummin = v_continuous(vec_math_base(.fn, .x, ...)),
+         cummax = v_continuous(vec_math_base(.fn, .x, ...)),
+         
+         
+         # Codomain: v_continuous_nonneg
+         abs = v_continuous_nonneg(vec_math_base(.fn, .x, ...)),
+         exp = v_continuous_nonneg(vec_math_base(.fn, .x, ...)),
+
+         
+         ## Summary
+         sum = {
+           check_summary_args(...)
+           maybe_get_data_summary_math("sum", .fn, .x, ...)
+        },
+         mean = maybe_get_data_summary_math("mean", .fn, .x, ...),
+         stop_invalid_math(.x, .fn)
   )
 }
 
@@ -221,8 +269,18 @@ vec_math.v_continuous <- function(fun, x, ...) {
 #' @method median v_continuous
 #' @export
 median.v_continuous <- function(x, na.rm = FALSE, ...) {
-  stats::median(vctrs::vec_data(x), na.rm, ...)
-}
+   `if`(is_auto_computed(x) && na.rm,
+        get_data_summary(x, "median"),
+        stats::median(vctrs::vec_data(x), na.rm, ...))
+ }
+
+#' @method min v_continuous
+#' @export
+min.v_continuous <- make_maybe_get_summary("min", min)
+
+#' @method max v_continuous
+#' @export
+max.v_continuous <- make_maybe_get_summary("max", max)
 
 #' @importFrom stats quantile
 #' @method quantile v_continuous
@@ -245,7 +303,14 @@ format.v_continuous <- function(x, ...) {
 #' @method obj_print_footer v_continuous
 #' @export
 obj_print_footer.v_continuous <- function(x, ...) {
-  print_footer(x, c(mean = "Mean", sd = "SD"))
+  print_footer(
+    x, 
+    stats = list(mean = list(label = "Mean", printer = print_numeric_summary),
+                 variance = list(label = "SD", printer = function(x, label) {
+                   print_numeric_summary(sqrt(x), label)
+                 }))
+    
+  )
 }
 
 #' @importFrom vctrs vec_ptype_full

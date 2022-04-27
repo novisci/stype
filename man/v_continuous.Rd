@@ -13,10 +13,17 @@ v_continuous(
   x = ptypeFUN(),
   internal_name = "",
   context,
+  auto_compute_summary = auto_compute_default,
   extra_descriptors = list()
 )
 
-cont(x = ptypeFUN(), internal_name = "", context, extra_descriptors = list())
+cont(
+  x = ptypeFUN(),
+  internal_name = "",
+  context,
+  auto_compute_summary = auto_compute_default,
+  extra_descriptors = list()
+)
 
 is_continuous(x)
 
@@ -33,34 +40,56 @@ as_continuous(x)
 
 \item{context}{a \code{\link{context}}}
 
+\item{auto_compute_summary}{an indicator of whether the \code{data_summary} is
+automatically computed whenever a vector is initialized, subset, or
+concatenated. Defaults to \code{TRUE}. If this option is set to \code{FALSE},
+then \code{\link{get_data_summary}} is the only way to compute the summary.
+The \code{\link{data_summary_l}} lens will return an empty \code{data_summary}.}
+
 \item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
 appended to the default \code{\link{descriptors}}.}
 
 \item{...}{passed to other methods such as \code{as.character}}
 }
 \description{
-{
-Support: \eqn{\mathbf{R}}{the Reals}* (plus \code{\link{NA_real_}})
+Constructors and methods for a continuous data type. \code{v_continuous} and
+\code{cont} are synonyms that each create a new \code{v_continuous} object
+subclassed from \code{vctrs_vctr}. \cr\cr
+Support: \eqn{\mathbf{R}}{the Reals}* (plus \code{\link{NA_real_}}) \cr
+Prototype: \code{\link{double}} \cr
+\emph{}* - i.e. floating-point number
+}
+\examples{
+# Example data
+src_dbl <- c(-0.5, 1, 2.5, 4, 5.5, NA_real_)
 
-Prototype: \code{\link{double}}
-\itemize{
-\item 
-\itemize{
-\item i.e. floating-point number
-}
-}
-}
+# Constructor for the `v_continuous` class. One can also use `cont` which is a
+# synonym for the `v_continuous` function.
+v <- v_continuous(
+  x = src_dbl,
+  internal_name = "v_example",
+  context = context(
+    short_label = "important_var",
+    long_label  = "Very important variable"
+  ),
+  extra_descriptors = list()
+)
+
+# Helper functions and methods
+is_continuous(v)
+as_continuous(src_dbl)
+as.character(v)
+as_canonical(v)
 }
 \seealso{
 Other stype types: 
 \code{\link{tbl_analysis}},
 \code{\link{v_binary}},
-\code{\link{v_character}},
 \code{\link{v_continuous_nonneg}},
 \code{\link{v_count}},
-\code{\link{v_event_time}},
 \code{\link{v_nominal}},
 \code{\link{v_ordered}},
+\code{\link{v_proportion}},
 \code{\link{v_rcensored}}
 }
 \concept{stype types}

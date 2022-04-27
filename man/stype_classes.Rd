@@ -4,6 +4,7 @@
 \name{stype_classes}
 \alias{stype_classes}
 \alias{groupVar-class}
+\alias{stypeWeightVar-class}
 \alias{weightVar-class}
 \alias{categorical-class}
 \alias{Missing-class}
@@ -20,3 +21,4 @@
 \description{
 S4 classes uses in defining methods.
 }
+\keyword{internal}

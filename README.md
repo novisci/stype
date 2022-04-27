@@ -8,7 +8,7 @@
 
 ## Statistical types
 
-The `stype` package provides classes that enforce (run-time) safety for types common to many statistical analyses such as `v_binary`, `v_continuous`, `v_count`, `v_nominal`, and `v_event_time`. For example, binary data can be represented in `R` in at least three ways: a `logical`, a `factor` with two levels, or a `numeric` using just `0` and `1`. Which representation should one use? The latter two do not guarantee that certain binary operations are closed in a mathematical sense; e.g., `c(0, 1, 0, 1) + 1:4` returns `c(1, 3, 3, 5)`. Such behavior is not possible with `v_binary`. Similarly, count data can be represented by an `integer` in `R` but without the restriction of being non-negative. The `v_count` constructor enforces positivity.
+The `stype` package provides classes that enforce (run-time) safety for types common to many statistical analyses such as `v_binary`, `v_continuous`, `v_count`, and `v_nominal`. For example, binary data can be represented in `R` in at least three ways: a `logical`, a `factor` with two levels, or a `numeric` using just `0` and `1`. Which representation should one use? The latter two do not guarantee that certain binary operations are closed in a mathematical sense; e.g., `c(0, 1, 0, 1) + 1:4` returns `c(1, 3, 3, 5)`. Such behavior is not possible with `v_binary`. Similarly, count data can be represented by an `integer` in `R` but without the restriction of being non-negative. The `v_count` constructor enforces positivity.
 
 ## Contextual information
 
@@ -23,7 +23,7 @@ A `stype` vector also contains a `data_summary` object, which is  *automatically
 * `n_nonmissing`: the number of nonmissing
 * `n_missing`: the number of missing
 * `proportion_missing`: the proportion missing
-* `is_constant`L an indicator of whether all the values are the same
+* `is_constant`: an indicator of whether all the values are the same
 
 Each type has additional summary statistics relevant to its data. For example, `v_continuous` contains the mean, standard deviation, min, max, and various quantiles. The `data_summary` is updated whenever a variable is subset or two vectors of the type are combined.
 

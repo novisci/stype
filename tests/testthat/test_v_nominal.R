@@ -24,4 +24,31 @@ test_that("v_nomimal class descriptions update appropriately", {
   expect_equivalent(as.numeric(tab3), c(3, 3, 6, 3, 3, 3, 1))
   
 })
+
+test_that("casting & coercion v_nominal", {
+  
+  f1 <- factor(LETTERS[1:3])
+  n1 <- v_nominal(f1)
+  
+  expect_equal(as_nominal(f1), n1)
+  expect_equal(format(f1), format(n1))
+  
+  expect_equal(vec_ptype2(character(), v_nominal()),
+               vctrs::vec_ptype(c(character(), v_nominal())))
+  
+  expect_equal(vec_ptype2(v_nominal(), character()),
+               vctrs::vec_ptype(c(v_nominal(), character())))
+  
+  expect_equal(class(as.list(n1)), "list")
+})
+
+test_that("misc v_nominal", {
+  
+  f1 <- factor(LETTERS[1:3])
+  n1 <- v_nominal(f1)
+  
+  expect_output(print(n1))
+  
+  expect_equal(type_sum(n1), "nom")
+})
   

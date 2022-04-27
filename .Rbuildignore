@@ -3,10 +3,11 @@
 ^scratch\.R
 ^R\/vctr_generator.R
 ^\.gitlab-ci\.yml$
+^\.gitlab$
 ^doc$
 ^Meta$
 ^_pkgdown\.yml$
 ^docs$
-^pkgdown$
+^pkgdown\.yml$
 ^man-roxygen$
 ^LICENSE\.md$

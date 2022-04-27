@@ -6,9 +6,7 @@
 \alias{describe,simpleStype,maybeGroup,maybeWeight,maybeDescriptor-method}
 \alias{describe,tbl_df,missing,missing,maybeDescriptor-method}
 \alias{describe,v_rcensored,maybeGroup,maybeWeight,maybeDescriptor-method}
-\alias{weight}
-\alias{weight,stype,weightVar,maybeDescriptor-method}
-\title{Describe a variable}
+\title{Derive Variable Statistics}
 \usage{
 describe(x, g = NULL, w = NULL, .descriptors, ...)
 
@@ -19,10 +17,6 @@ describe(x, g = NULL, w = NULL, .descriptors, ...)
 \S4method{describe}{tbl_df,missing,missing,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
 
 \S4method{describe}{v_rcensored,maybeGroup,maybeWeight,maybeDescriptor}(x, g = NULL, w = NULL, .descriptors, ...)
-
-weight(x, w, .descriptors)
-
-\S4method{weight}{stype,weightVar,maybeDescriptor}(x, w, .descriptors)
 }
 \arguments{
 \item{x}{a vector a values}
@@ -31,12 +25,24 @@ weight(x, w, .descriptors)
 
 \item{w}{a vector of weights (optional)}
 
-\item{.descriptors}{an (optional) list of lambda functions}
+\item{.descriptors}{an optional list of functions. Each function should have
+a signature of the form \verb{function(v, ...)}, and where \code{v} is expected to be
+of the result of calling \code{as_canonical(x)} on the \code{x} input to \code{describe},
+and \code{...} is expected to be the unchanged value of the input to \code{...} in
+\code{describe}. If the input list is named then elements in the return object
+corresponding to the result of evaluating the supplied functions will have
+the corresponding names.}
 
-\item{...}{additional arguments}
+\item{...}{additional arguments passed on to the functions in the list
+provided by \code{.descriptors}.}
 }
 \description{
-Describe a variable
-
-(Re)\code{describe} a \code{stype} by weighting the vector.
+Return data derived from the data. For each type of stype vector, a
+reasonable set of default summary statistics will be provided based on the
+data type that is provided as an input. For example, if the data is
+continuous then statistics like the mean, variance, and various quantiles
+will be provided, whereas for a nominal variable the counts of the various
+levels are provided (among other information). Custom summary statistics can
+be appended to the base statistics by providing a list of additional
+functions as an input.
 }

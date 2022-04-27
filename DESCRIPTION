@@ -1,20 +1,22 @@
 Package: stype
 Type: Package
-Title: Statistical types
-Version: 0.4.3
-Date: 2020-09-16
-Author: Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
-                            email = "bsaul@novisci.com"),
-                     person("David", "Pritchard", role = c("aut"),
-                            email = "dpritchard@novisci.com"),
-                     person("Catie", "Wiener", role = c("ctb"),
-                            email = "cwiener@novisci.com"),
-                     person("Ying", "Yu", role = c("ctb"),
-                            email = "yingyu@novisci.com"),
-                     person("Matt", "Phelan", role = c("ctb"),
-                            email = "mphelan@novisci.com"),
-                     person("Bassim", "Eledath", role = c("ctb"),
-                            email = "beledath@novisci.com"))
+Title: Statistical Types
+Version: 0.5.0
+Date: 2021-24-09
+Authors@R: c(person("Bradley", "Saul", role = c("aut", "cre"), 
+                    email = "bsaul@novisci.com"),
+             person("David", "Pritchard", role = c("aut"),
+                    email = "dpritchard@novisci.com"),
+             person("Catie", "Wiener", role = c("ctb"),
+                    email = "cwiener@novisci.com"),
+             person("Ying", "Yu", role = c("ctb"),
+                    email = "yingyu@novisci.com"),
+             person("Matt", "Phelan", role = c("ctb"),
+                    email = "mphelan@novisci.com"),
+             person("Bassim", "Eledath", role = c("ctb"),
+                    email = "beledath@novisci.com"),
+             person("Brendan", "Brown", role = c("ctb"),
+                    email = "bbrown@targetrwe.com"))
 Maintainer: Bradley Saul <bsaul@novisci.com>
 Description: Provides S3 classes aligned with statistical language such as binary,
     continuous, count, non-negative continuous, time to event, right-censored, etc. 
@@ -22,17 +24,19 @@ Description: Provides S3 classes aligned with statistical language such as binar
     across applications. Automatically generates summary statistics to the variable
     metadata.
 Imports:
-   methods (>= 3.5),
-   vctrs (>= 0.3.0),
-   tibble (>= 3.0),
-   assertthat (>= 0.2.0),
-   purrr (>= 0.2.5),
-   pillar (>= 1.3.1),
-   crayon (>= 1.3.4),
-   lenses (>= 0.0.3)
+    methods (>= 3.5),
+    vctrs (>= 0.3.0),
+    rlang (>= 0.4.7),
+    tibble (>= 3.0),
+    assertthat (>= 0.2.0),
+    purrr (>= 0.2.5),
+    pillar (>= 1.3.1),
+    crayon (>= 1.3.4),
+    lenses (>= 0.0.3)
 Suggests:
    knitr,
    testthat,
+   rmarkdown,
    dplyr,
    survival,
    MASS,
@@ -40,23 +44,23 @@ Suggests:
    riskimator,
    rmarkdown
 License: MIT + file LICENSE
-URL: https://gitlab.novisci.com/nsStat/stype
-BugReports: https://gitlab.novisci.com/nsStat/stype/issues
+URL: https://github.com/novisci/stype
+BugReports: https://github.com/novisci/stype/issues
 Encoding: UTF-8
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Repository: cran.novisci.com
 Collate: 
+    'constants.R'
     'utilities.R'
     'v_count.R'
     'v_continuous.R'
     'v_continuous_nonneg.R'
-    'v_event_time.R'
     'v_binary.R'
     'v_nominal.R'
     'v_ordered.R'
-    'v_character.R'
+    'v_proportion.R'
     'v_rcensored.R'
     'tbl_analysis.R'
     'purpose.R'

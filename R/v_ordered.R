@@ -1,14 +1,37 @@
 #' Ordered categorical vectors
 #' 
-#' @description  {
-#' Support: see \code{\link{factor}}
-#' 
+#' Constructors and methods for an ordered categorical data type.
+#' \code{v_ordered} and \code{ord} are synonyms that each create a new
+#' \code{v_ordered} object subclassed from \code{vctrs_vctr}, \code{ordered},
+#' and \code{factor}. \cr\cr
+#' Support: see \code{\link{factor}} \cr
 #' Prototype: \code{\link{integer}}
-#' }
+#'
 #' @name v_ordered
-#' @inheritParams v_count
+#' @inheritParams v_binary
 #' @importFrom vctrs vec_ptype2.character
 #' @family stype types
+#' @examples
+#' # Example data
+#' src_fct <- factor(c("a", "bb", "a", "ccc", NA_character_), ordered = TRUE)
+#'
+#' # Constructor for the `v_ordered` class. One can also use `ord` which is a
+#' # synonym for the `v_ordered` function.
+#' v <- v_ordered(
+#'   x = src_fct,
+#'   internal_name = "v_example",
+#'   context = context(
+#'     short_label = "important_var",
+#'     long_label  = "Very important variable"
+#'   ),
+#'   extra_descriptors = list()
+#' )
+#'
+#' # Helper functions and methods
+#' is_ordered(v)
+#' as_ordered(src_fct)
+#' as.character(v)
+#' as_canonical(v)
 NULL
 
 #' The internal builder of v_ordered
@@ -19,32 +42,54 @@ new_ordered <- function(x = integer(), .levels = character(),
                         .internal_name = character(), 
                         .data_summary = data_summary(), 
                         .context = context(),
+                        .auto_compute_summary = auto_compute_default,
                         .extra_descriptors = list()) {
   stopifnot(is.integer(x))
   stopifnot(is.character(.levels))
   
-  structure(
+  new_stype_vctr(
     x,
-    levels  = .levels,
-    internal_name = .internal_name,
-    data_summary  = .data_summary, 
-    context       = .context,
-    extra_descriptors = .extra_descriptors,
-    class   = c("v_ordered", "vctrs_vctr", "ordered", "factor")
-  )
+    .internal_name = .internal_name,
+    .data_summary  = .data_summary, 
+    .context       = .context,
+    .extra_descriptors = .extra_descriptors,
+    .auto_compute_summary = .auto_compute_summary,
+    .class   = c("v_ordered", "vctrs_vctr", "ordered"),
+    # As of v0.3.8  vctrs::new_ordered doesn't take ... arguments, thus using
+    # new_factor instead
+    new_fun = vctrs::new_factor, 
+    levels = .levels)
 }
+
 #' @importFrom methods setOldClass
 methods::setOldClass(c("v_ordered", "vctrs_vctr"))
 
 #' Construction for a v_ordered
 #' @rdname v_ordered
 #' @param x a \code{factor}
+#' @importFrom assertthat assert_that
 #' @export
-v_ordered <- function(x = factor(ordered = TRUE), internal_name = "", context,
+v_ordered <- function(x = factor(ordered = TRUE),
+                      internal_name = "", 
+                      context,
+                      auto_compute_summary = auto_compute_default,
                       extra_descriptors = list()){
+
+  assert_that(is.ordered(x))
   
   # x <- vctrs::vec_cast(x, factor())
-  dsum <- describe(x, .descriptors = extra_descriptors)
+  
+  assertthat::assert_that(
+    is_truth(auto_compute_summary),
+    msg = "auto_compute_summary must be TRUE or FALSE."
+  )
+
+  dsum <- 
+    `if`(
+      auto_compute_summary,
+      describe(x, .descriptors = extra_descriptors ),
+      data_summary() )
+  
   
   if(missing(context)){
     context <- methods::new("context")
@@ -56,6 +101,7 @@ v_ordered <- function(x = factor(ordered = TRUE), internal_name = "", context,
     .internal_name = check_internal_name(internal_name),
     .data_summary  = dsum,
     .context       = context,
+    .auto_compute_summary = auto_compute_summary,
     .extra_descriptors = extra_descriptors)
 }
 
@@ -93,7 +139,8 @@ vec_ptype2.v_ordered.v_ordered <- function(x, y, ...) {
   new_ordered(
     .levels =  union(levels(x),levels(y)),
     .internal_name = get_internal_name(x),
-    .context = get_context(x))
+    .context = get_context(x),
+    .auto_compute_summary = decide_auto_compute(x, y))
 }
 
 # Cast --------------------------------------------------------------------
@@ -146,6 +193,7 @@ vec_restore.v_ordered <- function(x, to, ...,n = NULL) {
   ctxt  <- get_context(to)
   iname <- attr(to, "internal_name")
   edesc <- attr(to, "extra_descriptors")
+  auto  <- attr(to, "auto_compute_summary")
   
   x   <- levels(to)[x]
   out <- factor(x, levels = levels(to), ordered = TRUE)
@@ -154,9 +202,16 @@ vec_restore.v_ordered <- function(x, to, ...,n = NULL) {
     out,
     internal_name = iname, 
     context = ctxt,
+    auto_compute_summary = auto,
     extra_descriptors = edesc)
 }
 
+#' Casting function for ordered objects
+#' @rdname v_ordered
+#' @export
+as_ordered <- function(x) {
+  v_ordered(x)
+}
 
 #' @rdname v_ordered
 #' @export
@@ -194,15 +249,19 @@ format.v_ordered <- function(x, ...) {
 #' @method obj_print_footer v_ordered
 #' @export
 obj_print_footer.v_ordered <- function(x, ...) {
-  # TODO: use print_footer
-  ptab <- get_data_summary(x, "ptable")
-  ptab <- paste0(paste0(dimnames(ptab)$x, ": ", round(ptab, 2)*100, "%"), collapse = " ")
   
-  cxtp <- print_context(x)
-  
-  cat(ptab %+% "\n" %+%
-        cxtp,
-      sep = "")
+  print_footer(
+    x, 
+    stats = list(
+      ptable = list(
+        label = "Proportions",
+        printer  = function(x, label) {
+          r <- paste0(paste0(dimnames(x)[[1]], ": ", round(x, 2)*100, "%"), 
+                      collapse = " ")
+          sprintf("%s: %s", label, r)
+        }
+      )
+    ))
 }
 
 

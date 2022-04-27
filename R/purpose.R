@@ -6,20 +6,15 @@
 #' @importFrom methods slot slotNames new
 #' @importFrom assertthat validate_that
 #' @export purpose
-
 purpose <- setClass(
   "purpose",
   slots = c(
     "study_role" = "character",
     "tags"       = "character"
-  ),
-  prototype = methods::prototype(
-    study_role = "",
-    tags       = ""
   )
 )
 
-valid_roles <- c("identifier", "index", 
+valid_roles <- c("identifier", "index",
                  "outcome", "censoring", "competing",
                  "exposure", "covariate", "weight", 
                  "intermediate", "other")
@@ -28,8 +23,9 @@ setValidity(
   "purpose",
   function(object){
     assertthat::validate_that(
-      methods::slot(object, "study_role") %in% valid_roles,
-      msg = sprintf("study_role slot must be on of %s.", paste(valid_roles, collapse = ", "))
+      all(methods::slot(object, "study_role") %in% valid_roles),
+      msg = sprintf("study roles must be one of %s.", 
+                    paste(valid_roles, collapse = ", "))
     )
   }
 )
@@ -47,16 +43,15 @@ setGeneric("is_study_role", function(object, what) standardGeneric("is_study_rol
 #' @param what what to role to look for
 #' @aliases is_study_role,purpose,purpose-method
 #' @export
-
 setMethod(
   "is_study_role",
   "purpose",
   function(object, what){
-    purp <- methods::slot(object, "study_role") 
-    if(length(purp) == 0) {
+    purps <- methods::slot(object, "study_role") 
+    if(length(purps) == 0) {
       FALSE
     } else {
-      purp == what
+      what %in% purps
     }
   }
 )
@@ -155,3 +150,104 @@ setGeneric("is_other", function(object) standardGeneric("is_other"))
 #' @aliases is_other,purpose,purpose-method
 #' @export
 setMethod("is_other", "purpose", function(object){ is_study_role(object, "other")})
+
+#' Modify a purpose 
+#' @name modify_purpose
+#' @importFrom methods validObject
+NULL
+
+#' Add a study role
+#' 
+#' @rdname modify_purpose
+#' @param object an object
+#' @param role the roles to add
+#' @export
+setGeneric("add_study_role",
+           function(object, role) standardGeneric("add_study_role"))
+
+#' @rdname modify_purpose
+#' @aliases add_study_role,purpose,purpose-method
+#' @export
+setMethod(
+  "add_study_role", 
+  c("purpose", "character"),
+  function(object, role){ 
+    out <- 
+    set(d = object,
+        l = slot_l("study_role"), 
+        x = c(view(object, slot_l("study_role")), role))
+    
+    if ( validObject(out) ) out
+  })
+
+#' Add tags
+#' 
+#' @rdname modify_purpose
+#' @param object an object
+#' @param tags the tags to add/remove
+#' @export
+setGeneric("add_tags",
+           function(object, tags) standardGeneric("add_tags"))
+
+#' @rdname modify_purpose
+#' @aliases add_tags,purpose,purpose-method
+#' @export
+setMethod(
+  "add_tags", 
+  c("purpose", "character"),
+  function(object, tags){ 
+    out <- 
+      set(d = object,
+          l = slot_l("tags"), 
+          x = c(view(object, slot_l("tags")), tags))
+    
+    if ( validObject(out) ) out
+  })
+
+#' Remove a study role
+#' 
+#' @rdname modify_purpose
+#' @param object an object
+#' @param role the roles to remove
+#' @export
+setGeneric("remove_study_role", 
+           function(object, role) standardGeneric("remove_study_role"))
+
+#' @rdname modify_purpose
+#' @aliases remove_study_role,purpose,purpose-method
+#' @export
+setMethod(
+  "remove_study_role", 
+  c("purpose", "character"),
+  function(object, role){ 
+    out <-
+    set(d = object, 
+        l = slot_l("study_role"), 
+        x = setdiff(view(object, slot_l("study_role")), role))
+    
+    if ( validObject(out) ) out
+  })
+
+#' Remove tags
+#' 
+#' @rdname modify_purpose
+#' @param object an object
+#' @param tags the tags to add/remove
+#' @export
+setGeneric("remove_tags", 
+           function(object, tags) standardGeneric("remove_tags"))
+
+#' @rdname modify_purpose
+#' @aliases remove_tags,purpose,purpose-method
+#' @export
+setMethod(
+  "remove_tags", 
+  c("purpose", "character"),
+  function(object, tags){ 
+    out <-
+      set(d = object, 
+          l = slot_l("tags"), 
+          x = setdiff(view(object, slot_l("tags")), tags))
+    
+    if ( validObject(out) ) out
+  })

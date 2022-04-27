@@ -86,16 +86,16 @@ tail(view(dt2[[3]], data_summary_l), 2)
 
 ```{r}
 ctimes <- list(
-   v_event_time(c(5, 6, 10, NA_integer_, 1, NA_integer_, 19), 
+   v_continuous_nonneg(c(5, 6, 10, Inf, 1, Inf, 19), 
                 internal_name = "cA"),
-   v_event_time(c(4, 1, 15, NA_integer_, NA_integer_, NA_integer_, 21), 
+   v_continuous_nonneg(c(4, 1, 15, Inf, Inf, Inf, 21), 
                 internal_name = "cB")
 )
 
 otimes <- list(
-  v_event_time(c(2, 6, 11, 12, NA_integer_, NA_integer_, 25),
+  v_continuous_nonneg(c(2, 6, 11, 12, Inf, Inf, 25),
                internal_name = "oA"),
-  v_event_time(c(1, NA_integer_, 10, NA_integer_, NA_integer_, NA_integer_, 23), 
+  v_continuous_nonneg(c(1, Inf, 10, Inf, Inf, Inf, 23), 
                internal_name = "oB")
 )
 

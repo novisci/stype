@@ -13,6 +13,15 @@
 #' @importFrom purrr walk
 #' @importFrom methods slot slotNames new
 #' @importFrom assertthat validate_that
+#' @examples
+#' context(
+#'   short_label   = "age_cat4",
+#'   long_label    = "Age categorical with four levels",
+#'   description   = "The age categories are ... They were chosen by ...",
+#'   derivation    = "This variable was derived from the `age` variable",
+#'   purpose       = purpose(study_role = "covariate", tags = "demographics"),
+#'   security_type = "HIPAA"
+#' )
 #' @export context
 
 context <- setClass(
@@ -32,7 +41,6 @@ context <- setClass(
     derivation  = "",
     purpose     = purpose(),
     security_type = ""
-    
   )
 )
 
@@ -336,6 +344,95 @@ setMethod(
   }
 )
 
+# Modify a context's purpose ####
+#' @rdname modify_purpose 
+#' @aliases add_study_role,context,context-method
+#' @export
+setMethod("add_study_role", c("context", "character"), function(object, role){ 
+    over(
+      d = object,
+      l = slot_l("purpose"),
+      f = function(x) add_study_role(x, role)
+    )
+})
+
+#' @rdname modify_purpose 
+#' @aliases add_study_role,stype,stype-method
+#' @export
+setMethod("add_study_role", c("stype", "character"), function(object, role){ 
+  over(
+    d = object,
+    l = context_l,
+    f = function(x) add_study_role(x, role)
+  )
+})
+
+#' @rdname modify_purpose 
+#' @aliases remove_study_role,context,context-method
+#' @export
+setMethod("remove_study_role", c("context", "character"), function(object, role){ 
+  over(
+    d = object,
+    l = slot_l("purpose"),
+    f = function(x) remove_study_role(x, role)
+  )
+})
+
+#' @rdname modify_purpose 
+#' @aliases remove_study_role,stype,stype-method
+#' @export
+setMethod("remove_study_role", c("stype", "character"), function(object, role){ 
+  over(
+    d = object,
+    l = context_l,
+    f = function(x) remove_study_role(x, role)
+  )
+})
+
+#' @rdname modify_purpose 
+#' @aliases add_tags,context,context-method
+#' @export
+setMethod("add_tags", c("context", "character"), function(object, tags){ 
+  over(
+    d = object,
+    l = slot_l("purpose"),
+    f = function(x) add_tags(x, tags)
+  )
+})
+
+#' @rdname modify_purpose 
+#' @aliases add_tags,stype,stype-method
+#' @export
+setMethod("add_tags", c("stype", "character"), function(object, tags){ 
+  over(
+    d = object,
+    l = context_l,
+    f = function(x) add_tags(x, tags)
+  )
+})
+
+#' @rdname modify_purpose 
+#' @aliases remove_tags,context,context-method
+#' @export
+setMethod("remove_tags", c("context", "character"), function(object, tags){ 
+  over(
+    d = object,
+    l = slot_l("purpose"),
+    f = function(x) remove_tags(x, tags)
+  )
+})
+
+#' @rdname modify_purpose 
+#' @aliases remove_tags,stype,stype-method
+#' @export
+setMethod("remove_tags", c("stype", "character"), function(object, tags){ 
+  over(
+    d = object,
+    l = context_l,
+    f = function(x) remove_tags(x, tags)
+  )
+})
+
 # Context predicates ####
 #' @rdname is_study_role
 #' @aliases is_study_role,context,context-method
@@ -550,8 +647,21 @@ setMethod("is_other", "ANY", function(object){ FALSE })
 
 
 setGeneric("is_empty", function(x) standardGeneric("is_empty"))
-setMethod("is_empty", "character", function(x)  length(x) == 0 | nchar(x) == 0)
-setMethod("is_empty", "purpose", function(x) is_empty(methods::slot(x, "study_role")))
+setMethod(
+  "is_empty",
+  "character", 
+  function(x) { length(x) == 0 || all(nchar(x) == 0) } )
+
+setMethod(
+  "is_empty",
+  "purpose", 
+  function(x) {
+    empties <- purrr::map_lgl(
+      .x = methods::slotNames("purpose"),
+      .f = ~ is_empty(methods::slot(x, .x)))
+    all(empties)
+  })
+
 setMethod("is_empty", "context", function(x){
   empties <- purrr::map_lgl(
     .x = methods::slotNames("context"),
@@ -570,7 +680,8 @@ compare_contexts <- function(x, y){
   assertthat::assert_that(
     all(purrr::map_lgl(
       .x = cslts[!(cslts == "purpose")],
-      .f = ~ methods::slot(get_context(x), .x) == methods::slot(get_context(y), .x)
+      .f = ~ identical(methods::slot(get_context(x), .x),
+                       methods::slot(get_context(y), .x))
     )),
     msg = "All context elements must be equal in order to combine stypes."
   )
@@ -580,7 +691,8 @@ compare_contexts <- function(x, y){
   assertthat::assert_that(
       all(purrr::map_lgl(
         .x = pslts,
-        .f = ~ methods::slot(get_purpose(x), .x) == methods::slot(get_purpose(y), .x)
+        .f = ~ identical(methods::slot(get_purpose(x), .x),
+                         methods::slot(get_purpose(y), .x))
       )),
     msg = "All purpose elements must be equal in order to combine stypes."
   )

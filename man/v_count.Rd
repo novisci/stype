@@ -14,10 +14,17 @@ v_count(
   x = ptypeFUN(),
   internal_name = "",
   context,
+  auto_compute_summary = auto_compute_default,
   extra_descriptors = list()
 )
 
-cnt(x = ptypeFUN(), internal_name = "", context, extra_descriptors = list())
+cnt(
+  x = ptypeFUN(),
+  internal_name = "",
+  context,
+  auto_compute_summary = auto_compute_default,
+  extra_descriptors = list()
+)
 
 is_count(x)
 
@@ -30,11 +37,19 @@ as_canonical(x)
 \method{as_canonical}{v_count}(x)
 }
 \arguments{
-\item{x}{a \code{integer} vector}
+\item{x}{a \code{logical} vector or any vector that can be cast to a
+\code{logical} vector via \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}
+such as \code{integer} or \code{numeric} vectors with values in \{0, 1\}.}
 
 \item{internal_name}{the internal name of the variable}
 
 \item{context}{a \code{\link{context}}}
+
+\item{auto_compute_summary}{an indicator of whether the \code{data_summary} is
+automatically computed whenever a vector is initialized, subset, or
+concatenated. Defaults to \code{TRUE}. If this option is set to \code{FALSE},
+then \code{\link{get_data_summary}} is the only way to compute the summary.
+The \code{\link{data_summary_l}} lens will return an empty \code{data_summary}.}
 
 \item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
 appended to the default \code{\link{descriptors}}.}
@@ -42,22 +57,44 @@ appended to the default \code{\link{descriptors}}.}
 \item{...}{passed to other methods such as \code{as.character}}
 }
 \description{
-{
-Support: \eqn{\mathbf{N^+}}{the non-negative Integers}* (plus \code{\link{NA_integer_}})
-
-Prototype: \code{\link{integer}}
+Constructors and methods for a count data type. \code{v_count} and
+\code{cnt} are synonyms that each create a new \code{v_count} object
+subclassed from \code{vctrs_vctr}. \cr\cr
+Support: \eqn{\mathbf{N^+}}{the non-negative Integers}* (plus \code{\link{NA_integer_}}) \cr
+Prototype: \code{\link{integer}} \cr
+\emph{}* - i.e. the natural numbers including 0
 }
+\examples{
+# Example data
+src_count <- seq_len(5L)
+
+# Constructor for the `v_count` class. One can also use `cnt` which is a
+# synonym for the `v_count` function.
+v <- v_count(
+  x = src_count,
+  internal_name = "v_example",
+  context = context(
+    short_label = "important_var",
+    long_label  = "Very important variable"
+  ),
+  extra_descriptors = list()
+)
+
+# Helper functions and methods
+is_count(v)
+as_count(src_count)
+as.character(v)
+as_canonical(v)
 }
 \seealso{
 Other stype types: 
 \code{\link{tbl_analysis}},
 \code{\link{v_binary}},
-\code{\link{v_character}},
 \code{\link{v_continuous_nonneg}},
 \code{\link{v_continuous}},
-\code{\link{v_event_time}},
 \code{\link{v_nominal}},
 \code{\link{v_ordered}},
+\code{\link{v_proportion}},
 \code{\link{v_rcensored}}
 }
 \concept{stype types}

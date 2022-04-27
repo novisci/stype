@@ -7,12 +7,29 @@ reference:
     desc: "Algebraic data types for statistical analyses"
     contents: 
       - starts_with("v_")
+      - starts_with("tbl_")
+      - is_stype
   - title: "Contexts"
     desc: "Analysis-specific contextual information for styped vectors"
     contents:
-      - matches("context")
-      - matches("purpose")
+      - matches("describe")
+      - context
+      - purpose
   - title: "Data summary"
     desc: "Automatically generated summary information about styped vectors"
     contents:
       - matches("data_summary")
+  - title: "Utilities"
+    contents: 
+      - matches("get_")
+      - matches("weight")
+      - matches("pmin_v_rcensored")
+      - matches("as_")
+  - title: internal
+    contents: 
+      - matches("stype-")
+      - matches("stype_")
+      - matches("vec_")
+      - matches("show-methods")
+      - matches("eair")
+      - matches("casting")

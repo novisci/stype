@@ -25,3 +25,29 @@ test_that("v_ordered class descriptions update appropriately", {
   
 })
   
+test_that(
+  "misc tests for v_ordered", {
+    
+    char_o <- factor(LETTERS[1:3], ordered = T)
+    ord1 <- v_ordered(char_o)
+    ord2 <- v_ordered(factor(LETTERS[4:6], ordered = T))
+    ord0 <- v_ordered()
+    ## test footer
+    expect_output(print(ord1))
+    
+    ## test type sum
+    expect_equal(type_sum(ord1), "ord")
+    
+    ## Casting
+    expect_error(as_ordered(factor(LETTERS[1:3])))
+    expect_equal(as_ordered(char_o), ord1)
+    
+    ## Coercion
+    expect_equal(c(ord1, "B"), c(levels(ord1), "B"))
+    expect_type(c("B", ord1), "character")
+    expect_s3_class(c(ord1, ord2), "v_ordered")
+    expect_equal(levels(c(ord1, ord2)), LETTERS[1:6])
+    expect_s3_class(c(ord1, ord0), "v_ordered")
+  }
+)
+    

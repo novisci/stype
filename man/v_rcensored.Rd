@@ -3,31 +3,30 @@
 \name{v_rcensored}
 \alias{v_rcensored}
 \alias{rcen}
-\alias{is_v_rcensored}
 \alias{is_rcensored}
 \alias{as.character.v_rcensored}
 \alias{as_canonical.v_rcensored}
 \title{Right censored vectors}
 \usage{
 v_rcensored(
-  outcomes = list(),
+  outcomes = v_continuous_nonneg(),
   censors,
   end_time = Inf,
   internal_name = "",
   context,
+  auto_compute_summary = auto_compute_default,
   extra_descriptors = list()
 )
 
 rcen(
-  outcomes = list(),
+  outcomes = v_continuous_nonneg(),
   censors,
   end_time = Inf,
   internal_name = "",
   context,
+  auto_compute_summary = auto_compute_default,
   extra_descriptors = list()
 )
-
-is_v_rcensored(x)
 
 is_rcensored(x)
 
@@ -36,15 +35,17 @@ is_rcensored(x)
 \method{as_canonical}{v_rcensored}(x)
 }
 \arguments{
-\item{outcomes}{A \code{list} of \code{v_event_time} vectors that define the
-outcomes. The order of this list defines the precedence of outcomes. That is,
-if the first outcome and second outcome occur at the same time, the first
-outcome is the reason for the outcome.}
+\item{outcomes}{Either a \code{v_continuous_nonneg} vector or a \code{list} of
+\code{v_continuous_nonneg} vectors that define the outcomes. The order of this list
+defines the precedence of outcomes. That is,if the first outcome and second
+outcome occur at the same time, the first outcome is the reason for the outcome.
+Use \code{Inf} to indicate that an event has not been observed.}
 
-\item{censors}{A \code{list} of \code{v_event_time} vectors that define the
+\item{censors}{A \code{list} of \code{v_continuous_nonneg} vectors that define the
 censor The order of this list defines the precedence of censoring That is,
 if the first censor and second censor occur at the same time, the first
-censor is the reason for the censoring}
+censor is the reason for the censoring. Use \code{Inf} to indicate that an event
+has not been observed.}
 
 \item{end_time}{A \code{numeric} scalar defining the end of follow-up.}
 
@@ -52,19 +53,29 @@ censor is the reason for the censoring}
 
 \item{context}{a \code{\link{context}}}
 
+\item{auto_compute_summary}{an indicator of whether the \code{data_summary} is
+automatically computed whenever a vector is initialized, subset, or
+concatenated. Defaults to \code{TRUE}. If this option is set to \code{FALSE},
+then \code{\link{get_data_summary}} is the only way to compute the summary.
+The \code{\link{data_summary_l}} lens will return an empty \code{data_summary}.}
+
 \item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
 appended to the default \code{\link{descriptors}}.}
 
-\item{x}{a \code{integer} vector}
+\item{x}{a \code{logical} vector or any vector that can be cast to a
+\code{logical} vector via \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}
+such as \code{integer} or \code{numeric} vectors with values in \{0, 1\}.}
 
 \item{...}{passed to other methods such as \code{as.character}}
 }
 \description{
-\code{v_rcensored} provides a right-censored vector. Unlike other representations,
-such the \code{survival} package's \code{Surv} object, \code{v_rcensored} can be subset with
-\code{[} and concatenated with \code{c} as you would any other vector. The type is
-implemented as a \code{\link[vctrs]{new_rcrd}} where the necessary data are
-contained in \code{\link[vctrs]{fields}}.
+Constructors and methods for a right-censored data type. \code{v_rcensored}
+and \code{rcen} are synonyms that each create a new \code{v_rcensored} object
+subclassed from \code{censored}, \code{vctrs_rcrd}, and \code{vctrs_vctr}.
+Unlike other representations, such the \code{survival} package's \code{Surv} object,
+\code{v_rcensored} can be subset with \code{[} and concatenated with \code{c} as you would
+any other vector. The type is implemented as a \code{\link[vctrs]{new_rcrd}}
+where the necessary data are contained in \code{\link[vctrs]{fields}}.
 }
 \details{
 \code{as_canonical} casts the vector to a \code{list}. See \code{\link{v_rcensored_accessors}}
@@ -72,19 +83,67 @@ for functions to access components of a \code{v_rcensored}.
 
 When printed, an open right triangle indicates an observation was censored.
 A closed right triangle indicates an observation reached \code{end_time} without
-being censored or having an outcome. No triangles indicated an observation
-that had one of the outcomes.
+being censored or having an outcome. No triangle indicates an observation
+that has at least one of the outcomes.
+
+When constructing \code{v_rcensored}, the input must not contain \code{NA} values.
+Use \code{Inf} to indicate that an event has not been observed.
+
+The levels/labels follow the following rules:
+\enumerate{
+\item If a named list (all elements must be uniquely named) is passed to
+\code{outcomes} (or \code{censors}) and all the vectors have short labels,
+then the list names are the levels and the short labels become the labels.
+\item If a named list is passed to \code{outcomes} (or \code{censors}) and \emph{any} of the
+vectors are missing short labels, then the list names become the levels
+and the labels.
+\item If a unnamed list is passed and all the vectors have internal names and
+all the vectors have short labels, then the internal names are the levels
+and the short labels become the labels.
+\item If a unnamed list is passed and all the vectors have internal names \emph{any}
+of the vectors are missing short labels, then the internal names become
+the levels and  labels.
+\item Otherwise, \code{as.character(1:length(x))} become the levels and labels,
+where \code{length(x)} is the number of list elements.
+}
+}
+\examples{
+# Example censoring times data
+ctimeA <- v_continuous_nonneg(c(5, 6, 10, 1, Inf, 19), internal_name = "cA")
+ctimeB <- v_continuous_nonneg(c(4, 1, 15, Inf, Inf, 21), internal_name = "cB")
+
+# Example outcome times data
+otimeA <- v_continuous_nonneg(c(2, 6, 11, 12, Inf, 25), internal_name = "oA")
+otimeB <- v_continuous_nonneg(c(1, Inf, 10, Inf, Inf, 23), internal_name = "oB")
+
+# Constructor for the `v_rcensored` class. One can also use `rcen` which is a
+# synonym for the `v_rcensored` function.
+v <- v_rcensored(
+  outcomes = list(ctimeA, ctimeB),
+  censors = list(otimeA, otimeB),
+  end_time = 15,
+  internal_name = "v_example",
+  context = context(
+    short_label = "important_var",
+    long_label  = "Very important variable"
+  ),
+  extra_descriptors = list()
+)
+
+# Helper functions and methods
+is_rcensored(v)
+as.character(v)
+as_canonical(v)
 }
 \seealso{
 Other stype types: 
 \code{\link{tbl_analysis}},
 \code{\link{v_binary}},
-\code{\link{v_character}},
 \code{\link{v_continuous_nonneg}},
 \code{\link{v_continuous}},
 \code{\link{v_count}},
-\code{\link{v_event_time}},
 \code{\link{v_nominal}},
-\code{\link{v_ordered}}
+\code{\link{v_ordered}},
+\code{\link{v_proportion}}
 }
 \concept{stype types}

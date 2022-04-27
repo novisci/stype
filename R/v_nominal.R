@@ -1,14 +1,37 @@
 #' Nominal categorical vectors
-#' 
-#' @description  {
-#' Support: see \code{\link{factor}}
-#' 
+#'
+#' Constructors and methods for a nomimal categorical data type.
+#' \code{v_nominal} and \code{nom} are synonyms that each create a new
+#' \code{v_nominal} object subclassed from \code{vctrs_vctr} and \code{factor}.
+#' \cr\cr
+#' Support: see \code{\link{factor}} \cr
 #' Prototype: \code{\link{integer}}
-#' }
+#'
 #' @name v_nominal
-#' @inheritParams v_count
+#' @inheritParams v_binary
 #' @importFrom vctrs vec_ptype2.character
 #' @family stype types
+#' @examples
+#' # Example data
+#' src_fct <- factor(c("a", "bb", "a", "ccc", NA_character_))
+#'
+#' # Constructor for the `v_nominal` class. One can also use `nom` which is a
+#' # synonym for the `v_nominal` function.
+#' v <- v_nominal(
+#'   x = src_fct,
+#'   internal_name = "v_example",
+#'   context = context(
+#'     short_label = "important_var",
+#'     long_label  = "Very important variable"
+#'   ),
+#'   extra_descriptors = list()
+#' )
+#'
+#' # Helper functions and methods
+#' is_nominal(v)
+#' as_nominal(src_fct)
+#' as.character(v)
+#' as_canonical(v)
 NULL
 
 #' The internal builder of v_nominal
@@ -17,23 +40,26 @@ NULL
 #' @keywords internal
 new_nominal <- function(x = integer(), 
                         .levels = character(),
-                        .internal_name = character(), 
                         .data_summary = data_summary(), 
+                        .internal_name = character(), 
                         .context = context(),
+                        .auto_compute_summary = auto_compute_default,
                         .extra_descriptors = list()){
   
   stopifnot(is.integer(x))
   stopifnot(is.character(.levels))
   
-  structure(
+  new_stype_vctr(
     x,
-    levels  = .levels,
-    internal_name = .internal_name,
-    data_summary  = .data_summary, 
-    context       = .context,
-    extra_descriptors = .extra_descriptors,
-    class   = c("v_nominal", "vctrs_vctr", "factor")
-  )
+    .internal_name = .internal_name,
+    .context       = .context,
+    .data_summary  = .data_summary,
+    .extra_descriptors = .extra_descriptors,
+    .auto_compute_summary = .auto_compute_summary,
+    .class   = c("v_nominal", "vctrs_vctr"),
+    new_fun = vctrs::new_factor,
+    levels = .levels)
+
 }
 #' @importFrom methods setOldClass
 methods::setOldClass(c("v_nominal", "vctrs_vctr"))
@@ -41,12 +67,28 @@ methods::setOldClass(c("v_nominal", "vctrs_vctr"))
 #' Construction for a v_nominal
 #' @rdname v_nominal
 #' @param x a \code{factor}
+#' @importFrom assertthat assert_that
 #' @export
-v_nominal <- function(x = factor(), internal_name = "", context,
+v_nominal <- function(x = factor(), 
+                      internal_name = "", 
+                      context,
+                      auto_compute_summary = auto_compute_default,
                       extra_descriptors = list()){
-  
+
+  assert_that(is.factor(x))
+
   # x <- vctrs::vec_cast(x, factor())
-  dsum <- describe(x, .descriptors = extra_descriptors)
+  
+  assertthat::assert_that(
+    is_truth(auto_compute_summary),
+    msg = "auto_compute_summary must be TRUE or FALSE."
+  )
+  
+  dsum <- 
+    `if`(
+      auto_compute_summary,
+      describe( x, .descriptors = extra_descriptors ),
+      data_summary() )
   
   if(missing(context)){
     context <- methods::new("context")
@@ -58,6 +100,7 @@ v_nominal <- function(x = factor(), internal_name = "", context,
     .internal_name = check_internal_name(internal_name),
     .data_summary  = dsum,
     .context       = context,
+    .auto_compute_summary = auto_compute_summary,
     .extra_descriptors = extra_descriptors)
 }
 
@@ -95,7 +138,8 @@ vec_ptype2.v_nominal.v_nominal <- function(x, y, ...) {
   new_nominal(
     .levels =  union(levels(x),levels(y)),
     .internal_name = get_internal_name(x),
-    .context = get_context(x))
+    .context = get_context(x),
+    .auto_compute_summary = decide_auto_compute(x, y))
 }
 
 # Cast --------------------------------------------------------------------
@@ -148,6 +192,7 @@ vec_restore.v_nominal <- function(x, to, ..., n = NULL) {
   ctxt  <- get_context(to)
   iname <- attr(to, "internal_name")
   edesc <- attr(to, "extra_descriptors")
+  auto  <- attr(to, "auto_compute_summary")
   
   x   <- levels(to)[x]
   out <- factor(x, levels = levels(to))
@@ -156,9 +201,16 @@ vec_restore.v_nominal <- function(x, to, ..., n = NULL) {
     out,
     internal_name = iname, 
     context = ctxt,
+    auto_compute_summary = auto,
     extra_descriptors = edesc)
 }
 
+#' Casting function for nominal objects
+#' @rdname v_nominal
+#' @export
+as_nominal <- function(x) {
+  v_nominal(x)
+}
 
 #' @rdname v_nominal
 #' @export
@@ -198,18 +250,21 @@ format.v_nominal <- function(x, ...) {
 #' @method obj_print_footer v_nominal
 #' @export
 obj_print_footer.v_nominal <- function(x, ...) {
-  # TODO: use print_footer
-  ptab <- get_data_summary(x, "ptable")
-  ptab <- paste0(paste0(dimnames(ptab)$x, ": ", round(ptab, 2)*100, "%"), collapse = " ")
   
-  cxtp <- print_context(x)
-  
-  cat(ptab %+% "\n" %+%
-      cxtp,
-      sep = "")
+  print_footer(
+    x, 
+    stats = list(
+      ptable = list(
+        label = "Proportions",
+        printer  = function(x, label) {
+          r <- paste0(paste0(dimnames(x)[[1]], ": ", round(x, 2)*100, "%"), 
+                      collapse = " ")
+          sprintf("%s: %s", label, r)
+        }
+    )
+  ))
   
 }
-
 
 #' @export
 vec_ptype_full.v_nominal <- function(x, ...) {
@@ -227,15 +282,3 @@ vec_ptype_abbr.v_nominal <- function(x, ...) {
 type_sum.v_nominal <- function(x) {
   "nom"
 }
-
-# Helpers -----------------------------------------------------------------
-
-# hash_label <- function(x, length = 5) {
-#   if (length(x) == 0) {
-#     ""
-#   } else {
-#     # Can't use hash() currently because it hashes the string pointers
-#     # for performance, so the values in the test change each time
-#     substr(digest::digest(x), 1, length)
-#   }
-# }

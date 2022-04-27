@@ -40,13 +40,12 @@ Prototype: \code{\link{tibble}}
 \seealso{
 Other stype types: 
 \code{\link{v_binary}},
-\code{\link{v_character}},
 \code{\link{v_continuous_nonneg}},
 \code{\link{v_continuous}},
 \code{\link{v_count}},
-\code{\link{v_event_time}},
 \code{\link{v_nominal}},
 \code{\link{v_ordered}},
+\code{\link{v_proportion}},
 \code{\link{v_rcensored}}
 }
 \concept{stype types}

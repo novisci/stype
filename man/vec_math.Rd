@@ -7,19 +7,39 @@
 \alias{vec_math.v_binary}
 \title{Math}
 \usage{
-\method{vec_math}{v_count}(fun, x, ...)
+\method{vec_math}{v_count}(.fn, .x, ...)
 
-\method{vec_math}{v_continuous}(fun, x, ...)
+\method{vec_math}{v_continuous}(.fn, .x, ...)
 
-\method{vec_math}{v_binary}(fun, x, ...)
+\method{vec_math}{v_binary}(.fn, .x, ...)
 }
 \arguments{
-\item{fun}{fun}
+\item{.fn}{A mathematical function from the base package, as a string.}
 
-\item{x}{x}
+\item{.x}{A vector.}
 
-\item{...}{dots}
+\item{...}{Additional arguments passed to \code{.fn}.}
 }
 \description{
-Math
+Math operations implementations. Note that these strip stype attributes, e.g.
+context.
+}
+\details{
+vctrs implements a \code{Math} method which has the effect of any math operator
+being called for a subclasses of \code{vctrs_vct} being dispatched to
+\code{vctrs::Math.vctrs_vctr}. That method then calls the generic
+\code{vctrs::vec_math} so by creating a method for this class we prevent the
+dispatch from falling through to \code{vec_math.default}. We need to create our
+own definitions for these math operators since \code{vec_math.default} has the
+effect of invoking the appropriate operator in the base package with the raw
+data as the input (for vctrs types that are supported), and then restoring
+the appropriate vctrs type but not stype type (for vctrs types that are not
+supported an error is thrown immediately).
+
+Further note that vctrs also implements \code{Summary.vctrs_vctr} which routes to
+the \code{vctrs::vec_math} generic so we can include operators in that group in
+this function as well.
+
+See the \code{groupGeneric} documentation or
+https://adv-r.hadley.nz/s3.html#group-generics for more details.
 }

@@ -1,0 +1,103 @@
+---
+title: "stype math"
+author: "B. Saul"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{stype math}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(stype)
+```
+
+```{r utils, echo = FALSE}
+make_math_table <- function(x){
+  mth <- stype:::get_math_codomains(x)
+  smy <- stype:::get_summary_codomains(x)
+  
+  tbl <- 
+  dplyr::bind_rows(
+    dplyr::tibble(
+      group = "Math",
+      op  =  names(mth),
+      domain   = vctrs::vec_ptype_full(x),
+      codomain = unlist(mth)
+    ),
+    dplyr::tibble(
+      group = "Summary",
+      op = names(smy),
+      domain   = vctrs::vec_ptype_full(x),
+      codomain = unlist(smy)
+    )
+  )
+}
+```
+
+# Arith operations
+
+```{r stype_arith, results='markup', echo = FALSE}
+stype_numeric <- c("v_count", "v_continuous", "v_continuous_nonneg", "v_binary")
+numericish <- c(stype_numeric, "double", "integer")
+domains <- 
+  purrr::cross(
+    .l = list(x = numericish, y  = numericish),
+    .filter = function(x, y) {!(x %in% stype_numeric || y %in% stype_numeric )})
+
+arith_ops <- getGroupMembers(Arith)
+
+inputs <- 
+  purrr::cross(
+    list(
+      domains, 
+      op = arith_ops
+    )
+  )
+
+inputs <- 
+  purrr::map(inputs, purrr::flatten)
+
+try_arith_op <- function(op, x, y){
+   attempt <- 
+      try(
+          vctrs::vec_arith(op, 
+                     do.call(x, args = list()),
+                     do.call(y, args = list())),
+          silent = TRUE
+      )
+    
+    if (is(attempt, "try-error")){
+      "undefined"
+    } else {
+      vctrs::vec_ptype_full(attempt)
+    }
+}
+
+arith_tbl <- 
+  purrr::map_dfr(inputs, ~ c(.x, codomain = try_arith_op(.x$op, .x$x, .x$y)))
+
+knitr::kable(arith_tbl)
+
+```
+
+# Math and Summary operations
+
+```{r stype_math, results='markup', echo = FALSE}
+knitr::kable(
+  dplyr::bind_rows(
+    make_math_table(v_count(1:2)),
+    make_math_table(v_binary(0:1)),
+    make_math_table(v_continuous(-5:5)),
+    make_math_table(v_continuous_nonneg(1:5))
+  )
+)
+```

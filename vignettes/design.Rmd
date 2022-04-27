@@ -111,11 +111,10 @@ The following table describes the proposed data types (not all of these may be a
 | `v_count `               | `integer`    | $(0, 1, 2, \dots)$ |
 | `v_continuous`           | `double`     | $\mathcal{R}$      |
 | `v_continuous_nonneg`    | `double`     | $\mathcal{R}^+$    |
-| `v_event_time`           | `double`     | $\mathcal{R}^+$    |
 | `v_nominal`              | `factor`     |                    |
 | `v_ordered`              | `ordered`    |                    |
-| `v_date`                 | `Date`       |                    |
-| `v_character`            | `character`  |                    |
+| `v_proportion`           | `double`     | $[0, 1]$           |
+
 
 # Usage in `tibble`
 
@@ -137,7 +136,7 @@ purrr::map(
 
 dt <- tibble(
   y1 = v_binary(as.logical(rbinom(n, 1, 0.25)), context = make_context("outcome")),
-  y2 = v_event_time(runif(n, 1, 100), context = make_context("outcome")),
+  y2 = v_continuous_nonneg(runif(n, 1, 100), context = make_context("outcome")),
   y3 = v_continuous(rnorm(n), context = make_context("outcome")),
   !!! covariates
 )

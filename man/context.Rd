@@ -23,3 +23,13 @@ A context contains study design specific information about a variable.
 \item{\code{security_type}}{security information}
 }}
 
+\examples{
+context(
+  short_label   = "age_cat4",
+  long_label    = "Age categorical with four levels",
+  description   = "The age categories are ... They were chosen by ...",
+  derivation    = "This variable was derived from the `age` variable",
+  purpose       = purpose(study_role = "covariate", tags = "demographics"),
+  security_type = "HIPAA"
+)
+}

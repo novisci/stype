@@ -6,7 +6,7 @@
 #' 
 #' @name tbl_analysis
 #' @importFrom methods setOldClass
-#' @inheritParams v_count
+#' @inheritParams v_binary
 #' @family stype types
 NULL
 

@@ -5,13 +5,12 @@
 \alias{stype_lenses}
 \alias{stype_df_l}
 \alias{binary_l}
-\alias{character_l}
 \alias{continuous_l}
 \alias{continuous_nonneg_l}
 \alias{count_l}
-\alias{event_time_l}
 \alias{nominal_l}
 \alias{ordered_l}
+\alias{proportion_l}
 \alias{rcensored_l}
 \alias{covariate_l}
 \alias{censoring_l}
@@ -32,10 +31,11 @@
 \alias{all_tags_l}
 \alias{only_tags_l}
 \alias{data_summary_l}
+\alias{auto_compute_summary_l}
+\alias{extra_descriptors_l}
 \alias{vec_data_l}
 \alias{context_l}
 \alias{internal_name_l}
-\alias{extra_descriptors_l}
 \alias{derivation_l}
 \alias{short_label_l}
 \alias{long_label_l}
@@ -117,13 +117,13 @@ An object of class \code{lens} of length 2.
 An object of class \code{lens} of length 2.
 
 An object of class \code{lens} of length 2.
+
+An object of class \code{lens} of length 2.
 }
 \usage{
 stype_df_l(predicate)
 
 binary_l
-
-character_l
 
 continuous_l
 
@@ -131,11 +131,11 @@ continuous_nonneg_l
 
 count_l
 
-event_time_l
-
 nominal_l
 
 ordered_l
+
+proportion_l
 
 rcensored_l
 
@@ -176,6 +176,10 @@ all_tags_l(tags)
 only_tags_l(tags)
 
 data_summary_l
+
+auto_compute_summary_l
+
+extra_descriptors_l
 
 vec_data_l
 
@@ -219,19 +223,17 @@ structure
 
 \item \code{binary_l}: view/set \code{\link{v_binary}} stype vectors
 
-\item \code{character_l}: view/set \code{\link{v_character}} stype vectors
-
 \item \code{continuous_l}: view/set \code{\link{v_continuous}} stype vectors
 
 \item \code{continuous_nonneg_l}: view/set \code{\link{v_continuous_nonneg}} stype vectors
 
 \item \code{count_l}: view/set \code{\link{v_count}} stype vectors
 
-\item \code{event_time_l}: view/set \code{\link{v_event_time}} stype vectors
-
 \item \code{nominal_l}: view/set \code{\link{v_nominal}} stype vectors
 
 \item \code{ordered_l}: view/set \code{\link{v_ordered}} stype vectors
+
+\item \code{proportion_l}: view/set \code{\link{v_proportion}} stype vectors
 
 \item \code{rcensored_l}: view/set \code{\link{v_rcensored}} stype vectors
 
@@ -278,6 +280,12 @@ is \code{TRUE}
 is \code{TRUE}
 
 \item \code{data_summary_l}: view/set the \code{data_summary} object of a stype vector
+
+\item \code{auto_compute_summary_l}: view/set the \code{auto_compute_summary} inddicator
+of a stype vector
+
+\item \code{extra_descriptors_l}: view/set the \code{extra_descriptors} inddicator
+of a stype vector
 
 \item \code{vec_data_l}: view/set the \code{\link[vctrs]{vec_data}} of a
 \code{stype}. Casts to the original type when \code{set}.

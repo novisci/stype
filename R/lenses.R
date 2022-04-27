@@ -59,10 +59,6 @@ stype_df_l <- function(predicate){
 #' @export
 binary_l <- stype_df_l(is_binary)
 
-#' @describeIn stype_lenses view/set \code{\link{v_character}} stype vectors
-#' @export
-character_l <- stype_df_l(is_character)
-
 #' @describeIn stype_lenses view/set \code{\link{v_continuous}} stype vectors
 #' @export
 continuous_l <- stype_df_l(is_continuous)
@@ -75,10 +71,6 @@ continuous_nonneg_l <- stype_df_l(is_continuous_nonneg)
 #' @export
 count_l <- stype_df_l(is_count)
 
-#' @describeIn stype_lenses view/set \code{\link{v_event_time}} stype vectors
-#' @export
-event_time_l <- stype_df_l(is_event_time)
-
 #' @describeIn stype_lenses view/set \code{\link{v_nominal}} stype vectors
 #' @export
 nominal_l <- stype_df_l(is_nominal)
@@ -86,6 +78,10 @@ nominal_l <- stype_df_l(is_nominal)
 #' @describeIn stype_lenses view/set \code{\link{v_ordered}} stype vectors
 #' @export
 ordered_l <- stype_df_l(is_ordered)
+
+#' @describeIn stype_lenses view/set \code{\link{v_proportion}} stype vectors
+#' @export
+proportion_l <- stype_df_l(is_proportion)
 
 #' @describeIn stype_lenses view/set \code{\link{v_rcensored}} stype vectors
 #' @export
@@ -189,6 +185,16 @@ only_tags_l  <- function(tags){
 #' @describeIn stype_lenses view/set the \code{data_summary} object of a stype vector
 #' @export
 data_summary_l <- lenses::attr_l("data_summary")
+
+#' @describeIn stype_lenses view/set the \code{auto_compute_summary} inddicator
+#'  of a stype vector
+#' @export
+auto_compute_summary_l <- lenses::attr_l("auto_compute_summary")
+
+#' @describeIn stype_lenses view/set the \code{extra_descriptors} inddicator
+#'  of a stype vector
+#' @export
+extra_descriptors_l <- lenses::attr_l("extra_descriptors")
 
 #' @describeIn stype_lenses view/set the \code{\link[vctrs]{vec_data}} of a
 #'      \code{stype}. Casts to the original type when \code{set}.

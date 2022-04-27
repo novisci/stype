@@ -1,12 +1,12 @@
 library(survival)
 
-ctimeA <- v_event_time(c(5,        6, 10, NA_real_,        1, NA_real_, 19), internal_name = "cA")
-ctimeB <- v_event_time(c(4,        1, 15, NA_real_, NA_real_, NA_real_, 21), internal_name = "cB")
-ctimeC <- v_event_time(c(8,        4,  8, NA_real_,        4, NA_real_, 19), internal_name = "cC")
+ctimeA <- v_continuous_nonneg(c(5,        6, 10, Inf,   1, Inf, 19), internal_name = "cA")
+ctimeB <- v_continuous_nonneg(c(4,        1, 15, Inf, Inf, Inf, 21), internal_name = "cB")
+ctimeC <- v_continuous_nonneg(c(8,        4,  8, Inf,   4, Inf, 19), internal_name = "cC")
 
-otimeA <- v_event_time(c(2,        6, 11,       12, NA_real_, NA_real_, 25), internal_name = "oA")
-otimeB <- v_event_time(c(1, NA_real_, 10, NA_real_, NA_real_, NA_real_, 23), internal_name = "oB")
-otimeC <- v_event_time(c(3,        4,  8,       12, NA_real_, NA_real_, 20), internal_name = "oC")
+otimeA <- v_continuous_nonneg(c(2,        6, 11,       12, Inf, Inf, 25), internal_name = "oA")
+otimeB <- v_continuous_nonneg(c(1,      Inf, 10,      Inf, Inf, Inf, 23), internal_name = "oB")
+otimeC <- v_continuous_nonneg(c(3,        4,  8,       12, Inf, Inf, 20), internal_name = "oC")
 
 ctimes <- list(ctimeA, ctimeB)
 otimes <- list(otimeA, otimeB)
@@ -30,12 +30,12 @@ mgus2_censor_event <- ifelse(mgus2_single_event == 1, 0, 1)
 # Represent the mgus2 data using `v_rcensored` types
 mgus2_rcen <- rcen(
   outcomes = list(
-    outcome_pcm = tmev(ifelse(mgus2$pstat == 1, mgus2$ptime, NA_real_), internal_name = "outcome_pcm"),
-    outcome_death = tmev(ifelse(mgus2$death == 1, mgus2$futime, NA_real_), internal_name = "outcome_death")
+    outcome_pcm = nneg(ifelse(mgus2$pstat == 1, mgus2$ptime, Inf), internal_name = "outcome_pcm"),
+    outcome_death = nneg(ifelse(mgus2$death == 1, mgus2$futime, Inf), internal_name = "outcome_death")
   ),
   censors = list(
-    outcome_pcm = tmev(ifelse(mgus2$pstat == 0, mgus2$ptime, NA_real_), internal_name = "censor_pcm"),
-    outcome_death = tmev(ifelse(mgus2$death == 0, mgus2$futime, NA_real_), internal_name = "censor_death")
+    outcome_pcm = nneg(ifelse(mgus2$pstat == 0, mgus2$ptime, Inf), internal_name = "censor_pcm"),
+    outcome_death = nneg(ifelse(mgus2$death == 0, mgus2$futime, Inf), internal_name = "censor_death")
   ),
   internal_name = "mgus2"
 )
@@ -73,23 +73,23 @@ test_that("v_rcensored class descriptions update appropriately", {
 })
 
 test_that("predicate function for v_rcensored types", {
-  expect_false(is_v_rcensored(22))
-  expect_true(is_v_rcensored(v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)))
+  expect_false(is_rcensored(22))
+  expect_true(is_rcensored(v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)))
 })
 
 test_that("v_rcensored sets levels and labels correctly", {
   
   ctimes1 <- list(
-    v_event_time(c(5, 6), internal_name = "cA"),
-    v_event_time(c(4, 1), internal_name = "cB")
+    v_continuous_nonneg(c(5, 6), internal_name = "cA"),
+    v_continuous_nonneg(c(4, 1), internal_name = "cB")
   )
   ctimes2 <- list(
-    v_event_time(c(5, 6)),
-    v_event_time(c(4, 1))
+    v_continuous_nonneg(c(5, 6)),
+    v_continuous_nonneg(c(4, 1))
   )
   
   otimes <- list(
-    v_event_time(c(2, 6), internal_name = "oA",
+    v_continuous_nonneg(c(2, 6), internal_name = "oA",
                  context = stype::context(short_label = "Outcome A"))
   )
   
@@ -100,6 +100,41 @@ test_that("v_rcensored sets levels and labels correctly", {
   expect_equal(levels(vctrs::field(x1, "censor_reason")), c("cA", "cB"))
   expect_equal(levels(vctrs::field(x2, "censor_reason")), c("1", "2"))
   
+  r1 <- v_rcensored(list(o1 = v_continuous_nonneg(), o2 = v_continuous_nonneg()),
+                    list(c1 = v_continuous_nonneg(), c2 = v_continuous_nonneg()))
+  
+  expect_equal(levels(get_outcome_reason(r1)), c("o1", "o2"))
+  expect_equal(levels(get_censor_reason(r1)), c("c1", "c2"))
+  
+  
+  r2 <- v_rcensored(list(v_continuous_nonneg(internal_name = "o1"),
+                         v_continuous_nonneg(internal_name = "o2")),
+                    list(c1 = v_continuous_nonneg(), c2 = v_continuous_nonneg()))
+  
+  expect_equal(levels(get_outcome_reason(r2)), c("o1", "o2"))
+  expect_equal(levels(get_censor_reason(r2)), c("c1", "c2"))
+
+  # inputs must be consistent in how they are named, else defaults to integer levels
+  r3 <- v_rcensored(list(v_continuous_nonneg(internal_name = "o1"),
+                         v_continuous_nonneg(context = context(short_label = "o2"))),
+                    list(c1 = v_continuous_nonneg(), c2 = v_continuous_nonneg()))
+  expect_equal(levels(get_outcome_reason(r3)), c("1", "2"))
+  expect_length(labels(get_outcome_reason(r3)), 0L)
+  expect_equal(levels(get_censor_reason(r3)), c("c1", "c2"))
+  
+  r4 <- v_rcensored(list(v_continuous_nonneg(internal_name = "o1"),
+                         o2 = v_continuous_nonneg()))
+  
+  expect_equal(levels(get_outcome_reason(r4)), c("1", "2"))
+  
+  ## Labels and Names
+  r5 <- v_rcensored(list(o1 = v_continuous_nonneg(context = context(short_label = "out1")),
+                         o2 = v_continuous_nonneg(context = context(short_label = "out2"))),
+                    list(c1 = v_continuous_nonneg(context = context(short_label = "cens1")), 
+                         c2 = v_continuous_nonneg(context = context(short_label = "cens2"))))
+  
+  expect_equal(levels(get_outcome_reason(r5)), c("out1", "out2"))
+  expect_equal(levels(get_censor_reason(r5)), c("cens1", "cens2"))
 })
 
 test_that("v_rcensored fails as expected", {
@@ -195,7 +230,7 @@ test_that("row binding works for v_rcensored", {
 test_that("v_rcensored getters work", {
   x1 <- v_rcensored(outcomes = otimes, censors = ctimes, end_time = 15)
  
-  expect_is(get_time(x1), "v_event_time")
+  expect_is(get_time(x1), "v_continuous_nonneg")
   expect_is(get_censored(x1), "v_binary")
   expect_is(get_outcome(x1), "v_binary")
   expect_is(get_censor_reason(x1), "v_nominal")
@@ -306,3 +341,84 @@ test_that("pmin_v_rcensored end time selection", {
   expect_equal(actual_dbl12, expected_12)
   expect_error(pmin_v_rcensored(a_12, b_18, c_22, new_end_time = 13))
 })
+
+
+test_that("invalid v_rcensored inputs are properly handled with decent error messages", {
+  
+  expect_error(
+    v_rcensored(outcomes = NULL),
+    regexp = "at least one outcome"
+  )
+  
+  expect_error(
+    v_rcensored(censors = list(y = v_continuous_nonneg(5))),
+    regexp = "must have the same length"
+  )
+  
+  expect_error(
+    v_rcensored(outcomes = v_continuous_nonneg(c(2, 5)),
+                censors = list(v_continuous_nonneg(2))),
+    regexp = "must have the same length"
+  )
+  
+  expect_error(
+    v_rcensored(outcomes = v_continuous_nonneg(c(2, 5)),
+                censors = list(v_continuous_nonneg(2, 3),
+                               v_continuous_nonneg(2, 3, 5))),
+    regexp = "must have the same length"
+  )
+  
+  expect_error(
+    v_rcensored(
+      outcomes = list(y = v_continuous_nonneg(10)),
+      censors = list(y =5)),
+    regexp = "v_continuous_nonneg"
+  )
+  
+  expect_error(
+    v_rcensored(outcomes = list(y = 10)),
+    regexp = "v_continuous_nonneg"
+  )
+})
+
+test_that(
+  "misc tests for v_rcensored", {
+    
+    ## test footer
+    expect_output(print(v_rcensored(otimes, ctimes)))
+    
+    ## small name?
+    expect_equal(type_sum(v_rcensored(otimes, ctimes)), "rcen")
+    
+    ## auto compute summary = F works
+    sum_on <- v_rcensored(outcomes = otimes, censors = ctimes)
+    sum_off <- v_rcensored(outcomes = otimes, censors = ctimes, auto_compute_summary = F)
+   
+    #expect_equal(sum_on, sum_off) 
+  }
+)
+
+test_that(
+  "casting intermediate vectors works to construct right censored", {
+    
+    test_rcens_cast <- function(fn){
+      coerce_cA <- fn(c(5,        6, 10, Inf,   1, Inf, 19))
+      coerce_cB <- fn(c(4,        1, 15, Inf, Inf, Inf, 21))
+      
+      coerce_oA <- fn(c(2,        6, 11,       12, Inf, Inf, 25))
+      coerce_oB <- fn(c(1,      Inf, 10,      Inf, Inf, Inf, 23))
+      
+      c_coerce <- list(coerce_cA, coerce_cB)
+      o_coerce <- list(coerce_oA, coerce_oB)
+      
+      v_rcensored(outcomes = o_coerce, censor = c_coerce)
+    }
+    
+    cast_rcens <- test_rcens_cast(as_nonneg_continuous)
+    construct_rcens <- test_rcens_cast(v_continuous_nonneg)
+    
+    expect_equal(cast_rcens, construct_rcens)
+    
+  }
+)
+

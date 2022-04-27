@@ -8,9 +8,12 @@ stages:
 coverage:
   stage: testing
   script:
-    - R -e 'install.packages("covr")'
-    - R -e 'covr::package_coverage()'
-
+    - Rscript -e 'covr::package_coverage()'
+    - Rscript -e 'covr::to_cobertura(covr::package_coverage())'
+  artifacts:
+    reports:
+      cobertura: cobertura.xml
+    
 testing:
   stage: testing
   script:
@@ -21,12 +24,14 @@ cran_check:
 # Per CRAN Repository Policy:
 # I have checked the submission using R CMD check --as-cran and a current version
 # of r-devel
-  image: registry.novisci.com/nsstat/statocker/r/develcran
+  image: registry.novisci.com/nsstat/nsbuild/r-devel
   stage: cran_check
   script:
     - R -e "install.packages(c('lenses'))"
     - R -e "install.packages(c('riskimator', 'smd'), repos = 'http://cran.novisci.com')"
-    - R CMD check --no-build-vignettes --as-cran .
+    - R CMD build . 
+    - PKGTAR=$(find stype_*)
+    - R CMD check $PKGTAR --as-cran 
 
 package:
   stage: package

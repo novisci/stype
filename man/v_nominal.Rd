@@ -4,6 +4,7 @@
 \alias{v_nominal}
 \alias{nom}
 \alias{is_nominal}
+\alias{as_nominal}
 \alias{as_canonical.v_nominal}
 \title{Nominal categorical vectors}
 \usage{
@@ -11,12 +12,21 @@ v_nominal(
   x = factor(),
   internal_name = "",
   context,
+  auto_compute_summary = auto_compute_default,
   extra_descriptors = list()
 )
 
-nom(x = factor(), internal_name = "", context, extra_descriptors = list())
+nom(
+  x = factor(),
+  internal_name = "",
+  context,
+  auto_compute_summary = auto_compute_default,
+  extra_descriptors = list()
+)
 
 is_nominal(x)
+
+as_nominal(x)
 
 \method{as_canonical}{v_nominal}(x)
 }
@@ -27,26 +37,54 @@ is_nominal(x)
 
 \item{context}{a \code{\link{context}}}
 
+\item{auto_compute_summary}{an indicator of whether the \code{data_summary} is
+automatically computed whenever a vector is initialized, subset, or
+concatenated. Defaults to \code{TRUE}. If this option is set to \code{FALSE},
+then \code{\link{get_data_summary}} is the only way to compute the summary.
+The \code{\link{data_summary_l}} lens will return an empty \code{data_summary}.}
+
 \item{extra_descriptors}{A \code{list} of \code{\link{descriptors}} functions
 appended to the default \code{\link{descriptors}}.}
 }
 \description{
-{
-Support: see \code{\link{factor}}
-
+Constructors and methods for a nomimal categorical data type.
+\code{v_nominal} and \code{nom} are synonyms that each create a new
+\code{v_nominal} object subclassed from \code{vctrs_vctr} and \code{factor}.
+\cr\cr
+Support: see \code{\link{factor}} \cr
 Prototype: \code{\link{integer}}
 }
+\examples{
+# Example data
+src_fct <- factor(c("a", "bb", "a", "ccc", NA_character_))
+
+# Constructor for the `v_nominal` class. One can also use `nom` which is a
+# synonym for the `v_nominal` function.
+v <- v_nominal(
+  x = src_fct,
+  internal_name = "v_example",
+  context = context(
+    short_label = "important_var",
+    long_label  = "Very important variable"
+  ),
+  extra_descriptors = list()
+)
+
+# Helper functions and methods
+is_nominal(v)
+as_nominal(src_fct)
+as.character(v)
+as_canonical(v)
 }
 \seealso{
 Other stype types: 
 \code{\link{tbl_analysis}},
 \code{\link{v_binary}},
-\code{\link{v_character}},
 \code{\link{v_continuous_nonneg}},
 \code{\link{v_continuous}},
 \code{\link{v_count}},
-\code{\link{v_event_time}},
 \code{\link{v_ordered}},
+\code{\link{v_proportion}},
 \code{\link{v_rcensored}}
 }
 \concept{stype types}

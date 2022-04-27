@@ -2,22 +2,41 @@
 % Please edit documentation in R/v_rcensored.R
 \name{as_Surv}
 \alias{as_Surv}
-\title{Cast a v_rcensored type to a Surv object}
+\title{Cast a \code{v_rcensored} Type to a Surv Object}
 \usage{
 as_Surv(x, censor_as_event = FALSE, multiple_endpoint = FALSE)
 }
 \arguments{
-\item{x}{a \code{\link{v_rcensored}} object}
+\item{x}{a \code{\link{v_rcensored}} object.}
 
-\item{censor_as_event}{an indicator to treat censoring as the event of
-interest (such as when estimating censoring probabilities). When
+\item{censor_as_event}{an indicator for whether to treat censoring as the
+event of interest (such as when estimating censoring probabilities). When
 \code{TRUE}, all outcomes are treated as a single censoring event and
 censoring events as a single outcome. Defaults to \code{FALSE}.}
 
-\item{multiple_endpoint}{an indicator to treat the outcomes as multiple
-endpoint data, otherwise all outcomes are treated as being the same event
-type. Defaults to \code{FALSE}.}
+\item{multiple_endpoint}{an indicator for whether to treat the outcomes as
+multiple endpoint data. Otherwise all outcomes are treated as being the
+same event type. Defaults to \code{FALSE}.}
 }
 \description{
-Supports (hopefully obviously) \code{type = "right"} in \code{survival::Surv}
+Useful for converting a \code{v_rcensored} object into the form that is
+expected as an input to various routines in the survival package. More
+concretely, this function returns an object with the same form as is returned
+by calling \code{\link[survival:Surv]{survival::Surv()}}.
+}
+\examples{
+
+# Example censoring and outcome times data
+ctime <- v_continuous_nonneg(c(5, 6, 10, 1, Inf, 19), internal_name = "censoring")
+otime <- v_continuous_nonneg(c(2, 6, 11, 12, Inf, 25), internal_name = "outcomes")
+
+# Construct a `v_censored` value
+v <- v_rcensored(
+  outcomes = list(ctime),
+  censors = list(otime),
+  end_time = 15,
+)
+
+# Convert to a 'survival' package right-censored data representation
+as_Surv(v)
 }

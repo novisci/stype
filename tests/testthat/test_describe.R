@@ -1,4 +1,15 @@
 
+test_that("standard descriptors work", {
+  x <- v_continuous(c(1, NA, 3))
+  y <- v_continuous(c(1, NA, 1))
+  z <- v_continuous(c(NA, NA, NA))
+  
+  expect_false(describe(x)$is_constant)
+  expect_false(describe(y)$is_constant)
+  expect_true(describe(y[-2])$is_constant)
+  expect_true(describe(z)$is_constant)
+})
+
 test_that(
   "grouped summaries work",
   {
@@ -35,13 +46,13 @@ test_that(
 
 
 ctimes <- list(
-  v_event_time(c(5, 6, 10, NA_integer_, 1, NA_integer_, 19), internal_name = "cA"),
-  v_event_time(c(4, 1, 15, NA_integer_, NA_integer_, NA_integer_, 21), internal_name = "cB")
+  v_continuous_nonneg(c(5, 6, 10, Inf, 1, Inf, 19), internal_name = "cA"),
+  v_continuous_nonneg(c(4, 1, 15, Inf, Inf, Inf, 21), internal_name = "cB")
 )
 
 otimes <- list(
-  v_event_time(c(2, 6, 11, 12, NA_integer_, NA_integer_, 25), internal_name = "oA"),
-  v_event_time(c(1, NA_integer_, 10, NA_integer_, NA_integer_, NA_integer_, 23), internal_name = "oB")
+  v_continuous_nonneg(c(2, 6, 11, 12, Inf, Inf, 25), internal_name = "oA"),
+  v_continuous_nonneg(c(1, Inf, 10, Inf, Inf, Inf, 23), internal_name = "oB")
 )
 
 test_that(
@@ -76,9 +87,13 @@ test_that(
     b1 <- c(TRUE, TRUE, FALSE, FALSE, TRUE, FALSE)
     w1 <- c(1, 1, 1, 1, 1, 1)
     w2 <- c(1, 2, 3, 4, 5, 6)
+    w3 <- v_continuous(w2)
+    w4 <- v_continuous_nonneg(w2)
     bin <- v_binary(b1)
     bin_wght1 <- weight(bin, w1)
     bin_wght2 <- weight(bin, w2)
+    bin_wght3 <- weight(bin, w3)
+    bin_wght4 <- weight(bin, w4)
     
     expect_equal(
       get_data_summary(bin_wght1)[["weighted_proportion"]],
@@ -86,6 +101,16 @@ test_that(
     
     expect_equal(
       get_data_summary(bin_wght2)[["weighted_proportion"]],
+      sum(w2*b1)/sum(w2)
+    )
+    
+    expect_equal(
+      get_data_summary(bin_wght3)[["weighted_proportion"]],
+      sum(w2*b1)/sum(w2)
+    )
+    
+    expect_equal(
+      get_data_summary(bin_wght4)[["weighted_proportion"]],
       sum(w2*b1)/sum(w2)
     )
     

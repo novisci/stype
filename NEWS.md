@@ -1,3 +1,7 @@
+# `stype` 0.5.1
+
+* Fixes minor bug in `v_rcensored` error message.
+
 # `stype` 0.5.0
 
 * Modifies the behavior of how the levels and labels for outcome and censors are created. The levels/labels follow the following rules:

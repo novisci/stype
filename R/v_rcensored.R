@@ -217,10 +217,10 @@ v_rcensored <- function(outcomes = v_continuous_nonneg(),
     .f = ~ {
       assertthat::assert_that(
         !anyNA(.x),
-        msg = c(
+        msg = paste(c(
           "Input vectors must not contain any NA values.",
           "Use Inf to indicate that an event has not yet been observed."
-        )
+        ), collapse = " ")
       )
     }
   )
